@@ -20,12 +20,14 @@ class Course
     /**
      * @ORM\Column(type="string", length=50)
 	 * @Assert\NotBlank()
-	 * @Assert\Length(min=5)
+	 * @Assert\Length(min=5, max=50)
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(min=10, max=255)
      */
     private $text;
 

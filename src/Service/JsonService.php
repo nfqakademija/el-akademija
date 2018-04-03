@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class JsonService
@@ -17,7 +17,7 @@ class JsonService
 		return new JsonResponse(array_merge(['success' => false], $params));
 	}
 
-	public function formErrors(Form $form): JsonResponse
+	public function formErrors(FormInterface $form): JsonResponse
 	{
 		if (!$form->isSubmitted())
 			return $this->parametersMissing();
