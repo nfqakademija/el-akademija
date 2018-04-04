@@ -16,14 +16,6 @@ class Version20180403114323 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE course (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(50) NOT NULL, text VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('DROP TABLE course_types');
-        $this->addSql('DROP TABLE courses');
-        $this->addSql('DROP TABLE files');
-        $this->addSql('DROP TABLE lectures');
-        $this->addSql('DROP TABLE lectures_hw');
-        $this->addSql('DROP TABLE roles');
-        $this->addSql('DROP TABLE students_hw');
-        $this->addSql('DROP TABLE users');
     }
 
     public function down(Schema $schema)
