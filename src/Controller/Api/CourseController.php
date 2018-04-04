@@ -40,7 +40,7 @@ class CourseController extends BaseApiController
 	 */
 	public function new(Request $request): JsonResponse
 	{
-		return parent::new(...func_get_args());
+		return parent::new($request);
 	}
 
 	/**
@@ -52,6 +52,17 @@ class CourseController extends BaseApiController
 	 */
 	public function edit(Request $request, int $id): JsonResponse
 	{
-		return parent::edit(...func_get_args());
+		return parent::edit($request, $id);
+	}
+
+	/**
+	 * @Route("/{id}/delete", name="delete", methods={"GET"})
+	 * @param int $id
+	 * @return JsonResponse
+	 * @throws \ReflectionException
+	 */
+	public function delete($id): JsonResponse
+	{
+		return parent::delete($id);
 	}
 }

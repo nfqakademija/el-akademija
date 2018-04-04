@@ -34,7 +34,7 @@ abstract class BaseApiController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function new(Request $request): JsonResponse
+	protected function new(Request $request): JsonResponse
 	{
 		$obj = new $this->class;
 		$form = $this->createForm($this->type, $obj, ['csrf_protection' => false]);
@@ -56,7 +56,7 @@ abstract class BaseApiController extends AbstractController
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	public function edit(Request $request, int $id): JsonResponse
+	protected function edit(Request $request, int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
@@ -73,6 +73,23 @@ abstract class BaseApiController extends AbstractController
 		if (!$form->isValid())
 			return $this->jsonService->formErrors($form);
 		$this->getDoctrine()->getManager()->flush();
+		return $this->jsonService->success();
+	}
+
+	/**
+	 * @param int $id
+	 * @return JsonResponse
+	 * @throws \ReflectionException
+	 */
+	protected function delete(int $id): JsonResponse
+	{
+		$obj = $this->getRepository()->find($id);
+		if (!$obj)
+			$this->jsonService->objectNotFound($this->class);
+
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($obj);
+		$em->flush();
 		return $this->jsonService->success();
 	}
 }
