@@ -5,29 +5,32 @@ namespace App\Controller\Api;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Service\JsonService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api/course", name="api_course_")
  */
-class CourseController extends AbstractController
+class CourseController extends BaseApiController
 {
-	/**
-	 * @var JsonService $jsonService
-	 */
-	private $jsonService;
-
 	/**
 	 * CourseController constructor.
 	 * @param JsonService $jsonService
 	 */
 	public function __construct(JsonService $jsonService)
 	{
-		$this->jsonService = $jsonService;
+		parent::__construct(
+			Course::class,
+			CourseType::class,
+			$jsonService
+		);
+	}
+
+	protected function getRepository(): ObjectRepository
+	{
+		return $this->getDoctrine()->getRepository(Course::class);
 	}
 
 	/**
@@ -37,39 +40,18 @@ class CourseController extends AbstractController
 	 */
 	public function new(Request $request): JsonResponse
 	{
-		$course = new Course();
-		$form = $this->createForm(CourseType::class, $course, ['csrf_protection' => false]);
-		$form->handleRequest($request);
-
-		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing();
-		if (!$form->isValid())
-			return $this->jsonService->formErrors($form);
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($course);
-		$em->flush();
-		return $this->jsonService->success();
+		return parent::new(...func_get_args());
 	}
 
 	/**
 	 * @Route("/{id}/edit", name="edit", methods={"PATCH"})
 	 * @param Request $request
-	 * @param Course $course
-	 * @return Response
+	 * @param int $id
+	 * @return JsonResponse
+	 * @throws \ReflectionException
 	 */
-	public function edit(Request $request, Course $course)
+	public function edit(Request $request, int $id): JsonResponse
 	{
-		$form = $this->createForm(CourseType::class, $course, [
-			'csrf_protection' => false,
-			'method' => 'PATCH'
-		]);
-		$form->handleRequest($request);
-
-		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing();
-		if (!$form->isValid())
-			return $this->jsonService->formErrors($form);
-		$this->getDoctrine()->getManager()->flush();
-		return $this->jsonService->success();
+		return parent::edit(...func_get_args());
 	}
 }
