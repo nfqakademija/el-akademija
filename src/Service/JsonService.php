@@ -39,7 +39,7 @@ class JsonService
 	public function objectNotFound(string $class): JsonResponse
 	{
 		return $this->error(
-			(new \ReflectionClass($class))->getShortName() . ' object not found',
+			(new \ReflectionClass($class))->getShortName() . ' not found',
 			[],
 			Response::HTTP_NOT_FOUND
 		);

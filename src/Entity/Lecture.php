@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CourseRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\LectureRepository")
  */
-class Course
+class Lecture
 {
 	/**
 	* @ORM\Id()
@@ -18,29 +18,40 @@ class Course
 	private $id;
 
 	/**
-	* @ORM\Column(type="string", length=50)
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Course")
+	 * @ORM\JoinColumn(nullable=false)
+	 * @Assert\NotBlank()
+	 */
+	private $course;
+
+	/**
+	* @ORM\Column(type="string", length=100)
 	* @Assert\NotBlank()
+	* @Assert\Length(max=100)
 	*/
 	private $name;
 
 	/**
-	* @ORM\Column(type="date")
+	* @ORM\Column(type="datetime")
 	* @Assert\NotBlank()
 	* @Assert\Date()
 	*/
 	private $start;
 
-	/**
-	* @ORM\Column(type="date")
-	* @Assert\NotBlank()
-	* @Assert\Date()
-	* @Assert\GreaterThan(propertyPath="start")
-	*/
-	private $end;
-
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	public function getCourse(): ?Course
+	{
+		return $this->course;
+	}
+
+	public function setCourse(?Course $course): self
+	{
+		$this->course = $course;
+		return $this;
 	}
 
 	public function getName(): ?string
@@ -62,17 +73,6 @@ class Course
 	public function setStart(?\DateTimeInterface $start): self
 	{
 		$this->start = $start;
-		return $this;
-	}
-
-	public function getEnd(): ?\DateTimeInterface
-	{
-		return $this->end;
-	}
-
-	public function setEnd(?\DateTimeInterface $end): self
-	{
-		$this->end = $end;
 		return $this;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use App\Service\JsonService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,37 +31,37 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
 	public function supports(Request $request)
 	{
-		return true;
+		return $request->getPathInfo() === '/api/auth/login' && $request->isMethod('POST');
 	}
 
 	public function getCredentials(Request $request)
 	{
-		return false;
+
 	}
 
 	public function getUser($credentials, UserProviderInterface $userProvider)
 	{
-	// todo
+		return new User();
 	}
 
 	public function checkCredentials($credentials, UserInterface $user)
 	{
-	// todo
+		return true;
 	}
 
 	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
 	{
-		return null;
+		return $this->jsonService->error($exception->getMessage(), [], Response::HTTP_FORBIDDEN);
 	}
 
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
 	{
-		return null;
+		return $this->jsonService->success();
 	}
 
 	public function start(Request $request, AuthenticationException $authException = null): JsonResponse
 	{
-		return $this->jsonService->error('Access Denied', [], Response::HTTP_FORBIDDEN);
+		return $this->jsonService->error('Access denied. Please log in.', [], Response::HTTP_FORBIDDEN);
 	}
 
 	public function supportsRememberMe()

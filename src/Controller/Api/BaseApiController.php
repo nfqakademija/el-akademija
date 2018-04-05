@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 abstract class BaseApiController extends AbstractController
 {
@@ -31,10 +32,11 @@ abstract class BaseApiController extends AbstractController
 	abstract protected function getRepository(): ObjectRepository;
 
 	/**
+	 * @Route("/new", name="new", methods={"POST"})
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	protected function new(Request $request): JsonResponse
+	public function new(Request $request): JsonResponse
 	{
 		$obj = new $this->class;
 		$form = $this->createForm($this->type, $obj, ['csrf_protection' => false]);
@@ -51,16 +53,17 @@ abstract class BaseApiController extends AbstractController
 	}
 
 	/**
+	 * @Route("/{id}/edit", name="edit", methods={"PATCH"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	protected function edit(Request $request, int $id): JsonResponse
+	public function edit(Request $request, int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
-			$this->jsonService->objectNotFound($this->class);
+			return $this->jsonService->objectNotFound($this->class);
 
 		$form = $this->createForm($this->type, $obj, [
 			'csrf_protection' => false,
@@ -77,15 +80,16 @@ abstract class BaseApiController extends AbstractController
 	}
 
 	/**
+	 * @Route("/{id}/delete", name="delete", methods={"GET"})
 	 * @param int $id
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	protected function delete(int $id): JsonResponse
+	public function delete(int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
-			$this->jsonService->objectNotFound($this->class);
+			return $this->jsonService->objectNotFound($this->class);
 
 		$em = $this->getDoctrine()->getManager();
 		$em->remove($obj);

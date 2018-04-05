@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
+ */
+class Question
+{
+	/**
+	* @ORM\Id()
+	* @ORM\GeneratedValue()
+	* @ORM\Column(type="integer")
+	*/
+	private $id;
+
+	/**
+	* @ORM\ManyToOne(targetEntity="App\Entity\Lecture")
+	* @ORM\JoinColumn(nullable=false)
+	* @Assert\NotBlank()
+	*/
+	private $lecture;
+
+	/**
+	* @ORM\Column(type="string", length=100)
+	* @Assert\NotBlank()
+	* @Assert\Length(max=100)
+	*/
+	private $title;
+
+	/**
+	* @ORM\Column(type="text")
+	* @Assert\NotBlank()
+	* @Assert\Length(max=1000)
+	*/
+	private $text;
+
+	/**
+	* @ORM\Column(type="datetime")
+	*/
+	private $created;
+
+	public function __construct()
+	{
+		$this->created = new \DateTime();
+	}
+
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	public function getLecture(): ?Lecture
+	{
+		return $this->lecture;
+	}
+
+	public function setLecture(?Lecture $lecture): self
+	{
+		$this->lecture = $lecture;
+		return $this;
+	}
+
+	public function getTitle(): ?string
+	{
+		return $this->title;
+	}
+
+	public function setTitle(string $title): self
+	{
+		$this->title = $title;
+		return $this;
+	}
+
+	public function getText(): ?string
+	{
+		return $this->text;
+	}
+
+	public function setText(string $text): self
+	{
+		$this->text = $text;
+		return $this;
+	}
+
+	public function getCreated(): ?\DateTime
+	{
+		return $this->created;
+	}
+}
