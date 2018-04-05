@@ -2,14 +2,16 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Course;
+use App\Form\CourseType;
 use App\Service\JsonService;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api", name="api_")
  */
-class IndexController
+class IndexController extends AbstractController
 {
 	/**
 	 * @var JsonService $json
@@ -24,10 +26,10 @@ class IndexController
 	/**
 	 * @Route("/get_example", name="get_example")
 	 */
-	public function getExample(): JsonResponse
+	public function getExample()
 	{
-		return $this->json->success([
-			'test' => false
-		]);
+		$course = new Course();
+		$form = $this->createForm(CourseType::class, $course, ['csrf_protection' => false]);
+		return $this->render('index.html.twig', ['form' => $form->createView()]);
 	}
 }

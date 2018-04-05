@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class JsonService
 {
@@ -13,16 +14,17 @@ class JsonService
 	 */
 	public function success(array $params = []): JsonResponse
 	{
-		return new JsonResponse(array_merge(['success' => true], $params));
+		return new JsonResponse(array_merge(['success' => true], $params), Response::HTTP_OK);
 	}
 
 	/**
 	 * @param array $params
+	 * @param int $status
 	 * @return JsonResponse
 	 */
-	public function error(array $params = []): JsonResponse
+	public function error(array $params = [], int $status = Response::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
 	{
-		return new JsonResponse(array_merge(['success' => false], $params));
+		return new JsonResponse(array_merge(['success' => false], $params), $status);
 	}
 
 	/**
@@ -34,7 +36,7 @@ class JsonService
 	{
 		return $this->error([
 			'message' => (new \ReflectionClass($class))->getShortName() . ' object not found'
-		]);
+		], Response::HTTP_NOT_FOUND);
 	}
 
 	/**
@@ -54,7 +56,7 @@ class JsonService
 				$errors[$child->getName()][] = $error->getMessage();
 			}
 		}
-		return $this->error(['errors' => $errors]);
+		return $this->error(['errors' => $errors], Response::HTTP_BAD_REQUEST);
 	}
 
 	/**
@@ -62,6 +64,6 @@ class JsonService
 	 */
 	public function parametersMissing(): JsonResponse
 	{
-		return $this->error(['message' => 'All parameters are missing']);
+		return $this->error(['message' => 'All parameters are missing'], Response::HTTP_BAD_REQUEST);
 	}
 }

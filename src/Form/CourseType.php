@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Course;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,7 +14,8 @@ class CourseType extends AbstractType
     {
         $builder
 			->add('name')
-			->add('text')
+			->add('start', DateType::class, ['widget' => 'single_text'])
+			->add('end', DateType::class, ['widget' => 'single_text'])
         ;
     }
 

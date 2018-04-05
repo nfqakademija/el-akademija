@@ -20,16 +20,22 @@ class Course
     /**
      * @ORM\Column(type="string", length=50)
 	 * @Assert\NotBlank()
-	 * @Assert\Length(min=5, max=50)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="date")
 	 * @Assert\NotBlank()
-	 * @Assert\Length(min=10, max=255)
+	 * @Assert\Date()
      */
-    private $text;
+    private $start;
+
+    /**
+     * @ORM\Column(type="date")
+	 * @Assert\NotBlank()
+	 * @Assert\Date()
+     */
+    private $end;
 
     public function getId()
     {
@@ -47,14 +53,25 @@ class Course
         return $this;
     }
 
-    public function getText(): ?string
+    public function getStart(): ?\DateTimeInterface
     {
-        return $this->text;
+        return $this->start;
     }
 
-    public function setText(string $text): self
+    public function setStart(\DateTimeInterface $start): self
     {
-        $this->text = $text;
+        $this->start = $start;
+        return $this;
+    }
+
+    public function getEnd(): ?\DateTimeInterface
+    {
+        return $this->end;
+    }
+
+    public function setEnd(\DateTimeInterface $end): self
+    {
+        $this->end = $end;
         return $this;
     }
 }
