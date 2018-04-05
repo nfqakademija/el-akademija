@@ -32,6 +32,11 @@ class User implements UserInterface
      */
     private $lastname;
 
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $password;
+
     public function getId()
     {
         return $this->id;
@@ -70,6 +75,17 @@ class User implements UserInterface
         return $this;
     }
 
+	public function getPassword(): ?string
+	{
+		return $this->password;
+	}
+
+	public function setPassword(string $password): self
+	{
+		$this->password = $password;
+		return $this;
+	}
+
     public function getUsername()
 	{
 		return $this->email;
@@ -78,5 +94,15 @@ class User implements UserInterface
 	public function getSalt()
 	{
 		return null;
+	}
+
+	public function getRoles()
+	{
+		return ['ROLE_STUDENT', 'ROLE_LECTOR', 'ROLE_ADMIN'];
+	}
+
+	public function eraseCredentials()
+	{
+		// TODO: Implement eraseCredentials() method.
 	}
 }

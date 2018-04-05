@@ -9,21 +9,25 @@ use Symfony\Component\HttpFoundation\Response;
 class JsonService
 {
 	/**
+	 * @param string $message
 	 * @param array $params
 	 * @return JsonResponse
 	 */
-	public function success(array $params = []): JsonResponse
+	public function success(string $message = null, array $params = []): JsonResponse
 	{
+		if ($message) $params['message'] = $message;
 		return new JsonResponse(array_merge(['success' => true], $params), Response::HTTP_OK);
 	}
 
 	/**
+	 * @param string $message
 	 * @param array $params
 	 * @param int $status
 	 * @return JsonResponse
 	 */
-	public function error(array $params = [], int $status = Response::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
+	public function error(string $message = null, array $params = [], int $status = Response::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
 	{
+		if ($message) $params['message'] = $message;
 		return new JsonResponse(array_merge(['success' => false], $params), $status);
 	}
 
@@ -34,9 +38,11 @@ class JsonService
 	 */
 	public function objectNotFound(string $class): JsonResponse
 	{
-		return $this->error([
-			'message' => (new \ReflectionClass($class))->getShortName() . ' object not found'
-		], Response::HTTP_NOT_FOUND);
+		return $this->error(
+			(new \ReflectionClass($class))->getShortName() . ' object not found',
+			[],
+			Response::HTTP_NOT_FOUND
+		);
 	}
 
 	/**
@@ -56,7 +62,7 @@ class JsonService
 				$errors[$child->getName()][] = $error->getMessage();
 			}
 		}
-		return $this->error(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+		return $this->error(null, ['errors' => $errors], Response::HTTP_BAD_REQUEST);
 	}
 
 	/**
@@ -64,6 +70,6 @@ class JsonService
 	 */
 	public function parametersMissing(): JsonResponse
 	{
-		return $this->error(['message' => 'All parameters are missing'], Response::HTTP_BAD_REQUEST);
+		return $this->error('All parameters are missing', [], Response::HTTP_BAD_REQUEST);
 	}
 }
