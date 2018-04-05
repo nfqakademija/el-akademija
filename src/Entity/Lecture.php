@@ -11,10 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Lecture
 {
 	/**
-	* @ORM\Id()
-	* @ORM\GeneratedValue()
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
 	private $id;
 
 	/**
@@ -25,17 +25,24 @@ class Lecture
 	private $course;
 
 	/**
-	* @ORM\Column(type="string", length=100)
-	* @Assert\NotBlank()
-	* @Assert\Length(max=100)
-	*/
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+	 * @ORM\JoinColumn(nullable=false)
+	 * @Assert\NotBlank()
+	 */
+	private $category;
+
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=100)
+	 */
 	private $name;
 
 	/**
-	* @ORM\Column(type="datetime")
-	* @Assert\NotBlank()
-	* @Assert\Date()
-	*/
+	 * @ORM\Column(type="datetime")
+	 * @Assert\NotBlank()
+	 * @Assert\Date()
+	 */
 	private $start;
 
 	public function getId()
@@ -51,6 +58,17 @@ class Lecture
 	public function setCourse(?Course $course): self
 	{
 		$this->course = $course;
+		return $this;
+	}
+
+	public function getCategory(): ?Category
+	{
+		return $this->category;
+	}
+
+	public function setCategory(?Category $category): self
+	{
+		$this->category = $category;
 		return $this;
 	}
 

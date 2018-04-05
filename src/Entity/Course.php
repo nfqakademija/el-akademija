@@ -11,31 +11,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Course
 {
 	/**
-	* @ORM\Id()
-	* @ORM\GeneratedValue()
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
 	private $id;
 
 	/**
-	* @ORM\Column(type="string", length=50)
-	* @Assert\NotBlank()
-	*/
+	 * @ORM\Column(type="string", length=50)
+	 * @Assert\NotBlank()
+	 */
 	private $name;
 
 	/**
-	* @ORM\Column(type="date")
-	* @Assert\NotBlank()
-	* @Assert\Date()
-	*/
+	 * @ORM\Column(type="date")
+	 * @Assert\NotBlank()
+	 * @Assert\Date()
+	 */
 	private $start;
 
 	/**
-	* @ORM\Column(type="date")
-	* @Assert\NotBlank()
-	* @Assert\Date()
-	* @Assert\GreaterThan(propertyPath="start")
-	*/
+	 * @ORM\Column(type="date")
+	 * @Assert\NotBlank()
+	 * @Assert\Date()
+	 * @Assert\GreaterThan(propertyPath="start")
+	 */
 	private $end;
 
 	public function getId()

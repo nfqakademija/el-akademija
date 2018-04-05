@@ -12,33 +12,33 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
 	/**
-	* @ORM\Id()
-	* @ORM\GeneratedValue()
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
 	private $id;
 
 	/**
-	* @ORM\Column(type="string", length=150)
-	* @Assert\NotBlank()
-	* @Assert\Email()
-	*/
+	 * @ORM\Column(type="string", length=150)
+	 * @Assert\NotBlank()
+	 * @Assert\Email()
+	 */
 	private $email;
 
 	/**
-	* @ORM\Column(type="string", length=50)
-	*/
+	 * @ORM\Column(type="string", length=50)
+	 */
 	private $firstname;
 
 	/**
-	* @ORM\Column(type="string", length=50)
-	*/
+	 * @ORM\Column(type="string", length=50)
+	 */
 	private $lastname;
 
 	/**
-	* @ORM\Column(type="string", length=60)
-	* @Assert\NotBlank()
-	*/
+	 * @ORM\Column(type="string", length=60)
+	 * @Assert\NotBlank()
+	 */
 	private $password;
 
 	public function getId()

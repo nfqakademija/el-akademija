@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class Question
+class Comment
 {
 	/**
 	 * @ORM\Id()
@@ -18,18 +18,18 @@ class Question
 	private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Question")
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Assert\NotBlank()
 	 */
-	private $category;
+	private $question;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\ManyToOne(targetEntity="App\Entity\User")
+	 * @ORM\JoinColumn(nullable=false)
 	 * @Assert\NotBlank()
-	 * @Assert\Length(max=100)
 	 */
-	private $title;
+	private $user;
 
 	/**
 	 * @ORM\Column(type="text")
@@ -53,25 +53,25 @@ class Question
 		return $this->id;
 	}
 
-	public function getCategory(): ?Category
+	public function getQuestion(): ?Question
 	{
-		return $this->category;
+		return $this->question;
 	}
 
-	public function setCategory(?Category $category): self
+	public function setQuestion(?Question $question): self
 	{
-		$this->category = $category;
+		$this->question = $question;
 		return $this;
 	}
 
-	public function getTitle(): ?string
+	public function getUser(): ?User
 	{
-		return $this->title;
+		return $this->user;
 	}
 
-	public function setTitle(string $title): self
+	public function setUser(?User $user): self
 	{
-		$this->title = $title;
+		$this->user = $user;
 		return $this;
 	}
 
@@ -86,7 +86,7 @@ class Question
 		return $this;
 	}
 
-	public function getCreated(): ?\DateTime
+	public function getCreated(): ?\DateTimeInterface
 	{
 		return $this->created;
 	}

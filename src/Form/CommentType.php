@@ -2,28 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Lecture;
+use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LectureType extends AbstractType
+class CommentType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('course')
-			->add('category')
-			->add('name')
-			->add('start', DateType::class, ['widget' => 'single_text'])
+			->add('question')
+			->add('user')
+			->add('text')
 		;
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([
-			'data_class' => Lecture::class,
+			'data_class' => Comment::class,
 		]);
 	}
 }
