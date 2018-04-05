@@ -5,6 +5,7 @@
 /var/
 /vendor/
 /front-sketch/node_modules
+/node_modules
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###
