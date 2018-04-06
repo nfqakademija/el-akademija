@@ -97,6 +97,7 @@ class Lecture extends JsonEntity
 	public function jsonSerialize()
 	{
 		return [
+			'id' => $this->id,
 			'course' => $this->course,
 			'category' => $this->category,
 			'name' => $this->name,

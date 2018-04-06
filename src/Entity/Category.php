@@ -42,6 +42,9 @@ class Category extends JsonEntity
 
 	public function jsonSerialize()
 	{
-		return ['name' => $this->name];
+		return [
+			'id' => $this->id,
+			'name' => $this->name
+		];
 	}
 }

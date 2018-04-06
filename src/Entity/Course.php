@@ -79,6 +79,7 @@ class Course extends JsonEntity
 	public function jsonSerialize()
 	{
 		return [
+			'id' => $this->id,
 			'name' => $this->name,
 			'start' => $this->formatDate($this->start),
 			'end' => $this->formatDate($this->end)

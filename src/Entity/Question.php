@@ -94,6 +94,7 @@ class Question extends JsonEntity
 	public function jsonSerialize()
 	{
 		return [
+			'id' => $this->id,
 			'category' => $this->category,
 			'title' => $this->title,
 			'text' => $this->text,

@@ -94,6 +94,7 @@ class Comment extends JsonEntity
 	public function jsonSerialize()
 	{
 		return [
+			'id' => $this->id,
 			'question' => $this->question,
 			'user' => $this->user,
 			'text' => $this->text,
