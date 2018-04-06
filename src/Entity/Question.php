@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
  */
-class Question
+class Question extends JsonEntity
 {
 	/**
 	 * @ORM\Id()
@@ -89,5 +89,15 @@ class Question
 	public function getCreated(): ?\DateTime
 	{
 		return $this->created;
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'category' => $this->category,
+			'title' => $this->title,
+			'text' => $this->text,
+			'created' => $this->formatDate($this->created)
+		];
 	}
 }

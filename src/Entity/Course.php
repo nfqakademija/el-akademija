@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CourseRepository")
  */
-class Course
+class Course extends JsonEntity
 {
 	/**
 	 * @ORM\Id()
@@ -74,5 +74,14 @@ class Course
 	{
 		$this->end = $end;
 		return $this;
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'name' => $this->name,
+			'start' => $this->formatDate($this->start),
+			'end' => $this->formatDate($this->end)
+		];
 	}
 }

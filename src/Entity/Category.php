@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
-class Category
+class Category extends JsonEntity
 {
 	/**
 	 * @ORM\Id()
@@ -38,5 +38,10 @@ class Category
 	{
 		$this->name = $name;
 		return $this;
+	}
+
+	public function jsonSerialize()
+	{
+		return ['name' => $this->name];
 	}
 }
