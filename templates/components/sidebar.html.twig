@@ -1,6 +1,6 @@
 {% block sidebar %}
 
-    <nav id="sidebar">
+    <nav id="sidebar" class="active">
         <!-- Sidebar Header -->
         <div class="sidebar-header">
             <img src="{{ asset('build/images/Logo.svg') }}" alt="">
@@ -8,8 +8,8 @@
 
         <!-- Sidebar Links -->
         <ul class="list-unstyled components">
-            <li class="{{ app.request.attributes.get('_route') == 'Pagrindinis' ? 'active' }}">
-                <a href="{{ path('Pagrindinis') }}">Pagrindinis</a>
+            <li class="{{ app.request.attributes.get('_route') == 'index' ? 'active' }}">
+                <a href="{{ path('index') }}">Pagrindinis</a>
             </li>
             <li class="{{ app.request.attributes.get('_route') == 'questions' ? 'active' }}">
                 <a href="{{ path('questions') }}">Klausimai</a>
