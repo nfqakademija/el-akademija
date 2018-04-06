@@ -108,7 +108,6 @@ abstract class BaseApiController extends AbstractController
 	public function show(int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
-
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
