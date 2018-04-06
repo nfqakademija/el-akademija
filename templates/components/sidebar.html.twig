@@ -1,0 +1,30 @@
+{% block sidebar %}
+
+    <nav id="sidebar">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <img src="{{ asset('build/images/Logo.svg') }}" alt="">
+    </div>
+
+    <!-- Sidebar Links -->
+    <ul class="list-unstyled components">
+        <li class="active">
+            <a href="">Pagrindinis</a>
+        </li>
+        <li>
+            <a href="#">Klausimai</a>
+        </li>
+        <li>
+            <!-- Link with dropdown items -->
+            <a href="#PagesSubMenu" data-toggle="collapse" aria-expanded="false">Kursai</a>
+            <ul class="collapse list-unstyled" id="PagesSubMenu">
+                <li>
+                    <a href="#">Kursas 1</a>
+                </li>
+                <li>
+                    <a href="#">Kursas 2</a>
+                </li>
+            </ul>
+    </ul>
+    </nav>
+{% endblock %}

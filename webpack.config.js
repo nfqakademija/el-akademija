@@ -8,7 +8,7 @@ Encore
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
 
-    .addEntry('/js/index', ["babel-polyfill", './assets/js/index.js'])
+    .addEntry('/js/courses-list-table', ["babel-polyfill", './assets/js/courses-list-table.js'])
     // will create public/build/app.js and public/build/app.css
     .addStyleEntry('/css/style', `./assets/sass/style.scss`)
 

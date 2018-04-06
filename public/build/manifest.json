@@ -1,4 +1,4 @@
 {
   "build//css/style.css": "/build//css/style.css",
-  "build//js/index.js": "/build//js/index.js"
+  "build//js/courses-list-table.js": "/build//js/courses-list-table.js"
 }
