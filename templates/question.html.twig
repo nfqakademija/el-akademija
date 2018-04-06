@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    <div class="container upper">
+        <div class="stream-posts">
+            <div class="stream-post">
+                <div class="sp-author">
+                    <a href="#" class="sp-author-avatar">
+                        <img src="http://bootdey.com/img/Content/avatar/avatar6.png" alt="" />
+                    </a>
+                    <h6 class="sp-author-name"><a href="#">Vilius Antanavičius</a></h6>
+                    <div class="likes">
+                        <div class="hearts">
+                            <span class="heart"></span>
+                            <span class="heart-number">4</span>
+                        </div>
+                        <div class="comments">
+                            <span class="comment"></span>
+                            <span class="comment-number">113</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sp-content">
+                    <div class="sp-header">
+                        <div class="sp-title">Esu lochas, ką daryti?</div>
+                        <div class="sp-date">posted 1h ago</div>
+                    </div>
+                    <p class="sp-paragraph mt-4">Auk Soldanella plainscraft acetonylidene wolfishness
+                        irrecognizant Candolleaceae provision Marsipobranchii arpen Paleoanthropus supersecular
+                        inidoneous autoplagiarism palmcrist occamy equestrianism periodontoclasia mucedin
+                        overchannel goelism decapsulation pourer zira</p>
+                </div>
+            </div>
+
+            <div class="stream-post">
+                <div class="sp-author">
+                    <a href="#" class="sp-author-avatar">
+                        <img src="http://bootdey.com/img/Content/avatar/avatar6.png" alt="" />
+                    </a>
+                    <h6 class="sp-author-name"><a href="#">Mantas Ramančionis</a></h6>
+                    <div class="likes">
+                        <div class="hearts">
+                            <span class="heart"></span>
+                            <span class="heart-number">33</span>
+                        </div>
+                        <div class="comments">
+                            <span class="comment"></span>
+                            <span class="comment-number">60</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sp-content">
+                    <div class="sp-header">
+                        <div class="sp-title">Klausimas, kaip netapti tokiu kaip Vilius?</div>
+                        <div class="sp-date">posted 33 mins ago</div>
+                    </div>
+                    <p class="sp-paragraph mt-4">Auk Soldanella plainscraft acetonylidene wolfishness
+                        irrecognizant Candolleaceae provision Marsipobranchii arpen Paleoanthropus supersecular
+                        inidoneous autoplagiarism palmcrist occamy equestrianism periodontoclasia mucedin
+                        overchannel goelism decapsulation pourer zira</p>
+                </div>
+            </div>
+        </div>
+        <div class="post-editor">
+                    <textarea name="post-field" id="post-field" class="post-field"
+                              placeholder="Write Something Cool!"></textarea>
+            <div class="d-flex">
+                <button class="btn btn-orange">Post</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

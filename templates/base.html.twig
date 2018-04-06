@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>
-        {% block title %}
-            NFQ Akademija
-        {% endblock %}
+        {% block title %}NFQ Akademija{% endblock %}
     </title>
     {% block stylesheets %}
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/images/favicon/apple-touch-icon.png') }}"/>
@@ -37,48 +35,10 @@
 
             {{ block("navbar", "/components/navbar.html.twig") }}
 
-            <div class="container">
 
-                <div id="courses-list-table"></div>
-
-                <div class="stream-posts">
-                    <div class="stream-post">
-                        <div class="sp-author">
-                            <a href="#" class="sp-author-avatar"><img
-                                        src="http://bootdey.com/img/Content/avatar/avatar6.png" alt=""></a>
-                            <h6 class="sp-author-name"><a href="#">Kent Lemaitre</a></h6></div>
-                        <div class="sp-content">
-                            <div class="sp-info">posted 1h ago</div>
-                            <p class="sp-paragraph mb-0">Auk Soldanella plainscraft acetonylidene wolfishness
-                                irrecognizant Candolleaceae provision Marsipobranchii arpen Paleoanthropus supersecular
-                                inidoneous autoplagiarism palmcrist occamy equestrianism periodontoclasia mucedin
-                                overchannel goelism decapsulation pourer zira</p>
-                        </div>
-                    </div>
-                    <div class="stream-post mb-0">
-                        <div class="sp-author">
-                            <a href="#" class="sp-author-avatar"><img
-                                        src="http://bootdey.com/img/Content/avatar/avatar6.png" alt=""></a>
-                            <h6 class="sp-author-name"><a href="#">Loria Lambing</a></h6></div>
-                        <div class="sp-content">
-                            <div class="sp-info">posted 2 days ago</div>
-                            <p class="sp-paragraph">Auk Soldanella plainscraft acetonylidene wolfishness irrecognizant
-                                Candolleaceae provision Marsipobranchii arpen Paleoanthropus supersecular inidoneous</p>
-                            <p class="sp-paragraph">autoplagiarism palmcrist occamy equestrianism periodontoclasia
-                                mucedin overchannel goelism decapsulation pourer zira</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-editor">
-                    <textarea name="post-field" id="post-field" class="post-field"
-                              placeholder="Write Something Cool!"></textarea>
-                    <div class="d-flex">
-                        <button class="btn btn-success px-4 py-1">Post</button>
-                    </div>
-                </div>
-            </div>
+                {% block main%}{% endblock %}
+            {{ block("footer", "/components/footer.html.twig") }}
         </div>
-    </div>
     </div>
 {% endblock %}
 {% block javascripts %}

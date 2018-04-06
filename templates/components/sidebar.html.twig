@@ -1,30 +1,30 @@
 {% block sidebar %}
 
     <nav id="sidebar">
-    <!-- Sidebar Header -->
-    <div class="sidebar-header">
-        <img src="{{ asset('build/images/Logo.svg') }}" alt="">
-    </div>
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <img src="{{ asset('build/images/Logo.svg') }}" alt="">
+        </div>
 
-    <!-- Sidebar Links -->
-    <ul class="list-unstyled components">
-        <li class="active">
-            <a href="">Pagrindinis</a>
-        </li>
-        <li>
-            <a href="#">Klausimai</a>
-        </li>
-        <li>
-            <!-- Link with dropdown items -->
-            <a href="#PagesSubMenu" data-toggle="collapse" aria-expanded="false">Kursai</a>
-            <ul class="collapse list-unstyled" id="PagesSubMenu">
-                <li>
-                    <a href="#">Kursas 1</a>
-                </li>
-                <li>
-                    <a href="#">Kursas 2</a>
-                </li>
-            </ul>
-    </ul>
+        <!-- Sidebar Links -->
+        <ul class="list-unstyled components">
+            <li class="{{ app.request.attributes.get('_route') == 'Pagrindinis' ? 'active' }}">
+                <a href="{{ path('Pagrindinis') }}">Pagrindinis</a>
+            </li>
+            <li class="{{ app.request.attributes.get('_route') == 'questions' ? 'active' }}">
+                <a href="{{ path('questions') }}">Klausimai</a>
+            </li>
+            <li>
+                <!-- Link with dropdown items -->
+                <a href="#PagesSubMenu" data-toggle="collapse" aria-expanded="false">Paskaitos</a>
+                <ul class="collapse list-unstyled" id="PagesSubMenu">
+                    <li>
+                        <a href="#">Front-End</a>
+                    </li>
+                    <li>
+                        <a href="#">PHP</a>
+                    </li>
+                </ul>
+        </ul>
     </nav>
 {% endblock %}
