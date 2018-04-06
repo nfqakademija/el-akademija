@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface
+class User extends JsonEntity implements UserInterface
 {
 	/**
 	 * @ORM\Id()
@@ -108,5 +108,15 @@ class User implements UserInterface
 	public function eraseCredentials()
 	{
 		// TODO: Implement eraseCredentials() method.
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'id' => $this->id,
+			'email' => $this->email,
+			'firstname' => $this->firstname,
+			'lastname' => $this->lastname
+		];
 	}
 }
