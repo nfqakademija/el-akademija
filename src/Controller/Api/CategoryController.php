@@ -45,9 +45,6 @@ class CategoryController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($this->getDoctrine()->getRepository(Question::class)->findBy(
-			['category' => $obj],
-			['id' => 'DESC']
-		));
+		return new JsonResponse($this->getDoctrine()->getRepository(Question::class)->findByCategory($obj));
 	}
 }

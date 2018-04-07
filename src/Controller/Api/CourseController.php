@@ -45,9 +45,6 @@ class CourseController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($this->getDoctrine()->getRepository(Lecture::class)->findBy(
-			['course' => $obj],
-			['id' => 'DESC']
-		));
+		return new JsonResponse($this->getDoctrine()->getRepository(Lecture::class)->findByCourse($obj));
 	}
 }

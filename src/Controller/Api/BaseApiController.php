@@ -45,7 +45,7 @@ abstract class BaseApiController extends AbstractController
 		$form->handleRequest($request);
 
 		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing();
+			return $this->jsonService->parametersMissing($form);
 		if (!$form->isValid())
 			return $this->jsonService->formErrors($form);
 		$em = $this->getDoctrine()->getManager();
@@ -74,7 +74,7 @@ abstract class BaseApiController extends AbstractController
 		$form->handleRequest($request);
 
 		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing();
+			return $this->jsonService->parametersMissing($form);
 		if (!$form->isValid())
 			return $this->jsonService->formErrors($form);
 		$this->getDoctrine()->getManager()->flush();

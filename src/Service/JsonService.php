@@ -51,8 +51,6 @@ class JsonService
 	 */
 	public function formErrors(FormInterface $form): JsonResponse
 	{
-		if (!$form->isSubmitted())
-			return $this->parametersMissing();
 		$errors = [];
 		foreach ($form->getErrors() as $error) {
 			$errors[$form->getName()][] = $error->getMessage();
@@ -68,8 +66,12 @@ class JsonService
 	/**
 	 * @return JsonResponse
 	 */
-	public function parametersMissing(): JsonResponse
+	public function parametersMissing(FormInterface $form): JsonResponse
 	{
-		return $this->error('All parameters are missing', [], Response::HTTP_BAD_REQUEST);
+		$errors = [];
+		foreach ($form->all() as $child) {
+			$errors[$child->getName()] = 'Parameter is missing';
+		}
+		return $this->error(null, ['errors' => $errors], Response::HTTP_BAD_REQUEST);
 	}
 }
