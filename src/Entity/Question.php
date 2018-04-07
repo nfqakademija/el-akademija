@@ -104,9 +104,15 @@ class Question extends JsonEntity
 		return $this;
 	}
 
-	public function getCreated(): ?\DateTime
+	public function getCreated(): ?\DateTimeInterface
 	{
 		return $this->created;
+	}
+
+	public function setCreated(?\DateTimeInterface $created): self
+	{
+		$this->created = $created;
+		return $this;
 	}
 
 	public function jsonSerialize()

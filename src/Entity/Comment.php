@@ -91,6 +91,12 @@ class Comment extends JsonEntity
 		return $this->created;
 	}
 
+	public function setCreated(?\DateTimeInterface $created): self
+	{
+		$this->created = $created;
+		return $this;
+	}
+
 	public function jsonSerialize()
 	{
 		return [
