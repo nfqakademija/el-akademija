@@ -25,6 +25,13 @@ class Question extends JsonEntity
 	private $category;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="App\Entity\User")
+	 * @ORM\JoinColumn(nullable=false)
+	 * @Assert\NotBlank()
+	 */
+	private $user;
+
+	/**
 	 * @ORM\Column(type="string", length=100)
 	 * @Assert\NotBlank()
 	 * @Assert\Length(max=100)
@@ -64,6 +71,17 @@ class Question extends JsonEntity
 		return $this;
 	}
 
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
+
+	public function setUser(?User $user): self
+	{
+		$this->user = $user;
+		return $this;
+	}
+
 	public function getTitle(): ?string
 	{
 		return $this->title;
@@ -96,6 +114,7 @@ class Question extends JsonEntity
 		return [
 			'id' => $this->id,
 			'category' => $this->category,
+			'user' => $this->user,
 			'title' => $this->title,
 			'text' => $this->text,
 			'created' => $this->formatDate($this->created)
