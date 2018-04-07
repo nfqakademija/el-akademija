@@ -10,6 +10,8 @@ Encore
 
     .addEntry('/js/courses-list-table', ["babel-polyfill", './assets/js/courses-list-table.js'])
     .addEntry('/js/question', ["babel-polyfill", './assets/js/question.js'])
+    .addEntry('/js/question-comments-list', ["babel-polyfill", './assets/js/question-comments-list.js'])
+    .addEntry('/js/comment', ["babel-polyfill", './assets/js/comment.js'])
     .addEntry('/js/ApiClient', ["babel-polyfill", './assets/js/ApiClient.js'])
     // will create public/build/app.js and public/build/app.css
     .addStyleEntry('/css/style', `./assets/sass/style.scss`)
@@ -23,10 +25,13 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
 
     .enableReactPreset()
+    .configureBabel((config) => {
+        config.presets.push('stage-3');
+    })
 
 
     // empty the outputPath dir before each build
-    //.cleanupOutputBeforeBuild()
+    .cleanupOutputBeforeBuild()
 
     // show OS notifications when builds finish/fail
     //.enableBuildNotifications()

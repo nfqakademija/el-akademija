@@ -2,6 +2,7 @@
 
 $orange: rgb(255, 107, 0);
 $dark: rgba(153, 153, 153, 1);
+$dark-lightest: rgba(153, 153, 153, 0.6);
 $light-blue: rgb(225, 244, 253);
 $stronger-blue: rgb(154, 206, 214);
 $silver-tab-color: rgb(250, 250, 250);
@@ -321,7 +322,10 @@ a {
     }
   }
 }
+.stream-post.question {
+  background: $dark-lightest;
 
+}
 .stream-post {
   position: relative;
   .button-view-more {
@@ -467,6 +471,7 @@ a {
   background: #fff;
   padding: 1rem;
   margin-top: 1rem;
+  min-height: 150px;
   .sp-header {
     display: flex;
     justify-content: space-between;
@@ -483,6 +488,7 @@ a {
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 1rem;
+    word-wrap: break-word;
     &:last-child {
       margin-bottom: 0;
     }
