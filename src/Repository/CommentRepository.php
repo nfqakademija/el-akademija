@@ -28,7 +28,7 @@ class CommentRepository extends ServiceEntityRepository
 	{
 		return $this->findBy(
 			['question' => $question],
-			['id' => 'DESC']
+			['id' => 'ASC']
 		);
 	}
 }
