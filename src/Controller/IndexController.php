@@ -25,4 +25,13 @@ class IndexController extends AbstractController
     {
         return $this->render('questions.html.twig');
     }
+
+    /**a
+     * @Route("/question/{id}", name="question")
+     * @return Response
+     */
+    public function question($id): Response
+    {
+        return $this->render('question.html.twig', ['id' => $id]);
+    }
 }

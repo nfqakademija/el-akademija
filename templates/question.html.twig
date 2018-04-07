@@ -3,6 +3,8 @@
 {% block main %}
 
     <div class="container upper">
+
+        <div id="question" question-id="{{ id }}"></div>
         <div class="stream-posts">
             <div class="stream-post">
                 <div class="sp-author">
@@ -73,4 +75,8 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascript_for_page %}
+    <script src="{{ asset('build/js/question.js') }}"></script>
 {% endblock %}
