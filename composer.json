@@ -65,7 +65,8 @@
             "./bin/console doctrine:fixtures:load --append"
         ],
         "setup:migrations": "./bin/console doctrine:migrations:migrate",
-        "setup:faker": "./bin/console doctrine:fixtures:load --append"
+        "setup:faker": "./bin/console doctrine:fixtures:load --append",
+        "server:routes": "./bin/console debug:router"
     },
     "conflict": {
         "symfony/symfony": "*"
