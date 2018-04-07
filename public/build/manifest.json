@@ -1,4 +1,5 @@
 {
   "build//css/style.css": "/build//css/style.css",
+  "build//js/ApiClient.js": "/build//js/ApiClient.js",
   "build//js/courses-list-table.js": "/build//js/courses-list-table.js"
 }

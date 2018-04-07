@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ApiClient from './ApiClient'
 
 class Courses_List_Table extends React.Component {
 
@@ -11,13 +12,13 @@ class Courses_List_Table extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/course/show')
-            .then(response => response.json())
-            .then(entries => {
+        ApiClient.get('/api/course/show').then(courses => {
                 this.setState({
-                    courses: entries
+                    courses: courses
                 })
-            })
+            }
+        );
+
     }
 
     render() {
