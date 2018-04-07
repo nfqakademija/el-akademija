@@ -95,7 +95,6 @@ class Comment extends JsonEntity
 	{
 		return [
 			'id' => $this->id,
-			'question' => $this->question,
 			'user' => $this->user,
 			'text' => $this->text,
 			'created' => $this->formatDate($this->created)

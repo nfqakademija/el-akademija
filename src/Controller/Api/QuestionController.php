@@ -45,6 +45,9 @@ class QuestionController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($this->getDoctrine()->getRepository(Comment::class)->findByQuestion($obj));
+		return new JsonResponse(array_merge(
+			$obj->jsonSerialize(),
+			['comments' => $this->getDoctrine()->getRepository(Comment::class)->findByQuestion($obj)]
+		));
 	}
 }
