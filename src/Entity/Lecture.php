@@ -101,7 +101,7 @@ class Lecture extends JsonEntity
 			'course' => $this->course,
 			'category' => $this->category,
 			'name' => $this->name,
-			'start' => $this->formatDate($this->start)
+			'start' => $this->formatDateTime($this->start)
 		];
 	}
 }

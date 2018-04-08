@@ -103,7 +103,7 @@ class Comment extends JsonEntity
 			'id' => $this->id,
 			'user' => $this->user,
 			'text' => $this->text,
-			'created' => $this->formatDate($this->created)
+			'created' => $this->formatDateTime($this->created)
 		];
 	}
 }

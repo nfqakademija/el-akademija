@@ -123,7 +123,7 @@ class Question extends JsonEntity
 			'user' => $this->user,
 			'title' => $this->title,
 			'text' => $this->text,
-			'created' => $this->formatDate($this->created)
+			'created' => $this->formatDateTime($this->created)
 		];
 	}
 }
