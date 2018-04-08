@@ -17,6 +17,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 		$faker = Faker\Factory::create('lt_LT');
 		$categories = $manager->getRepository(Category::class)->findAll();
 		$users = $manager->getRepository(User::class)->findAll();
+		$lastDate = $faker->dateTimeInInterval('-35 days', '+10 days');
 		for ($i = 0; $i < 10; $i++) {
 			$question = new Question();
 			$question
@@ -24,8 +25,9 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 				->setUser($faker->randomElement($users))
 				->setTitle($faker->realText(20))
 				->setText($faker->realText(200))
-				->setCreated($faker->dateTimeBetween('-30 days', 'now'));
+				->setCreated($lastDate);
 			$manager->persist($question);
+			$lastDate = $faker->dateTimeInInterval($lastDate, '+2 days');
 		}
 		$manager->flush();
 	}

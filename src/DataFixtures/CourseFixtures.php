@@ -23,10 +23,10 @@ class CourseFixtures extends Fixture
 			for ($j = 0; $j < 2; $j++) {
 				$startDate = $faker->dateTimeInInterval($startDates[$j], '+10 days');
 				$endDate = $faker->dateTimeInInterval($endDates[$j], '+10 days');
-				for ($z = 0, $len = count($cities); $z < $len; $z++) {
+				foreach ($cities as $city) {
 					$course = new Course();
 					$course
-						->setName($cities[$z] . ' | ' . $semesters[$j])
+						->setName($city . ' | ' . $semesters[$j])
 						->setStart($startDate)
 						->setEnd($endDate);
 					$manager->persist($course);

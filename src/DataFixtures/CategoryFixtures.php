@@ -11,9 +11,9 @@ class CategoryFixtures extends Fixture
 	public function load(ObjectManager $manager)
 	{
 		$categories = ['Frontend', 'Backend', 'Mysql', 'UX'];
-		for ($i = 0, $len = count($categories); $i < $len; $i++) {
+		foreach ($categories as $cat) {
 			$category = new Category();
-			$category->setName($categories[$i]);
+			$category->setName($cat);
 			$manager->persist($category);
 		}
 		$manager->flush();
