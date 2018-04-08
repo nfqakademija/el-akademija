@@ -64,13 +64,14 @@ class JsonService
 	}
 
 	/**
+	 * @param FormInterface $form
 	 * @return JsonResponse
 	 */
 	public function parametersMissing(FormInterface $form): JsonResponse
 	{
 		$errors = [];
 		foreach ($form->all() as $child) {
-			$errors[$child->getName()] = 'Parameter is missing';
+			$errors[$child->getName()] = ['Parameter is missing'];
 		}
 		return $this->error(null, ['errors' => $errors], Response::HTTP_BAD_REQUEST);
 	}
