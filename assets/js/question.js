@@ -33,7 +33,7 @@ class Question extends React.Component {
 
         // Kai dar neuzkrauta informacija
         if (!this.state.question) {
-            return <div>Loading...</div>
+            return <div></div>
         } else {
 
             const {question} = {...this.state};

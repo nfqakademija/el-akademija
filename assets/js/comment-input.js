@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from "axios"
 import ApiClient from './ApiClient';
 
 class CommentInput extends React.Component {
@@ -16,7 +15,7 @@ class CommentInput extends React.Component {
         this.setState({value: event.target.value});
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
         ApiClient.post('/api/comment/new',
             {
                 'comment[question]': this.props.questionId,
