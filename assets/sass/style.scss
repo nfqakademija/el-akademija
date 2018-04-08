@@ -132,6 +132,9 @@ a {
     max-height: 78px;
     display: flex;
     justify-content: center;
+    .img {
+      max-height: 77px;
+    }
   }
   ul {
     &.components {
@@ -532,5 +535,10 @@ a {
       }
     }
   }
+}
+
+
+.currentCourse {
+  font-size: 48px;
 }
 
