@@ -16,7 +16,7 @@ class Comment extends React.Component {
 
 
     render() {
-        if(typeof this.props.comment === "undefined") {
+        if(!this.props.comment) {
             return <div>Loading...</div>
         } else {
             let {comment} = this.props;

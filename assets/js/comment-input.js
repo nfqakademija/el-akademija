@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from "axios"
-const qs = require('qs');
-//import ApiClient from './ApiClient';
+import ApiClient from './ApiClient';
 
 class CommentInput extends React.Component {
 
@@ -18,33 +17,13 @@ class CommentInput extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-
-        // SITA NESAMONE NEVEIKIA. NEI VIENAS METODAS.
-        // Nesvarbu ar tai qs biblioteka, ar tai queryString biblioteka
-        // taip pat headers pridejimas irgi nepadeda.
-
-
-
-        /*ApiClient.post('/api/comment/new', {
-            "question": this.props.questionId,
-            "user": 1,
-            "text": this.state.value
-        }).then((response) => console.log(response));*/
-
-        axios.post('/api/comment/new',
-            qs.stringify({
-                question: this.props.questionId,
-                user: 1,
-                text: this.state.value
-            }),
+        ApiClient.post('/api/comment/new',
             {
-                headers: {
-                    'Content-type': 'application/x-www-form-urlencoded'
-                }
-            }
-        ).then((response) => console.log(response));
-
+                'comment[question]': this.props.questionId,
+                'comment[user]': 1,
+                'comment[text]': this.state.value
+            }).
+        then((response) => console.log(response));
 
     }
 

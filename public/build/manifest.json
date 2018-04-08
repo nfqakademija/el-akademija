@@ -4,5 +4,7 @@
   "build//js/comment.js": "/build//js/comment.js",
   "build//js/courses-list-table.js": "/build//js/courses-list-table.js",
   "build//js/question-comments-list.js": "/build//js/question-comments-list.js",
+  "build//js/question-list.js": "/build//js/question-list.js",
+  "build//js/question-view-more.js": "/build//js/question-view-more.js",
   "build//js/question.js": "/build//js/question.js"
 }

@@ -326,22 +326,23 @@ a {
   background: $dark-lightest;
 
 }
-.stream-post {
-  position: relative;
-  .button-view-more {
-    display: flex;
-    .btn {
-      text-transform: uppercase;
-      border: 1px solid #63B1B9;
-      border-radius: 4px;
-      background: transparent;
-      color: #63B1B9;
-      &:hover {
-        background: #63B1B9;
-        color: white;
-      }
+
+.button-blue-outline {
+  display: flex;
+  .btn {
+    text-transform: uppercase;
+    border: 1px solid #63B1B9;
+    border-radius: 20px;
+    background: transparent;
+    color: #63B1B9;
+    &:hover {
+      background: #63B1B9;
+      color: white;
     }
   }
+}
+.stream-post {
+  position: relative;
 }
 
 .sp-author {

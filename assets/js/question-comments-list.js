@@ -9,7 +9,7 @@ class CommentsList extends React.Component {
 
 
     render() {
-        if(typeof this.props.comments === "undefined") {
+        if(!this.props.comments) {
             return <div>Loading...</div>
         } else {
             let {comments} = this.props;
