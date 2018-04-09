@@ -8,6 +8,7 @@ use App\Form\CourseType;
 use App\Service\JsonService;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -35,16 +36,22 @@ class CourseController extends BaseApiController
 
 	/**
 	 * @Route("/{id}/lectures", name="lectures")
+	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	public function showLectures(int $id): JsonResponse
+	public function showLectures(Request $request, int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($this->getDoctrine()->getRepository(Lecture::class)->findByCourse($obj));
+		return new JsonResponse(
+			$this
+				->getDoctrine()
+				->getRepository(Lecture::class)
+				->findByCourse($obj, ...$this->handleOPS($request, Lecture::class))
+		);
 	}
 }

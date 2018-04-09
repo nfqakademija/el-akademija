@@ -85,4 +85,14 @@ class Course extends JsonEntity
 			'end' => $this->formatDate($this->end)
 		];
 	}
+
+	public static function whiteListedFields(): array
+	{
+		return ['id', 'name', 'start', 'end'];
+	}
+
+	public static function getLimit(): int
+	{
+		return 10;
+	}
 }

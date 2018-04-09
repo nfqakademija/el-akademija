@@ -22,13 +22,14 @@ class LectureRepository extends ServiceEntityRepository
 
 	/**
 	 * @param Course $course
+	 * @param mixed ...$args
 	 * @return Lecture[]
 	 */
-	public function findByCourse(Course $course)
+	public function findByCourse(Course $course, ...$args)
 	{
 		return $this->findBy(
 			['course' => $course],
-			['id' => 'DESC']
+			...$args
 		);
 	}
 }

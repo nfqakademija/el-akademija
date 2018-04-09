@@ -22,13 +22,14 @@ class CommentRepository extends ServiceEntityRepository
 
 	/**
 	 * @param Question $question
+	 * @param mixed ...$args
 	 * @return Comment[]
 	 */
-	public function findByQuestion(Question $question)
+	public function findByQuestion(Question $question, ...$args)
 	{
 		return $this->findBy(
 			['question' => $question],
-			['id' => 'ASC']
+			...$args
 		);
 	}
 }

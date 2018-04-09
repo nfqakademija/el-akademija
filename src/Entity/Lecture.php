@@ -104,4 +104,14 @@ class Lecture extends JsonEntity
 			'start' => $this->formatDateTime($this->start)
 		];
 	}
+
+	public static function whiteListedFields(): array
+	{
+		return ['id', 'name', 'start'];
+	}
+
+	public static function getLimit(): int
+	{
+		return 10;
+	}
 }

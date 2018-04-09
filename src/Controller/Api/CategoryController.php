@@ -8,6 +8,7 @@ use App\Form\CategoryType;
 use App\Service\JsonService;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -35,16 +36,22 @@ class CategoryController extends BaseApiController
 
 	/**
 	 * @Route("/{id}/questions", name="questions")
+	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	public function showQuestions(int $id): JsonResponse
+	public function showQuestions(Request $request, int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($this->getDoctrine()->getRepository(Question::class)->findByCategory($obj));
+		return new JsonResponse(
+			$this
+				->getDoctrine()
+				->getRepository(Question::class)
+				->findByCategory($obj, ...$this->handleOPS($request, Question::class))
+		);
 	}
 }

@@ -106,4 +106,14 @@ class Comment extends JsonEntity
 			'created' => $this->formatDateTime($this->created)
 		];
 	}
+
+	public static function whiteListedFields(): array
+	{
+		return ['id', 'text', 'created'];
+	}
+
+	public static function getLimit(): int
+	{
+		return 10;
+	}
 }

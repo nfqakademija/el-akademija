@@ -47,4 +47,14 @@ class Category extends JsonEntity
 			'name' => $this->name
 		];
 	}
+
+	public static function whiteListedFields(): array
+	{
+		return ['id', 'name'];
+	}
+
+	public static function getLimit(): int
+	{
+		return 10;
+	}
 }

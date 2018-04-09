@@ -8,6 +8,7 @@ use App\Form\QuestionType;
 use App\Service\JsonService;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -35,11 +36,12 @@ class QuestionController extends BaseApiController
 
 	/**
 	 * @Route("/{id}/comments", name="comments")
+	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
 	 * @throws \ReflectionException
 	 */
-	public function showComments(int $id): JsonResponse
+	public function showComments(Request $request, int $id): JsonResponse
 	{
 		$obj = $this->getRepository()->find($id);
 		if (!$obj)
@@ -47,7 +49,13 @@ class QuestionController extends BaseApiController
 
 		return new JsonResponse(array_merge(
 			$obj->jsonSerialize(),
-			['comments' => $this->getDoctrine()->getRepository(Comment::class)->findByQuestion($obj)]
+			[
+				'comments' =>
+					$this
+						->getDoctrine()
+						->getRepository(Comment::class)
+						->findByQuestion($obj, ...$this->handleOPS($request, Comment::class))
+			]
 		));
 	}
 }

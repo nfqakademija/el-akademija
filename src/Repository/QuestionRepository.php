@@ -22,13 +22,14 @@ class QuestionRepository extends ServiceEntityRepository
 
 	/**
 	 * @param Category $category
+	 * @param mixed ...$args
 	 * @return Question[]
 	 */
-	public function findByCategory(Category $category)
+	public function findByCategory(Category $category, ...$args)
 	{
 		return $this->findBy(
 			['category' => $category],
-			['id' => 'DESC']
+			...$args
 		);
 	}
 }

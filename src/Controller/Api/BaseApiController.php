@@ -116,10 +116,42 @@ abstract class BaseApiController extends AbstractController
 
 	/**
 	 * @Route("/show", name="show_all", methods={"GET"})
+	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function showAll(): JsonResponse
+	public function showAll(Request $request): JsonResponse
 	{
-		return new JsonResponse($this->getRepository()->findAll());
+		return new JsonResponse($this->getRepository()->findBy([], ...$this->handleOPS($request)));
+	}
+
+	/**
+	 * @param Request $request
+	 * @param string|null $class
+	 * @return array
+	 */
+	protected function handleOPS(Request $request, string $class = null): array
+	{
+		if (!$class)
+			$class = $this->class;
+
+		try {
+			$whiteList = call_user_func($class . '::whiteListedFields');
+			$limit = call_user_func($class . '::getLimit');
+		} catch (\Exception $err) {
+			return [];
+		}
+
+		$orderBy = strtolower($request->query->get('orderBy', ''));
+		$order = strtolower($request->query->get('order', ''));
+		if (!in_array($orderBy, $whiteList))
+			$orderBy = 'id';
+		if (!in_array($order, ['asc', 'desc']))
+			$order = 'desc';
+		$page = (int) $request->query->get('page');
+		if ($page <= 0)
+			$page = 1;
+		$orderArr = [$orderBy => $order];
+		$offset = ($page - 1) * $limit;
+		return [$orderArr, $limit, $offset];
 	}
 }
