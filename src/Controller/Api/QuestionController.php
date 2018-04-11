@@ -54,7 +54,7 @@ class QuestionController extends BaseApiController
 					$this
 						->getDoctrine()
 						->getRepository(Comment::class)
-						->findByQuestion($obj, ...$this->handleOPS($request, Comment::class))
+						->findByQuestion($obj, ...$this->handleOPS($request, Comment::class)->getArray())
 			]
 		));
 	}

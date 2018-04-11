@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Course;
+use App\Entity\Homework;
 use App\Entity\Lecture;
 use App\Form\CourseType;
 use App\Service\JsonService;
@@ -51,7 +52,28 @@ class CourseController extends BaseApiController
 			$this
 				->getDoctrine()
 				->getRepository(Lecture::class)
-				->findByCourse($obj, ...$this->handleOPS($request, Lecture::class))
+				->findByCourse($obj, ...$this->handleOPS($request, Lecture::class)->getArray())
+		);
+	}
+
+	/**
+	 * @Route("/{id}/homework", name="homework")
+	 * @param Request $request
+	 * @param int $id
+	 * @return JsonResponse
+	 * @throws \ReflectionException
+	 */
+	public function showHomework(Request $request, int $id): JsonResponse
+	{
+		$obj = $this->getRepository()->find($id);
+		if (!$obj)
+			return $this->jsonService->objectNotFound($this->class);
+
+		return new JsonResponse(
+			$this
+				->getDoctrine()
+				->getRepository(Homework::class)
+				->findByCourse($obj, $this->handleOPS($request, Homework::class))
 		);
 	}
 }

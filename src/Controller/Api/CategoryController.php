@@ -51,7 +51,7 @@ class CategoryController extends BaseApiController
 			$this
 				->getDoctrine()
 				->getRepository(Question::class)
-				->findByCategory($obj, ...$this->handleOPS($request, Question::class))
+				->findByCategory($obj, ...$this->handleOPS($request, Question::class)->getArray())
 		);
 	}
 }

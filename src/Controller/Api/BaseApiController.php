@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Model\QueryArgs;
 use App\Service\JsonService;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -121,37 +122,39 @@ abstract class BaseApiController extends AbstractController
 	 */
 	public function showAll(Request $request): JsonResponse
 	{
-		return new JsonResponse($this->getRepository()->findBy([], ...$this->handleOPS($request)));
+		return new JsonResponse($this->getRepository()->findBy([], ...$this->handleOPS($request)->getArray()));
 	}
 
 	/**
 	 * @param Request $request
 	 * @param string|null $class
-	 * @return array
+	 * @return QueryArgs
 	 */
-	protected function handleOPS(Request $request, string $class = null): array
+	protected function handleOPS(Request $request, string $class = null): QueryArgs
 	{
 		if (!$class)
 			$class = $this->class;
 
+		$args = new QueryArgs();
 		try {
 			$whiteList = call_user_func($class . '::whiteListedFields');
 			$limit = call_user_func($class . '::getLimit');
 		} catch (\Exception $err) {
-			return [];
+			return $args;
 		}
 
 		$orderBy = strtolower($request->query->get('orderBy', ''));
 		$order = strtolower($request->query->get('order', ''));
-		if (!in_array($orderBy, $whiteList))
-			$orderBy = 'id';
-		if (!in_array($order, ['asc', 'desc']))
-			$order = 'desc';
+		if (in_array($orderBy, $whiteList))
+			$args->setOrderBy($orderBy);
+		if (in_array($order, ['asc', 'desc']))
+			$args->setOrder(strtoupper($order));
 		$page = (int) $request->query->get('page');
 		if ($page <= 0)
 			$page = 1;
-		$orderArr = [$orderBy => $order];
 		$offset = ($page - 1) * $limit;
-		return [$orderArr, $limit, $offset];
+		$args->setLimit($limit);
+		$args->setOffset($offset);
+		return $args;
 	}
 }
