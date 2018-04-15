@@ -112,7 +112,7 @@ abstract class BaseApiController extends AbstractController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse($obj);
+		return $this->jsonService->successData($obj->jsonSerialize());
 	}
 
 	/**
@@ -122,7 +122,9 @@ abstract class BaseApiController extends AbstractController
 	 */
 	public function showAll(Request $request): JsonResponse
 	{
-		return new JsonResponse($this->getRepository()->findBy([], ...$this->handleOPS($request)->getArray()));
+		return $this->jsonService->successData(
+			$this->getRepository()->findBy([], ...$this->handleOPS($request)->getArray())
+		);
 	}
 
 	/**

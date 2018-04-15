@@ -69,7 +69,7 @@ class CourseController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse(
+		return $this->jsonService->successData(
 			$this
 				->getDoctrine()
 				->getRepository(Homework::class)

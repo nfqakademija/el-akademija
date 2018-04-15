@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Question;
+use App\Model\QueryArgs;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -31,5 +32,22 @@ class QuestionRepository extends ServiceEntityRepository
 			['category' => $category],
 			...$args
 		);
+	}
+
+	/**
+	 * @param string $param
+	 * @param QueryArgs $args
+	 * @return Question[]
+	 */
+	public function search($param, QueryArgs $args)
+	{
+		return $this->createQueryBuilder('q')
+			->where('MATCH_AGAINST (q.title, q.text, :param) > 0')
+			->setParameter('param', $param)
+			->orderBy('q.' . $args->getOrderBy(), $args->getOrder())
+			->setMaxResults($args->getLimit())
+			->setFirstResult($args->getOffset())
+			->getQuery()
+			->execute();
 	}
 }

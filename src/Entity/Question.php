@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
+ * @ORM\Table(indexes={@Index(name="search", columns={"title", "text"}, flags={"fulltext"})})
  */
 class Question extends JsonEntity
 {
@@ -134,6 +136,6 @@ class Question extends JsonEntity
 
 	public static function getLimit(): int
 	{
-		return 2;
+		return 5;
 	}
 }

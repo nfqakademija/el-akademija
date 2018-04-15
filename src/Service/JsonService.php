@@ -20,6 +20,15 @@ class JsonService
 	}
 
 	/**
+	 * @param array $params
+	 * @return JsonResponse
+	 */
+	public function successData(array $params): JsonResponse
+	{
+		return $this->success(null, ['data' => $params]);
+	}
+
+	/**
 	 * @param string $message
 	 * @param array $params
 	 * @param int $status
@@ -29,6 +38,15 @@ class JsonService
 	{
 		if ($message) $params['message'] = $message;
 		return new JsonResponse(array_merge(['success' => false], $params), $status);
+	}
+
+	/**
+	 * @param array $errors
+	 * @return JsonResponse
+	 */
+	public function errors(array $errors): JsonResponse
+	{
+		return $this->error(null, ['errors' => $errors], Response::HTTP_BAD_REQUEST);
 	}
 
 	/**

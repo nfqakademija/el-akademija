@@ -10,6 +10,9 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 
 /**
  * @Route("/api/question", name="api_question_")
@@ -57,5 +60,33 @@ class QuestionController extends BaseApiController
 						->findByQuestion($obj, ...$this->handleOPS($request, Comment::class)->getArray())
 			]
 		));
+	}
+
+	/**
+	 * @Route("/search", name="search")
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function search(Request $request): JsonResponse
+	{
+		$param = $request->query->get('param');
+		$validator = Validation::createValidator();
+		$violations = $validator->validate($param, [
+			new NotBlank(),
+			new Length([
+				'min' => 4,
+				'max' => 10
+			])
+		]);
+		if (count($violations) !== 0)
+			return $this->jsonService->errors([
+				'param' => [$violations->get(0)->getMessage()]
+			]);
+
+		return $this->jsonService->successData(
+			$this
+				->getRepository()
+				->search($param, $this->handleOPS($request, Question::class))
+		);
 	}
 }
