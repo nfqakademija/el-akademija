@@ -50,16 +50,20 @@ class QuestionController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse(array_merge(
-			$obj->jsonSerialize(),
-			[
-				'comments' =>
-					$this
-						->getDoctrine()
-						->getRepository(Comment::class)
-						->findByQuestion($obj, ...$this->handleOPS($request, Comment::class)->getArray())
-			]
-		));
+		$args = $this->handleOPS($request, Comment::class);
+		return $this->jsonService->successData(
+			array_merge(
+				$obj->jsonSerialize(),
+				[
+					'comments' =>
+						$this
+							->getDoctrine()
+							->getRepository(Comment::class)
+							->findByQuestion($obj, ...$args->getArray())
+				]
+			),
+			$args->getMetaInfo()
+		);
 	}
 
 	/**
@@ -83,10 +87,12 @@ class QuestionController extends BaseApiController
 				'param' => [$violations->get(0)->getMessage()]
 			]);
 
+		$args = $this->handleOPS($request, Question::class);
 		return $this->jsonService->successData(
 			$this
 				->getRepository()
-				->search($param, $this->handleOPS($request, Question::class))
+				->search($param, $args),
+			$args->getMetaInfo()
 		);
 	}
 }

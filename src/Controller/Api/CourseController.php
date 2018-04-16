@@ -48,11 +48,13 @@ class CourseController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
-		return new JsonResponse(
+		$args = $this->handleOPS($request, Lecture::class);
+		return $this->jsonService->successData(
 			$this
 				->getDoctrine()
 				->getRepository(Lecture::class)
-				->findByCourse($obj, ...$this->handleOPS($request, Lecture::class)->getArray())
+				->findByCourse($obj, ...$args->getArray()),
+			$args->getMetaInfo()
 		);
 	}
 
@@ -69,11 +71,13 @@ class CourseController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
+		$args = $this->handleOPS($request, Homework::class);
 		return $this->jsonService->successData(
 			$this
 				->getDoctrine()
 				->getRepository(Homework::class)
-				->findByCourse($obj, $this->handleOPS($request, Homework::class))
+				->findByCourse($obj, $args),
+			$args->getMetaInfo()
 		);
 	}
 }
