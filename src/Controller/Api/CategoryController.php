@@ -47,11 +47,13 @@ class CategoryController extends BaseApiController
 		if (!$obj)
 			return $this->jsonService->objectNotFound($this->class);
 
+		$args = $this->handleOPS($request, Question::class);
 		return $this->jsonService->successData(
 			$this
 				->getDoctrine()
 				->getRepository(Question::class)
-				->findByCategory($obj, ...$this->handleOPS($request, Question::class)->getArray())
+				->findByCategory($obj, ...$args->getArray()),
+			$args->getMetaInfo()
 		);
 	}
 }

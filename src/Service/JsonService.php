@@ -20,12 +20,13 @@ class JsonService
 	}
 
 	/**
+	 * @param array $data
 	 * @param array $params
 	 * @return JsonResponse
 	 */
-	public function successData(array $params): JsonResponse
+	public function successData(array $data, array $params = []): JsonResponse
 	{
-		return $this->success(null, ['data' => $params]);
+		return $this->success(null, array_merge($params, ['data' => $data]));
 	}
 
 	/**

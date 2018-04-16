@@ -122,8 +122,10 @@ abstract class BaseApiController extends AbstractController
 	 */
 	public function showAll(Request $request): JsonResponse
 	{
+		$args = $this->handleOPS($request);
 		return $this->jsonService->successData(
-			$this->getRepository()->findBy([], ...$this->handleOPS($request)->getArray())
+			$this->getRepository()->findBy([], ...$args->getArray()),
+			$args->getMetaInfo()
 		);
 	}
 
@@ -155,8 +157,9 @@ abstract class BaseApiController extends AbstractController
 		if ($page <= 0)
 			$page = 1;
 		$offset = ($page - 1) * $limit;
-		$args->setLimit($limit);
-		$args->setOffset($offset);
-		return $args;
+		return $args
+			->setLimit($limit)
+			->setOffset($offset)
+			->setPage($page);
 	}
 }

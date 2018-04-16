@@ -9,8 +9,9 @@ class QueryArgs
 	 * @var string $order
 	 * @var int|null $limit
 	 * @var int|null $offset
+	 * @var int $page
 	 */
-	private $orderBy, $order, $limit, $offset;
+	private $orderBy, $order, $limit, $offset, $page;
 
 	/**
 	 * QueryArgs constructor.
@@ -18,13 +19,15 @@ class QueryArgs
 	 * @param string $order
 	 * @param int|null $limit
 	 * @param int|null $offset
+	 * @param int $page
 	 */
-	public function __construct($orderBy = 'id', $order = 'DESC', $limit = null, $offset = null)
+	public function __construct($orderBy = 'id', $order = 'DESC', $limit = null, $offset = null, $page = 1)
 	{
 		$this->orderBy = $orderBy;
 		$this->order = $order;
 		$this->limit = $limit;
 		$this->offset = $offset;
+		$this->page = $page;
 	}
 
 	/**
@@ -99,8 +102,39 @@ class QueryArgs
 		return $this;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getPage()
+	{
+		return $this->offset;
+	}
+
+	/**
+	 * @param mixed $page
+	 * @return QueryArgs
+	 */
+	public function setPage($page): self
+	{
+		$this->page = $page;
+		return $this;
+	}
+
 	public function getArray(): array
 	{
 		return [[$this->orderBy => $this->order], $this->limit, $this->offset];
+	}
+
+	public function getMetaInfo(): array
+	{
+		$meta = [
+			'orderBy' => $this->orderBy,
+			'order' => $this->order
+		];
+		if ($this->limit) {
+			$meta['max_results'] = $this->limit;
+			$meta['page'] = $this->page;
+		}
+		return $meta;
 	}
 }
