@@ -15,7 +15,8 @@ Encore
     .addEntry('/js/question-view-more', ["babel-polyfill", './assets/js/question-view-more.js'])
     .addEntry('/js/question-comments-list', ["babel-polyfill", './assets/js/question-comments-list.js'])
     .addEntry('/js/comment', ["babel-polyfill", './assets/js/comment.js'])
-    .addEntry('/js/ApiClient', ["babel-polyfill", './assets/js/ApiClient.js'])
+    .addEntry('/js/api-client', ["babel-polyfill", './assets/js/api-client.js'])
+    .addEntry('/js/api', ["babel-polyfill", './assets/js/api.js'])
     // will create public/build/app.js and public/build/app.css
     .addStyleEntry('/css/style', `./assets/sass/style.scss`)
 

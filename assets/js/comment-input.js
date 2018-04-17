@@ -1,5 +1,6 @@
 import React from 'react';
-import ApiClient from './ApiClient';
+import ApiClient from './api-client';
+const {api} = require('./api');
 
 class CommentInput extends React.Component {
 
@@ -16,13 +17,12 @@ class CommentInput extends React.Component {
     }
 
     handleSubmit() {
-        ApiClient.post('/api/comment/new',
+        ApiClient.post(api.question.post_comment,
             {
                 'comment[question]': this.props.questionId,
                 'comment[user]': 1,
                 'comment[text]': this.state.value
-            }).
-        then((response) => console.log(response));
+            });
 
     }
 
@@ -34,7 +34,9 @@ class CommentInput extends React.Component {
                               placeholder="Type..." value={this.state.value} onChange={this.handleChange}>
                 </textarea>
                     <div className="d-flex">
-                        <button className="btn btn-orange" type="submit">Post</button>
+                        <div className="button-orange">
+                            <button className="btn button-round" type="submit">Komentuoti</button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import ApiClient from './ApiClient';
+
 
 import TimeAgo from 'javascript-time-ago';
 import lt from 'javascript-time-ago/locale/lt';
@@ -8,36 +8,21 @@ TimeAgo.locale(lt);
 const timeAgo = new TimeAgo('lt-LT');
 
 
-
 class Question extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            question: null
-        };
-    }
-
-    componentDidMount() {
-        ApiClient.get(`/api/question/${this.props.questionId}/comments`)
-            .then(question => {
-                this.setState({
-                    question: question
-                })
-            });
-
-
     }
 
     render() {
 
         // Kai dar neuzkrauta informacija
-        if (!this.state.question) {
+        if (!this.props.question) {
             return <div></div>
         } else {
 
-            const {question} = {...this.state};
-            const {category, user, comments} = {...question};
+            const {question} = {...this.props};
+            const { user } = {...question};
             return (
                 <div>
 
@@ -69,8 +54,8 @@ class Question extends React.Component {
                             <p className="sp-paragraph mt-4">{question.text}</p>
                         </div>
 
-                        <div className="button-blue-outline mt-2 justify-content-end">
-                            <a href={"/questions/"+question.id} className="btn" role="button">Skaityti daugiau</a>
+                        <div className="button-blue mt-2 justify-content-end">
+                            <a href={"/questions/"+question.id} className="btn button-shaped" role="button">Skaityti daugiau</a>
                         </div>
                     </div>
                 </div>

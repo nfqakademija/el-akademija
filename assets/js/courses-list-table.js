@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ApiClient from './ApiClient'
+import ApiClient from './api-client'
 
 class Courses_List_Table extends React.Component {
 
@@ -14,7 +14,7 @@ class Courses_List_Table extends React.Component {
     componentDidMount() {
         ApiClient.get('/api/course/show').then(courses => {
                 this.setState({
-                    courses: courses
+                    courses: courses.data
                 })
             }
         );
@@ -42,7 +42,6 @@ class Courses_List_Table extends React.Component {
             const currentCourse = this.state.courses.find(course => {
                     let startdate = new Date(course.start);
                     let enddate = new Date(course.end);
-                    console.log(startdate + " " + enddate);
                     return course.name === "Kaunas | Pavasario semestras" && startdate < today && enddate > today;
                 }
             );
@@ -60,7 +59,7 @@ class Courses_List_Table extends React.Component {
                     {coursesList}
                     </tbody>
                 </table>*/
-                <h6 class="currentCourse">{currentCourse.name}</h6>
+                <h6 className="currentCourse">{currentCourse.name}</h6>
 
 
             )

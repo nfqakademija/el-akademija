@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ApiClient from './ApiClient';
+import ApiClient from './api-client';
 import Question from './question';
+
+const {api} = require('./api');
 
 
 class QuestionList extends React.Component {
@@ -15,10 +17,10 @@ class QuestionList extends React.Component {
     }
 
     componentDidMount() {
-        ApiClient.get(`/api/question/show`)
+        ApiClient.get(api.question.show)
             .then(questions => {
                 this.setState({
-                    questions: questions
+                    questions: questions.data
                 })
             });
 
@@ -38,7 +40,7 @@ class QuestionList extends React.Component {
                     {questions.map(question =>
                         <Question
                             key={question.id}
-                            questionId={question.id}/>
+                            question={question}/>
                     )}
                 </div>
             );

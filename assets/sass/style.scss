@@ -330,12 +330,27 @@ a {
 
 }
 
-.button-blue-outline {
+.button-round {
+  border-radius: 20px;
+}
+
+.button-shaped {
+  border-radius: 4px;
+}
+
+.button-orange {
+  display:flex;
+  .btn {
+    background: $orange;
+    color:white;
+  }
+}
+
+.button-blue {
   display: flex;
   .btn {
     text-transform: uppercase;
     border: 1px solid #63B1B9;
-    border-radius: 20px;
     background: transparent;
     color: #63B1B9;
     &:hover {
@@ -383,6 +398,7 @@ a {
     .hearts, .comments {
       display: flex;
       justify-content: space-between;
+      display:none; // SITA BUTINAI ISIMTI
     }
 
     .heart-number, .comment-number {

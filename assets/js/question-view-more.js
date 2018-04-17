@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ApiClient from './ApiClient';
+import ApiClient from './api-client';
+const {api} = require('./api');
 
 import TimeAgo from 'javascript-time-ago';
 import lt from 'javascript-time-ago/locale/lt';
@@ -23,10 +24,10 @@ class QuestionViewMore extends React.Component {
     }
 
     componentDidMount() {
-        ApiClient.get(`/api/question/${this.props.questionId}/comments`)
+        ApiClient.get(api.question.comments(this.props.questionId))
             .then(question => {
                 this.setState({
-                    question: question
+                    question: question.data
                 })
             });
 
@@ -41,12 +42,12 @@ class QuestionViewMore extends React.Component {
         } else {
 
             const { question } = {...this.state};
-            const { category, user, comments } = {...question};
+            const { user, comments } = {...question};
             return (
                 <div>
                     <div className="mb-4">
-                        <div className="button-blue-outline mt-2 justify-content-start">
-                            <a href="/questions" className="btn" role="button">Atgal</a>
+                        <div className="button-blue mt-2 justify-content-start">
+                            <a href="/questions" className="btn button-shaped" role="button">Atgal</a>
                         </div>
                     </div>
                     <div className="stream-posts">
