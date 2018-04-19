@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block  main%}
+    <div class="container upper calendar">
+
+        <div class="card">
+            <div class="card-header">
+                Kalendorius
+            </div>
+            <div class="card-body">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript_for_page %}
+    <script src="{{ asset('build/js/calendar.js') }}"></script>
+{% endblock %}

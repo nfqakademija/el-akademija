@@ -33,4 +33,13 @@ class IndexController extends AbstractController
     {
         return $this->render('question.html.twig', ['id' => $id]);
     }
+
+    /**
+     * @Route("/calendar", name="calendar")
+     * @return Response
+     */
+    public function calendar(): Response
+    {
+        return $this->render('calendar.html.twig');
+    }
 }

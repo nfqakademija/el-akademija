@@ -7,7 +7,7 @@ Encore
 
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
-
+    .addEntry('/js/calendar', ["babel-polyfill", './assets/js/calendar.js'])
     .addEntry('/js/courses-list-table', ["babel-polyfill", './assets/js/courses-list-table.js'])
     .addEntry('/js/question', ["babel-polyfill", './assets/js/question.js'])
     .addEntry('/js/comment-input', ["babel-polyfill", './assets/js/comment-input.js'])
