@@ -18,18 +18,15 @@
             <li class="{{ route starts with 'question' ? 'active' }}">
                 <a href="{{ path('questions') }}">Klausimai</a>
             </li>
-            <li class="{{ route == 'calendar' ? 'active' }}">
-                <a href="{{ path('calendar') }}">Tvarkaraštis</a>
+            <li class="{{ route == 'schedule' ? 'active' }}">
+                <a href="{{ path('schedule') }}">Tvarkaraštis</a>
             </li>
-            <li>
+            <li class="{{ route starts with 'admin' ? 'active' }}">
                 <!-- Link with dropdown items -->
-                <a href="#PagesSubMenu" data-toggle="collapse" aria-expanded="false">Paskaitos</a>
-                <ul class="collapse list-unstyled" id="PagesSubMenu">
-                    <li>
-                        <a href="#">Front-End</a>
-                    </li>
-                    <li>
-                        <a href="#">PHP</a>
+                <a href="#AdminSubMenu" data-toggle="collapse" aria-expanded="{{ route starts with 'admin' ? 'true':'false' }}">Admin</a>
+                <ul class="list-unstyled collapse {{ route starts with 'admin' ? 'show' }}" id="AdminSubMenu">
+                    <li class="{{ route == 'admin_schedule' ? 'active' }}">
+                        <a href="{{ path('admin_schedule') }}">Tvarkaraštis</a>
                     </li>
                 </ul>
         </ul>

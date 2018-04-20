@@ -14,10 +14,14 @@ class CommentsList extends React.Component {
         } else {
             let {comments} = this.props;
             return (
-                <div className="container mx-3">
-                    {comments.map(comment =>
-                        <Comment key={comment.id} comment={comment} />
-                    )}
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            {comments.map(comment =>
+                                <Comment key={comment.id} comment={comment} />
+                            )}
+                        </div>
+                    </div>
                 </div>
             )
 

@@ -28,6 +28,9 @@ class CommentInput extends React.Component {
 
     render() {
         return (
+            <div className="container-fluid">
+            <div className="row">
+                <div className="col-sm-12">
             <div className="post-editor">
                 <form onSubmit={this.handleSubmit}>
                     <textarea name="post-field" id="post-field" className="post-field"
@@ -39,6 +42,9 @@ class CommentInput extends React.Component {
                         </div>
                     </div>
                 </form>
+            </div>
+            </div>
+            </div>
             </div>
         )
     }

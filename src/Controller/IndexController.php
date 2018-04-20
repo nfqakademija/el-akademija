@@ -35,11 +35,19 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/calendar", name="calendar")
+     * @Route("/schedule", name="schedule")
      * @return Response
      */
-    public function calendar(): Response
+    public function schedule(): Response
     {
-        return $this->render('calendar.html.twig');
+        return $this->render('schedule.html.twig');
+    }
+
+    /**
+     * @Route("/admin/schedule", name="admin_schedule")
+     * @return Response
+     */
+    public function admin_schedule(): Response {
+        return $this->render('admin/admin_schedule.html.twig');
     }
 }

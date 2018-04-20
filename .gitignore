@@ -5,6 +5,7 @@
 /var/
 /vendor/
 /node_modules
+/public/build
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###

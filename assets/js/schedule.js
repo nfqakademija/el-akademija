@@ -50,7 +50,7 @@ class CustomEvent extends React.Component {
     }
 }
 
-class Calendar extends React.Component {
+class Schedule extends React.Component {
 
     constructor(props) {
         super(props);
@@ -181,20 +181,20 @@ class Calendar extends React.Component {
             const events = [];
             const {lectures} = {...this.state};
             if(this.state.lectures) {
-                for (let i = 0; i < lectures.length; i++) {
 
-                    let start = new Date(lectures[i].start);
-                    let end = new Date(lectures[i].start);
+                lectures.forEach(l => {
+                    let start = new Date(l.start);
+                    let end = new Date(l.start);
                     end.setHours(start.getHours()+2);
 
-                    events[i] = {
-                        id: lectures[i].id,
-                        title: lectures[i].name,
+                    events.push({
+                        id: l.id,
+                        title: l.name,
                         start: start,
                         end: end,
-                        category: lectures[i].category.name,
-                    }
-                }
+                        category: l.category.name,
+                    })
+                });
             }
             return(
                 <div>
@@ -239,4 +239,4 @@ class Calendar extends React.Component {
     }
 }
 
-ReactDOM.render(<Calendar/>, document.getElementById('calendar'));
+ReactDOM.render(<Schedule/>, document.getElementById('schedule'));
