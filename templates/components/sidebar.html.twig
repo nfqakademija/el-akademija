@@ -18,6 +18,9 @@
             <li class="{{ route starts with 'question' ? 'active' }}">
                 <a href="{{ path('questions') }}">Klausimai</a>
             </li>
+            <li class="{{ route == 'calendar' ? 'active' }}">
+                <a href="{{ path('calendar') }}">Tvarkaraštis</a>
+            </li>
             <li>
                 <!-- Link with dropdown items -->
                 <a href="#PagesSubMenu" data-toggle="collapse" aria-expanded="false">Paskaitos</a>

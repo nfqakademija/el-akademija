@@ -3,18 +3,74 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/lt';
 import ReactDOM from "react-dom";
+import ApiClient from "./api-client";
+const {api} = require('./api');
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 BigCalendar.momentLocalizer(moment);
+
+const CategoryColors = [
+    {category:'Backend', color:'blue'},
+    {category:'Frontend', color:'green'},
+    {category:'Mysql', color:'yellow'},
+    {category:'UX', color:'red'},
+];
+
+class CustomEvent extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            popoverOpen: false
+        };
+    }
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        });
+    }
+
+    render(){
+        return (
+            <div>
+                <div id={`Popover${this.props.event.id}`} onClick={this.toggle}>
+                    {this.props.event.title}
+                </div>
+                <Popover placement="left" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
+                    <PopoverHeader style={{
+                        backgroundColor: CategoryColors.find(c => c.category === this.props.event.category).color,
+                        color:'white'
+                    }}>{this.props.event.title}</PopoverHeader>
+                    <PopoverBody>{this.props.event.category}</PopoverBody>
+                </Popover>
+            </div>
+        );
+    }
+}
 
 class Calendar extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            lectures: null
+        }
     }
 
+    componentDidMount() {
+        ApiClient.get(api.lecture.show)
+            .then(lectures => {
+                this.setState({
+                    lectures: lectures.data
+                })
+            });
+    }
 
     render() {
-        let events = [
+
+        /*const events = [
             {
                 id: 0,
                 title: 'All Day Event very long title',
@@ -121,47 +177,65 @@ class Calendar extends React.Component {
                 end: new Date(new Date().setHours(new Date().getHours() + 6)),
                 category: 'Front'
             },
-        ];
-        return(
+        ];*/
+            const events = [];
+            const {lectures} = {...this.state};
+            if(this.state.lectures) {
+                for (let i = 0; i < lectures.length; i++) {
 
-            <BigCalendar
-                culture='lt'
-                popup events={events}
-                step={60}
-                showMultiDayTimes
-                defaultDate={new Date()}
-                views={{ month: true, week: true, day: true }}
+                    let start = new Date(lectures[i].start);
+                    let end = new Date(lectures[i].start);
+                    end.setHours(start.getHours()+2);
 
-                eventPropGetter={
-                    (event, start, end, isSelected) => {
-                        let newStyle = {
-                            backgroundColor: "green",
-                            color: 'white',
-                        };
+                    events[i] = {
+                        id: lectures[i].id,
+                        title: lectures[i].name,
+                        start: start,
+                        end: end,
+                        category: lectures[i].category.name,
+                    }
+                }
+            }
+            return(
+                <div>
+                    <BigCalendar
+                        culture='lt'
+                        popup events={events}
+                        step={60}
+                        showMultiDayTimes
+                        defaultDate={new Date()}
+                        views={{ month: true, week: true, day: true }}
 
-                        if(event.category === 'PHP') {
-                            newStyle.backgroundColor = "blue";
-                        } else if(event.category === 'Front') {
-                            newStyle.backgroundColor = "red";
+                        eventPropGetter={
+                            (event, start, end, isSelected) => {
+                                let newStyle = {
+                                    backgroundColor: "red",
+                                    color: 'white',
+                                };
+                                newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
+                                return {
+                                    className: "",
+                                    style: newStyle
+                                };
+                            }
                         }
-                        return {
-                            className: "",
-                            style: newStyle
-                        };
-                    }
-                }
-                messages={
-                    {
-                        'today': 'šiandien',
-                        'previous': 'atgal',
-                        'next': 'kitas',
-                        'month': 'mėnuo',
-                        'week': 'savaitė',
-                        'day': 'diena'
-                    }
-                }
-            />
-        )
+                        messages={
+                            {
+                                'today': 'šiandien',
+                                'previous': 'atgal',
+                                'next': 'kitas',
+                                'month': 'mėnuo',
+                                'week': 'savaitė',
+                                'day': 'diena'
+                            }
+                        }
+                        components={{
+                            event: CustomEvent,
+                        }}
+                    />
+                </div>
+
+            )
     }
 }
 
