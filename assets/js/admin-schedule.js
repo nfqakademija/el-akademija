@@ -52,6 +52,22 @@ class CustomEvent extends React.Component {
     }
 }
 
+class ModalForm extends React.Component {
+
+    constructor(props){
+        super(props);
+
+    }
+
+    render(){
+        return (
+            <div>
+
+            </div>
+        );
+    }
+}
+
 class AdminSchedule extends React.Component {
 
 
@@ -86,22 +102,6 @@ class AdminSchedule extends React.Component {
         const events = [];
         const {lectures} = {...this.state};
 
-        const EventModal = props => (
-            <div>
-                <Modal isOpen={this.state.modal} fade={true} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Paskaitos pridėjimas</ModalHeader>
-                    <ModalBody>
-
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggle}>Do Something</Button>
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
-        );
-
-
         if(this.state.lectures) {
 
             lectures.forEach(l => {
@@ -118,45 +118,69 @@ class AdminSchedule extends React.Component {
                 })
             });
         }
+
+
+        const EventModal = props => (
+            <div>
+                <Modal isOpen={this.state.modal} fade={true} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Paskaitos pridėjimas</ModalHeader>
+                    <ModalBody>
+
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggle}>Do Something</Button>
+                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+            </div>
+        );
+
+        const Calendar = props => (
+            <BigCalendar
+                selectable
+                culture='lt'
+                popup events={events}
+                step={60}
+                defaultView='week'
+                defaultDate={new Date()}
+                views={["month", "week", "day"]}
+
+                eventPropGetter={
+                    (event, start, end, isSelected) => {
+                        let newStyle = {
+                            backgroundColor: "red",
+                            color: 'white',
+                        };
+                        newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
+                        return {
+                            className: "",
+                            style: newStyle
+                        };
+                    }
+                }
+                messages={
+                    {
+                        'today': 'Šiandien',
+                        'previous': 'Atgal',
+                        'next': 'Kitas',
+                        'month': 'Mėnuo',
+                        'week': 'Savaitė',
+                        'day': 'Diena',
+                        'showMore': total => `+${total} Žiūrėti daugiau`
+                    }
+                }
+                components={{
+                    event: CustomEvent,
+                }}
+                onSelectSlot={s => this.toggle(s)}
+            />
+        );
+
+
         return(
             <div>
-                <BigCalendar
-                    selectable
-                    culture='lt'
-                    popup events={events}
-                    step={60}
-                    showMultiDayTimes
-                    defaultDate={new Date()}
-                    views={{ month: true, week: true, day: true }}
 
-                    eventPropGetter={
-                        (event, start, end, isSelected) => {
-                            let newStyle = {
-                                backgroundColor: "red",
-                                color: 'white',
-                            };
-                            newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
-                            return {
-                                className: "",
-                                style: newStyle
-                            };
-                        }
-                    }
-                    messages={
-                        {
-                            'today': 'šiandien',
-                            'previous': 'atgal',
-                            'next': 'kitas',
-                            'month': 'mėnuo',
-                            'week': 'savaitė',
-                            'day': 'diena'
-                        }
-                    }
-                    components={{
-                        event: CustomEvent,
-                    }}
-                    onSelectSlot={s => this.toggle(s)}
-                />
+                <Calendar/>
                 <EventModal/>
             </div>
 
