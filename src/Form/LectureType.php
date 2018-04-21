@@ -17,6 +17,7 @@ class LectureType extends AbstractType
 			->add('category')
 			->add('name')
 			->add('start', DateType::class, ['widget' => 'single_text'])
+			->add('end', DateType::class, ['widget' => 'single_text'])
 		;
 	}
 

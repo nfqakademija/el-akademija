@@ -45,6 +45,14 @@ class Lecture extends JsonEntity
 	 */
 	private $start;
 
+	/**
+	 * @ORM\Column(type="datetime")
+	 * @Assert\NotBlank()
+	 * @Assert\Date()
+	 * @Assert\GreaterThan(propertyPath="start")
+	 */
+	private $end;
+
 	public function getId()
 	{
 		return $this->id;
@@ -94,6 +102,17 @@ class Lecture extends JsonEntity
 		return $this;
 	}
 
+	public function getEnd(): ?\DateTimeInterface
+	{
+		return $this->end;
+	}
+
+	public function setEnd(?\DateTimeInterface $end): self
+	{
+		$this->end = $end;
+		return $this;
+	}
+
 	public function jsonSerialize()
 	{
 		return [
@@ -101,13 +120,14 @@ class Lecture extends JsonEntity
 			'course' => $this->course,
 			'category' => $this->category,
 			'name' => $this->name,
-			'start' => $this->formatDateTime($this->start)
+			'start' => $this->formatDateTime($this->start),
+			'end' => $this->formatDateTime($this->end)
 		];
 	}
 
 	public static function whiteListedFields(): array
 	{
-		return ['id', 'name', 'start'];
+		return ['id', 'name', 'start', 'end'];
 	}
 
 	public static function getLimit(): int
