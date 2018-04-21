@@ -28,6 +28,8 @@ class CustomEvent extends React.Component {
         this.state = {
             popoverOpen: false
         };
+
+
     }
 
     toggle() {
@@ -58,39 +60,73 @@ class EventModal extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            name: '',
+            category : this.props.categories[0].name,
+            description: ''
+        };
+
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.handleChangeCategory = this.handleChangeCategory.bind(this);
+        this.handleChangeDescription = this.handleChangeDescription.bind(this);
+    }
+
+
+    handleChangeName(event) {
+        this.setState({name: event.target.value});
+    }
+
+    handleChangeCategory(event) {
+        this.setState({category: event.target.value});
+    }
+
+    handleChangeDescription(event) {
+        this.setState({description: event.target.value});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
     }
 
     render(){
+        console.log(this.state.name);
+        console.log(this.state.category);
+        console.log(this.state.description);
         return (
             <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
-                <Form>
+                <Form onSubmit={this.handleSubmit}>
                 <ModalHeader toggle={this.props.toggle}>Paskaitos pridėjimas</ModalHeader>
                 <ModalBody>
                     <Container>
-                        <FormGroup >
+                        <FormGroup>
                             <FormGroup row>
                                 <Label sm={2}>Pradžia</Label>
                                 <Label sm={10}>
-                                    {this.props.event !== null ? moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                                    {this.props.event !== null ?
+                                        moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss")
+                                        : null}
                                 </Label>
                             </FormGroup>
                             <FormGroup row>
                                 <Label sm={2}>Pabaiga</Label>
                                 <Label sm={10}>
-                                    {this.props.event !== null ? moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                                    {this.props.event !== null ?
+                                        moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss")
+                                        : null}
                                 </Label>
                             </FormGroup>
                         </FormGroup>
                         <FormGroup row>
                             <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
                             <Col sm={10}>
-                                <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
+                                <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
                             <Col sm={10}>
-                                <Input type="select" name="lectureCategory" id="lectureCategory" >
+                                <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category} onChange={this.handleChangeCategory}>
                                     {this.props.categories.map((category) =>
                                         <option style={{
                                             color: CategoryColors.find(c => c.category === category.name).color,
@@ -103,13 +139,19 @@ class EventModal extends React.Component {
                         <FormGroup row>
                             <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
                             <Col sm={10}>
-                                <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
+                                <Input
+                                    style={{minHeight: '200px'}}
+                                    type="textarea"
+                                    name="lectureDescription"
+                                    id="lectureDescription"
+                                    value={this.state.description}
+                                    onChange={this.handleChangeDescription}/>
                             </Col>
                         </FormGroup>
                     </Container>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="success" onClick={this.props.toggle}>Pridėti paskaitą</Button>
+                    <Button color="success" type='submit'>Pridėti paskaitą</Button>
                     <Button color="danger" onClick={this.props.toggle}>Atšaukti</Button>
                 </ModalFooter>
                 </Form>
