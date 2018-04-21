@@ -1,3 +1,6 @@
+// Paderinti eventus, savaites skyriuje jeigu keletas eventu tuo paciu metu, tada gaunas overlapsingas
+// ir tada rodo tik data, ir nebegalima paspausti ant teksto, kuris ismeta popoveri.
+
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
@@ -40,8 +43,8 @@ class CustomEvent extends React.Component {
 
     render(){
         return (
-            <div>
-                <div id={`Popover${this.props.event.id}`} onClick={this.toggle}>
+            <div style={{height: '100%'}}>
+                <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{height: '100%'}}>
                     {this.props.event.title}
                 </div>
                 <Popover placement="left" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
@@ -61,24 +64,53 @@ class EventModal extends React.Component {
     constructor(props) {
         super(props);
 
+        let today = new Date();
+        this.currentCourse = this.props.courses.find(course => {
+                let startdate = new Date(course.start);
+                let enddate = new Date(course.end);
+                return course.name === "Kaunas | Pavasario semestras" && startdate < today && enddate > today;
+            }
+        );
+
         this.state = {
             name: '',
-            category : this.props.categories[0].name,
-            description: ''
+            category: {
+                name: this.props.categories[0].name,
+                id: this.props.categories[0].id
+            },
+            description: '',
+            course: {
+                /*name: this.props.courses[0].name,
+                id: this.props.courses[0].id*/
+                name: this.currentCourse.name,
+                id: this.currentCourse.id
+            }
         };
-
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeCategory = this.handleChangeCategory.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
+
+    handleChangeCourse(event) {
+        this.setState({
+            course: {
+                name: event.target.value,
+                id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
+            }});
+    }
     handleChangeName(event) {
         this.setState({name: event.target.value});
     }
-
     handleChangeCategory(event) {
-        this.setState({category: event.target.value});
+        this.setState({
+            category: {
+                name: event.target.value,
+                id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
+            }});
     }
 
     handleChangeDescription(event) {
@@ -87,12 +119,25 @@ class EventModal extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        ApiClient.post(api.lecture.new,
+            {
+                'lecture[course]': this.state.course.id,
+                'lecture[category]': this.state.category.id,
+                'lecture[name]': this.state.name,
+                'lecture[description]': this.state.description,
+                'lecture[start]': moment(this.props.event.start).format('YYYY-MM-DD HH:mm:ss'), // 0000-00-00 00:00:00
+                'lecture[end]': moment(this.props.event.end).format('YYYY-MM-DD HH:mm:ss')
+            }).then((response) => {
+            if (response.data.success) {
+                console.log(response);
+                this.props.confirm();
+            }
+            }).catch((error) => {
+                console.log(error);
+        });
     }
 
     render(){
-        console.log(this.state.name);
-        console.log(this.state.category);
-        console.log(this.state.description);
         return (
             <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
                 <Form onSubmit={this.handleSubmit}>
@@ -118,6 +163,20 @@ class EventModal extends React.Component {
                             </FormGroup>
                         </FormGroup>
                         <FormGroup row>
+                            <Label for="courseList" sm={2}>Kursas</Label>
+                            <Col sm={10}>
+                                <Input type="select" name="courseList" id="courseList" value={this.state.course.name} onChange={this.handleChangeCourse}>
+                                    {this.props.courses.map((course) =>
+                                        <option
+                                            style={{
+                                                color: course.id === this.currentCourse.id ? 'red' : null}}
+                                            key={course.id}
+                                            data-id={course.id}>{course.name}</option>
+                                    )}
+                                </Input>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
                             <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
                             <Col sm={10}>
                                 <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
@@ -126,12 +185,13 @@ class EventModal extends React.Component {
                         <FormGroup row>
                             <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
                             <Col sm={10}>
-                                <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category} onChange={this.handleChangeCategory}>
+                                <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
                                     {this.props.categories.map((category) =>
                                         <option style={{
                                             color: CategoryColors.find(c => c.category === category.name).color,
                                             textDecoration:'bold'}}
-                                                key={category.id}>{category.name}</option>
+                                                key={category.id}
+                                                data-id={category.id}>{category.name}</option>
                                     )}
                                 </Input>
                             </Col>
@@ -166,26 +226,20 @@ class AdminSchedule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            lectures: null,
             modal: false,
             event: null,
-            categories:null
+            lectures: null,
+            categories:null,
+            courses:null
         };
 
         this.toggle = this.toggle.bind(this);
+        this.update = this.update.bind(this);
+        this.confirm = this.confirm.bind(this);
     }
 
     componentDidMount() {
-
-        ApiClient.all([
-            ApiClient.get(api.lecture.show),
-            ApiClient.get(api.category.show)
-        ]).then(ApiClient.spread((lectures, categories) => {
-            this.setState({
-                lectures: lectures.data,
-                categories: categories.data
-            });
-        }));
+        this.update();
     }
 
     toggle = (e) => {
@@ -198,18 +252,36 @@ class AdminSchedule extends React.Component {
         });
     };
 
+    update = () => {
+        ApiClient.all([
+            ApiClient.get(api.lecture.show),
+            ApiClient.get(api.category.show),
+            ApiClient.get(api.course.show)
+        ]).then(ApiClient.spread((lectures, categories, courses) => {
+            this.setState({
+                lectures: lectures.data,
+                categories: categories.data,
+                courses: courses.data
+            });
+        }));
+    };
+
+    confirm = () => {
+        this.update();
+        this.toggle();
+    };
+
     render() {
 
 
         const events = [];
-        const {lectures, categories} = {...this.state};
+        const {modal, event, lectures, categories, courses} = {...this.state};
 
-        if(this.state.lectures && this.state.categories) {
+        if(lectures && categories) {
 
             lectures.forEach(l => {
                 let start = new Date(l.start);
-                let end = new Date(l.start);
-                end.setHours(start.getHours()+2);
+                let end = new Date(l.end);
 
                 events.push({
                     id: l.id,
@@ -259,11 +331,13 @@ class AdminSchedule extends React.Component {
                         }}
                         onSelectSlot={s => this.toggle(s)}
                     />
-                    {this.state.modal !== false ?
-                        <EventModal modal={this.state.modal}
+                    {modal !== false ?
+                        <EventModal modal={modal}
                                     toggle={this.toggle}
-                                    event={this.state.event}
-                                    categories={this.state.categories}/>
+                                    event={event}
+                                    categories={categories}
+                                    courses={courses}
+                                    confirm={this.confirm}/>
                         : null}
                 </div>
             )

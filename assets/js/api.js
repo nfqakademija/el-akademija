@@ -8,10 +8,14 @@ const api = {
         post_comment: '/api/comment/new',
     },
     lecture: {
-        show: '/api/lecture/show'
+        show: '/api/lecture/show',
+        new: '/api/lecture/new'
     },
     category: {
         show: '/api/category/show'
+    },
+    course: {
+        show: '/api/course/show'
     }
 };
 
