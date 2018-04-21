@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Lecture;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,8 +17,8 @@ class LectureType extends AbstractType
 			->add('category')
 			->add('name')
 			->add('description')
-			->add('start', DateType::class, ['widget' => 'single_text'])
-			->add('end', DateType::class, ['widget' => 'single_text'])
+			->add('start', DateTimeType::class, ['widget' => 'single_text'])
+			->add('end', DateTimeType::class, ['widget' => 'single_text'])
 		;
 	}
 
