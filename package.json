@@ -33,7 +33,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "encore dev --watch"
+    "watch": "encore dev --watch",
+    "compile": "encore dev"
   },
   "repository": {
     "type": "git",

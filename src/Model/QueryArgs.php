@@ -11,7 +11,7 @@ class QueryArgs
 	 * @var int|null $offset
 	 * @var int $page
 	 */
-	private $orderBy, $order, $limit, $offset, $page;
+	private $orderBy, $order, $limit, $offset, $page, $filter;
 
 	/**
 	 * QueryArgs constructor.
@@ -20,14 +20,16 @@ class QueryArgs
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @param int $page
+	 * @param array $filter
 	 */
-	public function __construct($orderBy = 'id', $order = 'DESC', $limit = null, $offset = null, $page = 1)
+	public function __construct($orderBy = 'id', $order = 'DESC', $limit = null, $offset = null, $page = 1, array $filter = [])
 	{
 		$this->orderBy = $orderBy;
 		$this->order = $order;
 		$this->limit = $limit;
 		$this->offset = $offset;
 		$this->page = $page;
+		$this->filter = $filter;
 	}
 
 	/**
@@ -117,6 +119,24 @@ class QueryArgs
 	public function setPage($page): self
 	{
 		$this->page = $page;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFilter()
+	{
+		return $this->filter;
+	}
+
+	/**
+	 * @param array $filter
+	 * @return QueryArgs
+	 */
+	public function setFilter(array $filter): self
+	{
+		$this->filter = $filter;
 		return $this;
 	}
 

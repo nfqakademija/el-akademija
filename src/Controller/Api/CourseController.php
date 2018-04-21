@@ -36,6 +36,22 @@ class CourseController extends BaseApiController
 	}
 
 	/**
+	 * @Route("/show", name="show_all", methods={"GET"})
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function showAll(Request $request): JsonResponse
+	{
+		$args = $this->handleOPS($request);
+		if ($request->query->get('not_ended'))
+			$args->setFilter(['notEnded' => true]);
+		return $this->jsonService->successData(
+			$this->getRepository()->findByFilter($args),
+			$args->getMetaInfo()
+		);
+	}
+
+	/**
 	 * @Route("/{id}/lectures", name="lectures")
 	 * @param Request $request
 	 * @param int $id

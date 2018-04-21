@@ -39,6 +39,20 @@ class HomeworkLink extends JsonEntity
 	private $link;
 
 	/**
+	 * @ORM\Column(type="smallint", nullable=true)
+	 * @Assert\NotBlank()
+	 * @Assert\Range(min=0, max=10)
+	 */
+	private $grade;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=1000)
+	 */
+	private $comment;
+
+	/**
 	 * @ORM\Column(type="datetime")
 	 * @Assert\LessThan(propertyPath="homework.deadline", message="You cannot submit homework after its deadline")
 	 */
@@ -87,6 +101,28 @@ class HomeworkLink extends JsonEntity
 		return $this;
 	}
 
+	public function getGrade(): ?int
+	{
+		return $this->grade;
+	}
+
+	public function setGrade(int $grade): self
+	{
+		$this->grade = $grade;
+		return $this;
+	}
+
+	public function getComment(): ?string
+	{
+		return $this->comment;
+	}
+
+	public function setComment(string $comment): self
+	{
+		$this->comment = $comment;
+		return $this;
+	}
+
 	public function getCreated(): ?\DateTimeInterface
 	{
 		return $this->created;
@@ -105,6 +141,8 @@ class HomeworkLink extends JsonEntity
 			'homework' => $this->homework,
 			'user' => $this->user,
 			'link' => $this->link,
+			'grade' => $this->grade,
+			'comment' => $this->comment,
 			'created' => $this->formatDateTime($this->created)
 		];
 	}
