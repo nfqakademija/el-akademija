@@ -58,14 +58,77 @@ class ModalForm extends React.Component {
 
     constructor(props){
         super(props);
-
     }
 
     render(){
         return (
             <div>
-
+                <Form>
+                    <FormGroup >
+                        <FormGroup row>
+                            <Label sm={2}>Pradžia</Label>
+                            <Label sm={10}>
+                                {this.props.event !== null ? moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                            </Label>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label sm={2}>Pabaiga</Label>
+                            <Label sm={10}>
+                                {this.props.event !== null ? moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                            </Label>
+                        </FormGroup>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
+                        <Col sm={10}>
+                            <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
+                        <Col sm={10}>
+                            <Input type="select" name="lectureCategory" id="lectureCategory" >
+                                {this.props.categories.map((category) =>
+                                    <option style={{
+                                        color: CategoryColors.find(c => c.category === category.name).color,
+                                        textDecoration:'bold'}}
+                                            key={category.id}>{category.name}</option>
+                                )}
+                            </Input>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                        <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
+                        <Col sm={10}>
+                            <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
+                        </Col>
+                    </FormGroup>
+                </Form>
             </div>
+        );
+    }
+}
+
+class EventModal extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        return (
+            <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
+                <ModalHeader toggle={this.props.toggle}>Paskaitos pridėjimas</ModalHeader>
+                <ModalBody>
+                    <Container>
+                        <ModalForm event={this.props.event} categories={this.props.categories}/>
+                    </Container>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="success" onClick={this.props.toggle}>Pridėti paskaitą</Button>
+                    <Button color="danger" onClick={this.props.toggle}>Atšaukti</Button>
+                </ModalFooter>
+            </Modal>
         );
     }
 }
@@ -95,8 +158,6 @@ class AdminSchedule extends React.Component {
                 lectures: lectures.data,
                 categories: categories.data
             });
-            console.log(lectures.data);
-            console.log(categories.data);
         }));
     }
 
@@ -117,64 +178,6 @@ class AdminSchedule extends React.Component {
 
         const events = [];
         const {lectures, categories} = {...this.state};
-
-        const EventModal = props => (
-            <div>
-                <Modal isOpen={this.state.modal} fade={true} toggle={this.toggle} size='lg'>
-                    <ModalHeader toggle={this.toggle}>Paskaitos pridėjimas</ModalHeader>
-                    <ModalBody>
-                        <Container>
-                            <Form>
-                                <FormGroup >
-                                    <FormGroup row>
-                                        {console.log(this.state.event)}
-                                        <Label sm={2}>Pradžia</Label>
-                                        <Label sm={10}>
-                                            {this.state.event !== null ? moment(this.state.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : <div> </div>}
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup row>
-                                        <Label sm={2}>Pabaiga</Label>
-                                        <Label sm={10}>
-                                            {this.state.event !== null ? moment(this.state.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : <div> </div>}
-                                        </Label>
-                                    </FormGroup>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
-                                    <Col sm={10}>
-                                        <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
-                                    <Col sm={10}>
-                                        <Input type="select" name="lectureCategory" id="lectureCategory" >
-                                            {this.state.categories.map((category) =>
-                                                <option style={{
-                                                    color: CategoryColors.find(c => c.category === category.name).color,
-                                                    textDecoration:'bold'}}
-                                                    key={category.id}>{category.name}</option>
-                                            )}
-                                        </Input>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
-                                    <Col sm={10}>
-                                        <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
-                                    </Col>
-                                </FormGroup>
-                            </Form>
-                        </Container>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="success" onClick={this.toggle}>Pridėti paskaitą</Button>
-                        <Button color="danger" onClick={this.toggle}>Atšaukti</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
-        )
 
         if(this.state.lectures && this.state.categories) {
 
@@ -231,7 +234,12 @@ class AdminSchedule extends React.Component {
                         }}
                         onSelectSlot={s => this.toggle(s)}
                     />
-                    <EventModal/>
+                    {this.state.modal !== false ?
+                        <EventModal modal={this.state.modal}
+                                    toggle={this.toggle}
+                                    event={this.state.event}
+                                    categories={this.state.categories}/>
+                        : null}
                 </div>
             )
 
