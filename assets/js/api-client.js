@@ -9,6 +9,12 @@ class ApiClient {
     post(url, params) {
         return axios.post(url, qs.stringify(params)).then((response) => response);
     }
+    all(requests) {
+        return axios.all(requests).then((response) => response);
+    }
+    spread(requests) {
+        return axios.spread(requests);
+    }
 }
 
 export default new ApiClient();

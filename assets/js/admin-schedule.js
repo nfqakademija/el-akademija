@@ -6,7 +6,9 @@ import ReactDOM from "react-dom";
 import ApiClient from "./api-client";
 const {api} = require('./api');
 import { Popover, PopoverHeader, PopoverBody,
-    Button, Modal, ModalHeader, ModalBody, ModalFooter
+    Button, Modal, ModalHeader, ModalBody, ModalFooter,
+    Container, Row, Col,
+    Form, FormGroup, Label, Input, FormText
 } from 'reactstrap';
 
 BigCalendar.momentLocalizer(moment);
@@ -75,34 +77,106 @@ class AdminSchedule extends React.Component {
         super(props);
         this.state = {
             lectures: null,
-            modal: false
-        }
+            modal: false,
+            event: null,
+            categories:null
+        };
+
         this.toggle = this.toggle.bind(this);
     }
 
     componentDidMount() {
-        ApiClient.get(api.lecture.show)
-            .then(lectures => {
-                this.setState({
-                    lectures: lectures.data
-                })
+
+        ApiClient.all([
+            ApiClient.get(api.lecture.show),
+            ApiClient.get(api.category.show)
+        ]).then(ApiClient.spread((lectures, categories) => {
+            this.setState({
+                lectures: lectures.data,
+                categories: categories.data
             });
+            console.log(lectures.data);
+            console.log(categories.data);
+        }));
     }
 
     toggle = (e) => {
-        console.log(e);
         this.setState({
-            modal: !this.state.modal
+            lectures: this.state.lectures,
+            modal: !this.state.modal,
+            event: this.state.modal === false ? {
+                start: e.start,
+                end: e.end,
+            } : null,
+            categories: this.state.categories
         });
-    }
+    };
 
     render() {
 
 
         const events = [];
-        const {lectures} = {...this.state};
+        const {lectures, categories} = {...this.state};
 
-        if(this.state.lectures) {
+        const EventModal = props => (
+            <div>
+                <Modal isOpen={this.state.modal} fade={true} toggle={this.toggle} size='lg'>
+                    <ModalHeader toggle={this.toggle}>Paskaitos pridėjimas</ModalHeader>
+                    <ModalBody>
+                        <Container>
+                            <Form>
+                                <FormGroup >
+                                    <FormGroup row>
+                                        {console.log(this.state.event)}
+                                        <Label sm={2}>Pradžia</Label>
+                                        <Label sm={10}>
+                                            {this.state.event !== null ? moment(this.state.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : <div> </div>}
+                                        </Label>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Label sm={2}>Pabaiga</Label>
+                                        <Label sm={10}>
+                                            {this.state.event !== null ? moment(this.state.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : <div> </div>}
+                                        </Label>
+                                    </FormGroup>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
+                                    <Col sm={10}>
+                                        <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
+                                    <Col sm={10}>
+                                        <Input type="select" name="lectureCategory" id="lectureCategory" >
+                                            {this.state.categories.map((category) =>
+                                                <option style={{
+                                                    color: CategoryColors.find(c => c.category === category.name).color,
+                                                    textDecoration:'bold'}}
+                                                    key={category.id}>{category.name}</option>
+                                            )}
+                                        </Input>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
+                                    <Col sm={10}>
+                                        <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
+                                    </Col>
+                                </FormGroup>
+                            </Form>
+                        </Container>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="success" onClick={this.toggle}>Pridėti paskaitą</Button>
+                        <Button color="danger" onClick={this.toggle}>Atšaukti</Button>
+                    </ModalFooter>
+                </Modal>
+            </div>
+        )
+
+        if(this.state.lectures && this.state.categories) {
 
             lectures.forEach(l => {
                 let start = new Date(l.start);
@@ -117,74 +191,57 @@ class AdminSchedule extends React.Component {
                     category: l.category.name,
                 })
             });
+
+            return(
+                <div>
+                    <BigCalendar
+                        selectable
+                        culture='lt'
+                        popup events={events}
+                        step={60}
+                        defaultDate={new Date()}
+                        views={["month", "week", "day", "agenda"]}
+
+                        eventPropGetter={
+                            (event, start, end, isSelected) => {
+                                let newStyle = {
+                                    backgroundColor: "red",
+                                    color: 'white',
+                                };
+                                newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
+                                return {
+                                    className: "",
+                                    style: newStyle
+                                };
+                            }
+                        }
+                        messages={
+                            {
+                                'today': 'Šiandien',
+                                'previous': 'Atgal',
+                                'next': 'Kitas',
+                                'month': 'Mėnuo',
+                                'week': 'Savaitė',
+                                'day': 'Diena',
+                                'showMore': total => `+${total} Žiūrėti daugiau`
+                            }
+                        }
+                        components={{
+                            event: CustomEvent,
+                        }}
+                        onSelectSlot={s => this.toggle(s)}
+                    />
+                    <EventModal/>
+                </div>
+            )
+
+        } else {
+            return(
+                <div>
+
+                </div>
+            )
         }
-
-
-        const EventModal = props => (
-            <div>
-                <Modal isOpen={this.state.modal} fade={true} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Paskaitos pridėjimas</ModalHeader>
-                    <ModalBody>
-
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggle}>Do Something</Button>
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
-        );
-
-        const Calendar = props => (
-            <BigCalendar
-                selectable
-                culture='lt'
-                popup events={events}
-                step={60}
-                defaultView='week'
-                defaultDate={new Date()}
-                views={["month", "week", "day"]}
-
-                eventPropGetter={
-                    (event, start, end, isSelected) => {
-                        let newStyle = {
-                            backgroundColor: "red",
-                            color: 'white',
-                        };
-                        newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
-                        return {
-                            className: "",
-                            style: newStyle
-                        };
-                    }
-                }
-                messages={
-                    {
-                        'today': 'Šiandien',
-                        'previous': 'Atgal',
-                        'next': 'Kitas',
-                        'month': 'Mėnuo',
-                        'week': 'Savaitė',
-                        'day': 'Diena',
-                        'showMore': total => `+${total} Žiūrėti daugiau`
-                    }
-                }
-                components={{
-                    event: CustomEvent,
-                }}
-                onSelectSlot={s => this.toggle(s)}
-            />
-        );
-
-
-        return(
-            <div>
-
-                <Calendar/>
-                <EventModal/>
-            </div>
-
-        )
     }
 }
 

@@ -9,6 +9,9 @@ const api = {
     },
     lecture: {
         show: '/api/lecture/show'
+    },
+    category: {
+        show: '/api/category/show'
     }
 };
 

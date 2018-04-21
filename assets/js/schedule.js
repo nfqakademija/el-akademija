@@ -12,7 +12,7 @@ BigCalendar.momentLocalizer(moment);
 const CategoryColors = [
     {category:'Backend', color:'blue'},
     {category:'Frontend', color:'green'},
-    {category:'Mysql', color:'yellow'},
+    {category:'Mysql', color:'blue'},
     {category:'UX', color:'red'},
 ];
 
