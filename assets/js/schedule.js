@@ -12,7 +12,7 @@ BigCalendar.momentLocalizer(moment);
 const CategoryColors = [
     {category:'Backend', color:'blue'},
     {category:'Frontend', color:'green'},
-    {category:'Mysql', color:'blue'},
+    {category:'Mysql', color:'rgb(255, 107, 0)'},
     {category:'UX', color:'red'},
 ];
 
@@ -31,7 +31,6 @@ class CustomEvent extends React.Component {
             popoverOpen: !this.state.popoverOpen
         });
     }
-
     render(){
         return (
             <div>
