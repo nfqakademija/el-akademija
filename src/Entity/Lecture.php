@@ -48,14 +48,14 @@ class Lecture extends JsonEntity
 	/**
 	 * @ORM\Column(type="datetime")
 	 * @Assert\NotBlank()
-	 * @Assert\Date()
+	 * @Assert\DateTime()
 	 */
 	private $start;
 
 	/**
 	 * @ORM\Column(type="datetime")
 	 * @Assert\NotBlank()
-	 * @Assert\Date()
+	 * @Assert\DateTime()
 	 * @Assert\GreaterThan(propertyPath="start")
 	 */
 	private $end;
