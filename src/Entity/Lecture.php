@@ -39,6 +39,13 @@ class Lecture extends JsonEntity
 	private $name;
 
 	/**
+	 * @ORM\Column(type="text", length=1000)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=1000)
+	 */
+	private $description;
+
+	/**
 	 * @ORM\Column(type="datetime")
 	 * @Assert\NotBlank()
 	 * @Assert\Date()
@@ -88,6 +95,17 @@ class Lecture extends JsonEntity
 	public function setName(string $name): self
 	{
 		$this->name = $name;
+		return $this;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+	public function setDescription(string $description): self
+	{
+		$this->description = $description;
 		return $this;
 	}
 
