@@ -54,61 +54,6 @@ class CustomEvent extends React.Component {
     }
 }
 
-class ModalForm extends React.Component {
-
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return (
-            <div>
-                <Form>
-                    <FormGroup >
-                        <FormGroup row>
-                            <Label sm={2}>Pradžia</Label>
-                            <Label sm={10}>
-                                {this.props.event !== null ? moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
-                            </Label>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label sm={2}>Pabaiga</Label>
-                            <Label sm={10}>
-                                {this.props.event !== null ? moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
-                            </Label>
-                        </FormGroup>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
-                        <Col sm={10}>
-                            <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
-                        <Col sm={10}>
-                            <Input type="select" name="lectureCategory" id="lectureCategory" >
-                                {this.props.categories.map((category) =>
-                                    <option style={{
-                                        color: CategoryColors.find(c => c.category === category.name).color,
-                                        textDecoration:'bold'}}
-                                            key={category.id}>{category.name}</option>
-                                )}
-                            </Input>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
-                        <Col sm={10}>
-                            <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </div>
-        );
-    }
-}
-
 class EventModal extends React.Component {
 
     constructor(props) {
@@ -118,16 +63,56 @@ class EventModal extends React.Component {
     render(){
         return (
             <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
+                <Form>
                 <ModalHeader toggle={this.props.toggle}>Paskaitos pridėjimas</ModalHeader>
                 <ModalBody>
                     <Container>
-                        <ModalForm event={this.props.event} categories={this.props.categories}/>
+                        <FormGroup >
+                            <FormGroup row>
+                                <Label sm={2}>Pradžia</Label>
+                                <Label sm={10}>
+                                    {this.props.event !== null ? moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                                </Label>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label sm={2}>Pabaiga</Label>
+                                <Label sm={10}>
+                                    {this.props.event !== null ? moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss") : null}
+                                </Label>
+                            </FormGroup>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
+                            <Col sm={10}>
+                                <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
+                            <Col sm={10}>
+                                <Input type="select" name="lectureCategory" id="lectureCategory" >
+                                    {this.props.categories.map((category) =>
+                                        <option style={{
+                                            color: CategoryColors.find(c => c.category === category.name).color,
+                                            textDecoration:'bold'}}
+                                                key={category.id}>{category.name}</option>
+                                    )}
+                                </Input>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
+                            <Col sm={10}>
+                                <Input style={{minHeight: '200px'}} type="textarea" name="lectureDescription" id="lectureDescription" />
+                            </Col>
+                        </FormGroup>
                     </Container>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="success" onClick={this.props.toggle}>Pridėti paskaitą</Button>
                     <Button color="danger" onClick={this.props.toggle}>Atšaukti</Button>
                 </ModalFooter>
+                </Form>
             </Modal>
         );
     }
@@ -163,13 +148,11 @@ class AdminSchedule extends React.Component {
 
     toggle = (e) => {
         this.setState({
-            lectures: this.state.lectures,
             modal: !this.state.modal,
             event: this.state.modal === false ? {
                 start: e.start,
                 end: e.end,
-            } : null,
-            categories: this.state.categories
+            } : null
         });
     };
 
