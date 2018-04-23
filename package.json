@@ -34,7 +34,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "encore dev --watch",
-    "compile": "encore dev"
+    "compile": "encore dev",
+    "build": "encore production"
   },
   "repository": {
     "type": "git",
