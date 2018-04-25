@@ -11,7 +11,7 @@ const {api} = require('./api');
 import { Popover, PopoverHeader, PopoverBody,
     Button, Modal, ModalHeader, ModalBody, ModalFooter,
     Container, Row, Col,
-    Form, FormGroup, Label, Input, FormText
+    Form, FormGroup, FormFeedback, Label, Input, FormText
 } from 'reactstrap';
 
 BigCalendar.momentLocalizer(moment);
@@ -43,16 +43,18 @@ class CustomEvent extends React.Component {
 
     render(){
         return (
-            <div style={{height: '100%'}}>
-                <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{height: '100%'}}>
-                    {this.props.event.title}
+            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+                <strong>{this.props.event.title}</strong>
+                <div className='d-flex'>
+                    <div className="mr-auto p-2">Lekt. Linas Kukulskis</div>
+                    <div className="p-2">10:00</div>
                 </div>
-                <Popover placement="left" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
+                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
                         backgroundColor: CategoryColors.find(c => c.category === this.props.event.category) != null ? CategoryColors.find(c => c.category === this.props.event.category).color : 'white',
                         color:'white'
-                    }}>{this.props.event.title}</PopoverHeader>
-                    <PopoverBody>{this.props.event.category}</PopoverBody>
+                    }}>{this.props.event.category}</PopoverHeader>
+                    <PopoverBody>{this.props.event.description}</PopoverBody>
                 </Popover>
             </div>
         );
@@ -84,7 +86,8 @@ class EventModal extends React.Component {
                 id: this.props.courses[0].id*/
                 name: this.currentCourse.name,
                 id: this.currentCourse.id
-            }
+            },
+            errors: [],
         };
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
@@ -134,6 +137,11 @@ class EventModal extends React.Component {
             }
             }).catch((error) => {
                 console.log(error.response.data);
+                if(error.response.data.errors) {
+                    this.setState({
+                        errors: error.response.data.errors
+                    })
+                }
         });
     }
 
@@ -179,7 +187,8 @@ class EventModal extends React.Component {
                         <FormGroup row>
                             <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
                             <Col sm={10}>
-                                <Input type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
+                                <Input invalid={this.state.errors.name != null} type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
+                                <FormFeedback valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -205,7 +214,10 @@ class EventModal extends React.Component {
                                     name="lectureDescription"
                                     id="lectureDescription"
                                     value={this.state.description}
-                                    onChange={this.handleChangeDescription}/>
+                                    onChange={this.handleChangeDescription}
+                                    invalid={this.state.errors.description != null}/>
+
+                                <FormFeedback valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
                             </Col>
                         </FormGroup>
                     </Container>
@@ -256,7 +268,11 @@ class AdminSchedule extends React.Component {
         ApiClient.all([
             ApiClient.get(api.lecture.show),
             ApiClient.get(api.category.show),
-            ApiClient.get(api.course.show("order=ASC"))
+            ApiClient.get(api.course.show, {
+                params: {
+                    order: 'ASC'
+                }
+            })
         ]).then(ApiClient.spread((lectures, categories, courses) => {
             this.setState({
                 lectures: lectures.data,
@@ -289,6 +305,7 @@ class AdminSchedule extends React.Component {
                     start: start,
                     end: end,
                     category: l.category.name,
+                    description: l.description
                 })
             });
 
@@ -301,6 +318,10 @@ class AdminSchedule extends React.Component {
                         step={60}
                         defaultDate={new Date()}
                         views={["month", "week", "day", "agenda"]}
+                        onSelecting={() => false}
+                        onView={(view) => {
+                            this.setState({currentView: view});
+                        }}
 
                         eventPropGetter={
                             (event, start, end, isSelected) => {

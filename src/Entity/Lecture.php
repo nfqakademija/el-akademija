@@ -138,6 +138,7 @@ class Lecture extends JsonEntity
 			'course' => $this->course,
 			'category' => $this->category,
 			'name' => $this->name,
+            'description' => $this->description,
 			'start' => $this->formatDateTime($this->start),
 			'end' => $this->formatDateTime($this->end)
 		];
