@@ -49,7 +49,7 @@ class CustomEvent extends React.Component {
                 </div>
                 <Popover placement="left" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
-                        backgroundColor: CategoryColors.find(c => c.category === this.props.event.category).color,
+                        backgroundColor: CategoryColors.find(c => c.category === this.props.event.category) != null ? CategoryColors.find(c => c.category === this.props.event.category).color : 'white',
                         color:'white'
                     }}>{this.props.event.title}</PopoverHeader>
                     <PopoverBody>{this.props.event.category}</PopoverBody>
@@ -188,7 +188,7 @@ class EventModal extends React.Component {
                                 <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
                                     {this.props.categories.map((category) =>
                                         <option style={{
-                                            color: CategoryColors.find(c => c.category === category.name).color,
+                                            color: CategoryColors.find(c => c.category === category.name) != null ? CategoryColors.find(c => c.category === category.name).color : 'white',
                                             textDecoration:'bold'}}
                                                 key={category.id}
                                                 data-id={category.id}>{category.name}</option>
@@ -308,7 +308,7 @@ class AdminSchedule extends React.Component {
                                     backgroundColor: "red",
                                     color: 'white',
                                 };
-                                newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category).color;
+                                newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category) != null ? CategoryColors.find(c => c.category === event.category).color : 'white';
                                 return {
                                     className: "",
                                     style: newStyle
