@@ -68,7 +68,7 @@ class EventModal extends React.Component {
         this.currentCourse = this.props.courses.find(course => {
                 let startdate = new Date(course.start);
                 let enddate = new Date(course.end);
-                return course.name === "Kaunas | Pavasario semestras" && startdate < today && enddate > today;
+                return course.name === "Kaunas | Pavasario semestras 2018" && startdate < today && enddate > today;
             }
         );
 
@@ -133,7 +133,7 @@ class EventModal extends React.Component {
                 this.props.confirm();
             }
             }).catch((error) => {
-                console.log(error);
+                console.log(error.response.data);
         });
     }
 
@@ -256,7 +256,7 @@ class AdminSchedule extends React.Component {
         ApiClient.all([
             ApiClient.get(api.lecture.show),
             ApiClient.get(api.category.show),
-            ApiClient.get(api.course.show)
+            ApiClient.get(api.course.show("order=ASC"))
         ]).then(ApiClient.spread((lectures, categories, courses) => {
             this.setState({
                 lectures: lectures.data,

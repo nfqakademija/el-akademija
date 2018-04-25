@@ -26,7 +26,7 @@ class CourseFixtures extends Fixture
 				foreach ($cities as $city) {
 					$course = new Course();
 					$course
-						->setName($city . ' | ' . $semesters[$j])
+						->setName($city . ' | ' . $semesters[$j] . ' ' . $year)
 						->setStart($startDate)
 						->setEnd($endDate);
 					$manager->persist($course);

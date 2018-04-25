@@ -15,7 +15,7 @@ const api = {
         show: '/api/category/show'
     },
     course: {
-        show: '/api/course/show'
+        show: (args) => `/api/course/show?${args}`
     }
 };
 

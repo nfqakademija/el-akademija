@@ -42,7 +42,7 @@ class Courses_List_Table extends React.Component {
             const currentCourse = this.state.courses.find(course => {
                     let startdate = new Date(course.start);
                     let enddate = new Date(course.end);
-                    return course.name === "Kaunas | Pavasario semestras" && startdate < today && enddate > today;
+                    return course.name === "Kaunas | Pavasario semestras 2018" && startdate < today && enddate > today;
                 }
             );
             return (
