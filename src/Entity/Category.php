@@ -24,6 +24,13 @@ class Category extends JsonEntity
 	 */
 	private $name;
 
+	/**
+	 * @ORM\Column(type="string", length=7)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=7)
+	 */
+	private $color;
+
 	public function getId()
 	{
 		return $this->id;
@@ -40,17 +47,29 @@ class Category extends JsonEntity
 		return $this;
 	}
 
+	public function getColor(): ?string
+	{
+		return $this->color;
+	}
+
+	public function setColor(string $color): self
+	{
+		$this->color = $color;
+		return $this;
+	}
+
 	public function jsonSerialize()
 	{
 		return [
 			'id' => $this->id,
-			'name' => $this->name
+			'name' => $this->name,
+			'color' => $this->color
 		];
 	}
 
 	public static function whiteListedFields(): array
 	{
-		return ['id', 'name'];
+		return ['id', 'name', 'color'];
 	}
 
 	public static function getLimit(): int
