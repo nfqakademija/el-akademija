@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\HomeworkLinkRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\HomeworkGradeRepository")
  */
-class HomeworkLink extends JsonEntity
+class HomeworkGrade extends JsonEntity
 {
 	/**
 	 * @ORM\Id()
@@ -18,11 +18,11 @@ class HomeworkLink extends JsonEntity
 	private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Homework")
+	 * @ORM\ManyToOne(targetEntity="App\Entity\HomeworkLink")
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Assert\NotBlank()
 	 */
-	private $homework;
+	private $homeworkLink;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\User")
@@ -32,15 +32,21 @@ class HomeworkLink extends JsonEntity
 	private $user;
 
 	/**
-	 * @ORM\Column(type="string", length=200)
+	 * @ORM\Column(type="smallint", nullable=false)
 	 * @Assert\NotBlank()
-	 * @Assert\Length(max=200)
+	 * @Assert\Range(min=0, max=10)
 	 */
-	private $link;
+	private $grade;
+
+	/**
+	 * @ORM\Column(type="text", nullable=false)
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=1000)
+	 */
+	private $comment;
 
 	/**
 	 * @ORM\Column(type="datetime")
-	 * @Assert\LessThan(propertyPath="homework.deadline", message="You cannot submit homework after its deadline")
 	 */
 	private $created;
 
@@ -54,14 +60,14 @@ class HomeworkLink extends JsonEntity
 		return $this->id;
 	}
 
-	public function getHomework(): ?Homework
+	public function getHomeworkLink(): ?HomeworkLink
 	{
-		return $this->homework;
+		return $this->homeworkLink;
 	}
 
-	public function setHomework(?Homework $homework): self
+	public function setHomeworkLink(?HomeworkLink $homeworkLink): self
 	{
-		$this->homework = $homework;
+		$this->homeworkLink = $homeworkLink;
 		return $this;
 	}
 
@@ -76,14 +82,25 @@ class HomeworkLink extends JsonEntity
 		return $this;
 	}
 
-	public function getLink(): ?string
+	public function getGrade(): ?int
 	{
-		return $this->link;
+		return $this->grade;
 	}
 
-	public function setLink(string $link): self
+	public function setGrade(int $grade): self
 	{
-		$this->link = $link;
+		$this->grade = $grade;
+		return $this;
+	}
+
+	public function getComment(): ?string
+	{
+		return $this->comment;
+	}
+
+	public function setComment(string $comment): self
+	{
+		$this->comment = $comment;
 		return $this;
 	}
 
@@ -102,16 +119,17 @@ class HomeworkLink extends JsonEntity
 	{
 		return [
 			'id' => $this->id,
-			'homework' => $this->homework,
+			'homeworkLink' => $this->homeworkLink,
 			'user' => $this->user,
-			'link' => $this->link,
+			'grade' => $this->grade,
+			'comment' => $this->comment,
 			'created' => $this->formatDateTime($this->created)
 		];
 	}
 
 	public static function whiteListedFields(): array
 	{
-		return ['id', 'homework', 'created'];
+		return ['id', 'homeworkLink', 'grade', 'comment', 'created'];
 	}
 
 	public static function getLimit(): int
