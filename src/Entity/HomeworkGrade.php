@@ -3,10 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HomeworkGradeRepository")
+ * @UniqueEntity(
+ *     fields={"homeworkLink"}
+ * )
  */
 class HomeworkGrade extends JsonEntity
 {
