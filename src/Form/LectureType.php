@@ -14,6 +14,7 @@ class LectureType extends AbstractType
 	{
 		$builder
 			->add('course')
+			->add('lector')
 			->add('category')
 			->add('name')
 			->add('description')

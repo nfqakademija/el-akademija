@@ -25,6 +25,13 @@ class Lecture extends JsonEntity
 	private $course;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="App\Entity\User")
+	 * @ORM\JoinColumn(nullable=false)
+	 * @Assert\NotBlank()
+	 */
+	private $lector;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\Category")
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Assert\NotBlank()
@@ -73,6 +80,17 @@ class Lecture extends JsonEntity
 	public function setCourse(?Course $course): self
 	{
 		$this->course = $course;
+		return $this;
+	}
+
+	public function getLector(): ?User
+	{
+		return $this->lector;
+	}
+
+	public function setLector(?User $lector): self
+	{
+		$this->lector = $lector;
 		return $this;
 	}
 
@@ -136,6 +154,7 @@ class Lecture extends JsonEntity
 		return [
 			'id' => $this->id,
 			'course' => $this->course,
+			'lector' => $this->lector,
 			'category' => $this->category,
 			'name' => $this->name,
             'description' => $this->description,
@@ -146,7 +165,7 @@ class Lecture extends JsonEntity
 
 	public static function whiteListedFields(): array
 	{
-		return ['id', 'name', 'start', 'end'];
+		return ['id', 'lector', 'name', 'start', 'end'];
 	}
 
 	public static function getLimit(): int
