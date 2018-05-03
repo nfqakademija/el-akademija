@@ -16,13 +16,6 @@ import { Popover, PopoverHeader, PopoverBody,
 
 BigCalendar.momentLocalizer(moment);
 
-const CategoryColors = [
-    {category:'Backend', color:'blue'},
-    {category:'Frontend', color:'green'},
-    {category:'Mysql', color:'rgb(255, 107, 0)'},
-    {category:'UX', color:'red'},
-];
-
 class CustomEvent extends React.Component {
     constructor(props){
         super(props);
@@ -51,9 +44,9 @@ class CustomEvent extends React.Component {
                 </div>
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
-                        backgroundColor: CategoryColors.find(c => c.category === this.props.event.category) != null ? CategoryColors.find(c => c.category === this.props.event.category).color : 'white',
+                        backgroundColor: this.props.event.category.color,
                         color:'white'
-                    }}>{this.props.event.category}</PopoverHeader>
+                    }}>{this.props.event.category.name}</PopoverHeader>
                     <PopoverBody>{this.props.event.description}</PopoverBody>
                 </Popover>
             </div>
@@ -87,11 +80,16 @@ class EventModal extends React.Component {
                 name: this.currentCourse.name,
                 id: this.currentCourse.id
             },
+            lector: {
+                name: this.props.lectors[0].name,
+                id: this.props.lectors[0].id
+            },
             errors: [],
         };
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeCategory = this.handleChangeCategory.bind(this);
+        this.handleChangeLector = this.handleChangeLector.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -116,6 +114,14 @@ class EventModal extends React.Component {
             }});
     }
 
+    handleChangeLector(event) {
+        this.setState({
+            lector: {
+                name: event.target.value,
+                id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
+            }});
+    }
+
     handleChangeDescription(event) {
         this.setState({description: event.target.value});
     }
@@ -127,6 +133,7 @@ class EventModal extends React.Component {
                 'lecture[course]': this.state.course.id,
                 'lecture[category]': this.state.category.id,
                 'lecture[name]': this.state.name,
+                'lecture[lector]': this.state.lector.id,
                 'lecture[description]': this.state.description,
                 'lecture[start]': moment(this.props.event.start).format('YYYY-MM-DD HH:mm:ss'), // 0000-00-00 00:00:00
                 'lecture[end]': moment(this.props.event.end).format('YYYY-MM-DD HH:mm:ss')
@@ -197,10 +204,22 @@ class EventModal extends React.Component {
                                 <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
                                     {this.props.categories.map((category) =>
                                         <option style={{
-                                            color: CategoryColors.find(c => c.category === category.name) != null ? CategoryColors.find(c => c.category === category.name).color : 'white',
+                                            color: category.color,
                                             textDecoration:'bold'}}
                                                 key={category.id}
                                                 data-id={category.id}>{category.name}</option>
+                                    )}
+                                </Input>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label for="lectureLector" sm={2}>Lektorius</Label>
+                            <Col sm={10}>
+                                <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.name} onChange={this.handleChangeLector}>
+                                    {this.props.lectors.map((lector) =>
+                                        <option
+                                            key={lector.id}
+                                            data-id={lector.id}>{lector.name}</option>
                                     )}
                                 </Input>
                             </Col>
@@ -242,8 +261,18 @@ class AdminSchedule extends React.Component {
             event: null,
             lectures: null,
             categories:null,
-            courses:null
-        };
+            courses:null,
+            lectors: [
+                {
+                    id: 1,
+                    name: "Linas Kukulskis",
+                },
+                {
+                    id:2,
+                    name: "Mantas Kaveckas",
+                }
+            ],
+        },
 
         this.toggle = this.toggle.bind(this);
         this.update = this.update.bind(this);
@@ -291,9 +320,9 @@ class AdminSchedule extends React.Component {
 
 
         const events = [];
-        const {modal, event, lectures, categories, courses} = {...this.state};
+        const {modal, event, lectures, categories, courses, lectors} = {...this.state};
 
-        if(lectures && categories) {
+        if(lectures && categories && lectors) {
 
             lectures.forEach(l => {
                 let start = new Date(l.start);
@@ -304,7 +333,8 @@ class AdminSchedule extends React.Component {
                     title: l.name,
                     start: start,
                     end: end,
-                    category: l.category.name,
+                    category: l.category,
+                    //lectors: l.lector, // kolkas nera atvaizdavimo is duomenu bazes.
                     description: l.description
                 })
             });
@@ -329,7 +359,7 @@ class AdminSchedule extends React.Component {
                                     backgroundColor: "red",
                                     color: 'white',
                                 };
-                                newStyle.backgroundColor = CategoryColors.find(c => c.category === event.category) != null ? CategoryColors.find(c => c.category === event.category).color : 'white';
+                                newStyle.backgroundColor = event.category.color;
                                 return {
                                     className: "",
                                     style: newStyle
@@ -358,6 +388,7 @@ class AdminSchedule extends React.Component {
                                     event={event}
                                     categories={categories}
                                     courses={courses}
+                                    lectors={lectors}
                                     confirm={this.confirm}/>
                         : null}
                 </div>
