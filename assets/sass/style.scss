@@ -1311,9 +1311,9 @@ button.rbc-input {
   -webkit-flex: 1 0 0%;
   -ms-flex: 1 0 0%;
   flex: 1 0 0%;
-  -webkit-align-items: flex-start;
-  -ms-flex-align: start;
-  align-items: flex-start;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
   width: 100%;
   border-top: 2px solid #DDD;
   overflow-y: auto;

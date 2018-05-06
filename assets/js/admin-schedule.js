@@ -16,7 +16,7 @@ import { Popover, PopoverHeader, PopoverBody,
 
 BigCalendar.momentLocalizer(moment);
 
-class CustomEvent extends React.Component {
+class CustomMonthEvent extends React.Component {
     constructor(props){
         super(props);
 
@@ -38,10 +38,44 @@ class CustomEvent extends React.Component {
         return (
             <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
                 <strong>{this.props.event.title}</strong>
-                <div className='d-flex'>
-                    <div className="mr-auto p-2">Lekt. Linas Kukulskis</div>
-                    <div className="p-2">10:00</div>
+                <div className='d-flex justify-content-between'>
+                    <div className="p-2">Lekt. Linas Kukulskis</div>
+                    <div className="p-2">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
                 </div>
+                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
+                    <PopoverHeader style={{
+                        backgroundColor: this.props.event.category.color,
+                        color:'white'
+                    }}>{this.props.event.category.name}</PopoverHeader>
+                    <PopoverBody>{this.props.event.description}</PopoverBody>
+                </Popover>
+            </div>
+        );
+    }
+}
+
+class CustomWeekEvent extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            popoverOpen: false
+        };
+
+
+    }
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        });
+    }
+
+    render(){
+        return (
+            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+                {this.props.event.title}
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
                         backgroundColor: this.props.event.category.color,
@@ -378,7 +412,12 @@ class AdminSchedule extends React.Component {
                             }
                         }
                         components={{
-                            event: CustomEvent,
+                            month: {
+                                event: CustomMonthEvent
+                            },
+                            week: {
+                                event: CustomWeekEvent
+                            },
                         }}
                         onSelectSlot={s => this.toggle(s)}
                     />
