@@ -1,16 +1,28 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        # in_memory: { memory: ~ }
         # mysql: {}
+        # fos_userbundle:
+            # id: fos_user.user_provider.username
+        mysql:
+            entity:
+                class: App\Entity\User
+                property: email
+
     encoders:
+        # FOS\UserBundle\Model\UserInterface: bcrypt
         App\Entity\User: bcrypt
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            # pattern: ^/
+            # logout: true
             anonymous: true
+            provider: mysql
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
@@ -30,3 +42,14 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/course, roles: ROLE_ADMIN }
         # - { path: ^/api/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    registration:
+        confirmation:
+            enabled: false
+    from_email:
+        address: noreply@nfqakademija.lt
+        sender_name: NFQ Akademija

@@ -31,12 +31,16 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
 	public function supports(Request $request)
 	{
+		return false;
 		return $request->getPathInfo() === '/api/auth/login' && $request->isMethod('POST');
 	}
 
 	public function getCredentials(Request $request)
 	{
-
+		return [
+			'email' => $request->get('email'),
+			'password' => $request->get('password')
+		];
 	}
 
 	public function getUser($credentials, UserProviderInterface $userProvider)
@@ -46,7 +50,7 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
 	public function checkCredentials($credentials, UserInterface $user)
 	{
-		return true;
+		return false;
 	}
 
 	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)

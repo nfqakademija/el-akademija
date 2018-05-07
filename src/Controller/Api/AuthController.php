@@ -42,11 +42,12 @@ class AuthController extends AbstractController
 		$form->handleRequest($request);
 
 		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing();
+			return $this->jsonService->parametersMissing($form);
 		if (!$form->isValid())
 			return $this->jsonService->formErrors($form);
 
 		$user = $this->getUser();
+		var_dump($user);
 		if ($user instanceof UserInterface)
 			return $this->jsonService->success('Successfully logged in');
 		return $this->jsonService->error();
