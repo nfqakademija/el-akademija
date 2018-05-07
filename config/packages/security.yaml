@@ -5,10 +5,9 @@ security:
         # mysql: {}
         # fos_userbundle:
             # id: fos_user.user_provider.username
-        mysql:
-            entity:
-                class: App\Entity\User
-                property: email
+        main:
+            id: App\Repository\UserRepository
+            # entity: { class: App\Entity\User, property: email }
 
     encoders:
         # FOS\UserBundle\Model\UserInterface: bcrypt
@@ -19,10 +18,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            # pattern: ^/
-            # logout: true
+            pattern: ^/
+            logout: true
             anonymous: true
-            provider: mysql
+            provider: main
+            #access_denied_handler: App\Security\AccessDeniedHandler
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
@@ -40,8 +40,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        # - { path: ^/api/course, roles: ROLE_ADMIN }
-        # - { path: ^/api/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/course, roles: ROLE_ADMIN, methods: [POST] }
+        - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
