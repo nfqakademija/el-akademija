@@ -2,12 +2,11 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
-use App\Form\UserType;
 use App\Service\JsonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -37,19 +36,30 @@ class AuthController extends AbstractController
 	 */
 	public function login(Request $request): JsonResponse
 	{
-		$user = new User();
-		$form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
-		$form->handleRequest($request);
-
-		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing($form);
-		if (!$form->isValid())
-			return $this->jsonService->formErrors($form);
+//		$user = new User();
+//		$form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
+//		$form->handleRequest($request);
+//
+//		if (!$form->isSubmitted())
+//			return $this->jsonService->parametersMissing($form);
+//		if (!$form->isValid())
+//			return $this->jsonService->formErrors($form);
 
 		$user = $this->getUser();
 		var_dump($user);
 		if ($user instanceof UserInterface)
-			return $this->jsonService->success('Successfully logged in');
+			return $this->jsonService->success('Successfully logged in2');
 		return $this->jsonService->error();
+	}
+
+	/**
+	 * @Route("/logout", methods={"GET"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 */
+	public function logout(Session $session): JsonResponse
+	{
+		$session->invalidate();
+		return $this->jsonService->success();
 	}
 }
