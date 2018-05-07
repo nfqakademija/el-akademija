@@ -13,6 +13,7 @@ import { Popover, PopoverHeader, PopoverBody,
     Container, Row, Col,
     Form, FormGroup, FormFeedback, Label, Input, FormText
 } from 'reactstrap';
+import InputMoment from 'input-moment';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -37,10 +38,9 @@ class CustomMonthEvent extends React.Component {
     render(){
         return (
             <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
-                <strong>{this.props.event.title}</strong>
-                <div className='d-flex justify-content-between'>
-                    <div className="p-2">Lekt. Linas Kukulskis</div>
-                    <div className="p-2">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
+                <div className="d-flex justify-content-between" >
+                    <div className="p-0">{this.props.event.title}</div>
+                    <div className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
                 </div>
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
@@ -115,11 +115,16 @@ class EventModal extends React.Component {
                 id: this.currentCourse.id
             },
             lector: {
-                name: this.props.lectors[0].name,
+                fullname: this.props.lectors[0].firstname + ' ' + this.props.lectors[0].lastname,
                 id: this.props.lectors[0].id
             },
             errors: [],
+            startdate: moment(this.props.event.start),
+            enddate: moment(this.props.event.end)
         };
+        this.handleChangeStart = this.handleChangeStart.bind(this);
+        this.handleSave =  this.handleSave.bind(this);
+        //this.handleChangeEnd = this.handleChangeEnd.bind(this);
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeCategory = this.handleChangeCategory.bind(this);
@@ -129,6 +134,16 @@ class EventModal extends React.Component {
     }
 
 
+
+    handleSave = () => {
+        console.log('saved', this.state.startdate.format('llll'));
+    };
+
+    handleChangeStart = startdate => {
+        this.setState({
+            startdate
+        });
+    };
 
     handleChangeCourse(event) {
         this.setState({
@@ -151,7 +166,7 @@ class EventModal extends React.Component {
     handleChangeLector(event) {
         this.setState({
             lector: {
-                name: event.target.value,
+                fullname: event.target.value,
                 id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
             }});
     }
@@ -198,8 +213,15 @@ class EventModal extends React.Component {
                                 <Label sm={2}>Pradžia</Label>
                                 <Label sm={10}>
                                     {this.props.event !== null ?
-                                        moment(this.props.event.start).format("dddd, MMMM Do YYYY, HH:mm:ss")
+                                        moment(this.state.startdate).format("dddd, MMMM Do YYYY, HH:mm:ss")
                                         : null}
+
+                                    <InputMoment
+                                        moment={this.state.startdate}
+                                        onChange={this.handleChangeStart}
+                                        minStep={5}
+                                        onSave={this.handleSave}
+                                    />
                                 </Label>
                             </FormGroup>
                             <FormGroup row>
@@ -249,11 +271,11 @@ class EventModal extends React.Component {
                         <FormGroup row>
                             <Label for="lectureLector" sm={2}>Lektorius</Label>
                             <Col sm={10}>
-                                <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.name} onChange={this.handleChangeLector}>
+                                <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.fullname} onChange={this.handleChangeLector}>
                                     {this.props.lectors.map((lector) =>
                                         <option
                                             key={lector.id}
-                                            data-id={lector.id}>{lector.name}</option>
+                                            data-id={lector.id}>{lector.firstname} {lector.lastname}</option>
                                     )}
                                 </Input>
                             </Col>
@@ -296,16 +318,7 @@ class AdminSchedule extends React.Component {
             lectures: null,
             categories:null,
             courses:null,
-            lectors: [
-                {
-                    id: 1,
-                    name: "Linas Kukulskis",
-                },
-                {
-                    id:2,
-                    name: "Mantas Kaveckas",
-                }
-            ],
+            lectors: null,
         },
 
         this.toggle = this.toggle.bind(this);
@@ -335,12 +348,14 @@ class AdminSchedule extends React.Component {
                 params: {
                     order: 'ASC'
                 }
-            })
-        ]).then(ApiClient.spread((lectures, categories, courses) => {
+            }),
+            ApiClient.get(api.user.show)
+        ]).then(ApiClient.spread((lectures, categories, courses, lectors) => {
             this.setState({
                 lectures: lectures.data,
                 categories: categories.data,
-                courses: courses.data
+                courses: courses.data,
+                lectors: lectors.data,
             });
         }));
     };
@@ -368,7 +383,7 @@ class AdminSchedule extends React.Component {
                     start: start,
                     end: end,
                     category: l.category,
-                    //lectors: l.lector, // kolkas nera atvaizdavimo is duomenu bazes.
+                    lector: l.lector,
                     description: l.description
                 })
             });
@@ -390,10 +405,9 @@ class AdminSchedule extends React.Component {
                         eventPropGetter={
                             (event, start, end, isSelected) => {
                                 let newStyle = {
-                                    backgroundColor: "red",
                                     color: 'white',
+                                    backgroundColor: event.category.color
                                 };
-                                newStyle.backgroundColor = event.category.color;
                                 return {
                                     className: "",
                                     style: newStyle

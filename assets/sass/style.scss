@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
+@import url("http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
+
 $orange: rgb(255, 107, 0);
 $dark: rgba(153, 153, 153, 1);
 $dark-lightest: rgba(153, 153, 153, 0.6);
@@ -1344,4 +1346,221 @@ button.rbc-input {
   height: 1px;
   background-color: $background_color_10;
   pointer-events: none;
+}
+
+
+/* ---------------------------------------------------
+    DATETIME PICKER
+----------------------------------------------------- */
+
+.m-calendar {
+  display: inline-block;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+  td {
+    padding: 8px 0;
+    text-align: center;
+    cursor: pointer;
+    color: #dfe0e4;
+    border: 1px solid #dfe0e4;
+  }
+  thead td {
+    color: #1385e5;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  tbody td {
+    color: #666;
+    &:hover {
+      background: #1385e5;
+      border-color: #1385e5;
+      color: #fff;
+    }
+  }
+  .current-day {
+    color: #1385e5;
+    font-weight: 700;
+  }
+  .next-month, .prev-month {
+    color: #999;
+  }
+  .toolbar {
+    line-height: 30px;
+    color: #1385e5;
+    text-align: center;
+    margin-bottom: 13px;
+    button {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      color: #fff;
+      border: 1px solid #1385e5;
+      border-radius: 50%;
+      background: #1385e5;
+      font-size: 20px;
+      padding: 0;
+      text-align: center;
+      outline: 0;
+      z-index: 5;
+      cursor: pointer;
+    }
+    .prev-month {
+      float: left;
+    }
+    .next-month {
+      float: right;
+    }
+    .current-date {
+      color: #1385e5;
+    }
+  }
+}
+
+.m-time {
+  color: #fff;
+  padding-top: 50px;
+  .showtime {
+    text-align: center;
+  }
+  .separater {
+    display: inline-block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1385e5;
+    width: 32px;
+    height: 65px;
+    line-height: 65px;
+    text-align: center;
+  }
+  .time-text {
+    position: relative;
+    left: -10px;
+    font-size: 15px;
+    color: #1385e5;
+    margin-top: 7px;
+    margin-bottom: 10px;
+  }
+  .sliders {
+    padding: 0 10px;
+  }
+  .time {
+    width: 65px;
+    height: 65px;
+    display: inline-block;
+    font-size: 38px;
+    line-height: 65px;
+    background-color: #1385e5;
+    border-radius: 3px;
+    text-align: center;
+  }
+}
+
+.u-slider-time {
+  position: relative;
+  display: inline-block;
+  background-color: #dfe0e4;
+  border-radius: 3px;
+  height: 4px;
+  width: 100%;
+  cursor: pointer;
+  .value {
+    position: absolute;
+    background-color: #1385e5;
+    border-radius: 3px;
+    top: 0;
+    height: 100%;
+  }
+  .handle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    &:after {
+      position: relative;
+      display: block;
+      content: '';
+      top: -10px;
+      left: -12px;
+      width: 24px;
+      height: 24px;
+      background-color: #fff;
+      border: 3px solid #1385e5;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+}
+
+.im-btn {
+  display: inline-block;
+  background-color: #fff;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  line-height: 1;
+  &:before {
+    margin-right: 6px;
+  }
+}
+
+.m-input-moment {
+  display: inline-block;
+  width: 330px;
+  padding: 12px 15px;
+  border-radius: 3px;
+  border: 1px solid #dfe0e4;
+  .options {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 4px;
+    button {
+      float: left;
+      width: 50%;
+      color: #1385e5;
+      text-align: center;
+      font-size: 16px;
+      padding: 7px;
+      border: 1px solid #1385e5;
+      border-radius: 3px;
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      &.is-active {
+        color: #fff;
+        background-color: #1385e5;
+      }
+    }
+  }
+  .tab {
+    display: none;
+    height: 310px;
+    &.is-active {
+      display: block;
+    }
+  }
+  .tabs {
+    margin-bottom: 11px;
+  }
+  .btn-save {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    background-color: #1385e5;
+    padding: 12px 0;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 3px;
+  }
 }

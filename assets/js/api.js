@@ -16,6 +16,9 @@ const api = {
     },
     course: {
         show: '/api/course/show'
+    },
+    user: {
+        show: '/api/user/show'
     }
 };
 
