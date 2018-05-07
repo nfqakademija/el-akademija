@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Entity\User;
 use App\Service\JsonService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,11 +44,12 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
 	public function getUser($credentials, UserProviderInterface $userProvider)
 	{
-		return new User();
+		return $userProvider->loadUserByUsername($credentials['email']);
 	}
 
 	public function checkCredentials($credentials, UserInterface $user)
 	{
+		echo 123;
 		return false;
 	}
 
