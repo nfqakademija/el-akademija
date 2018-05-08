@@ -11,7 +11,8 @@ const {api} = require('./api');
 import { Popover, PopoverHeader, PopoverBody,
     Button, Modal, ModalHeader, ModalBody, ModalFooter,
     Container, Row, Col,
-    Form, FormGroup, FormFeedback, Label, Input, FormText
+    Form, FormGroup, FormFeedback, Label, Input, FormText,
+    Badge
 } from 'reactstrap';
 import InputMoment from 'input-moment';
 
@@ -120,11 +121,15 @@ class EventModal extends React.Component {
             },
             errors: [],
             startdate: moment(this.props.event.start),
-            enddate: moment(this.props.event.end)
+            enddate: moment(this.props.event.end),
+
+            startPopover: false,
+            endPopover: false,
         };
         this.handleChangeStart = this.handleChangeStart.bind(this);
-        this.handleSave =  this.handleSave.bind(this);
-        //this.handleChangeEnd = this.handleChangeEnd.bind(this);
+        this.handleStartPopover = this.handleStartPopover.bind(this);
+        this.handleChangeEnd = this.handleChangeEnd.bind(this);
+        this.handleEndPopover = this.handleEndPopover.bind(this);
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeCategory = this.handleChangeCategory.bind(this);
@@ -134,16 +139,29 @@ class EventModal extends React.Component {
     }
 
 
-
-    handleSave = () => {
-        console.log('saved', this.state.startdate.format('llll'));
-    };
-
     handleChangeStart = startdate => {
         this.setState({
             startdate
         });
     };
+
+    handleStartPopover() {
+        this.setState({
+            startPopover:!this.state.startPopover
+        });
+    }
+
+    handleChangeEnd = enddate => {
+        this.setState({
+            enddate
+        });
+    };
+
+    handleEndPopover() {
+        this.setState({
+            endPopover:!this.state.endPopover
+        });
+    }
 
     handleChangeCourse(event) {
         this.setState({
@@ -152,9 +170,11 @@ class EventModal extends React.Component {
                 id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
             }});
     }
+
     handleChangeName(event) {
         this.setState({name: event.target.value});
     }
+
     handleChangeCategory(event) {
         this.setState({
             category: {
@@ -211,25 +231,52 @@ class EventModal extends React.Component {
                         <FormGroup>
                             <FormGroup row>
                                 <Label sm={2}>Pradžia</Label>
-                                <Label sm={10}>
-                                    {this.props.event !== null ?
-                                        moment(this.state.startdate).format("dddd, MMMM Do YYYY, HH:mm:ss")
-                                        : null}
+                                <Label xs={9} sm={9} md={10} lg={6}>
 
-                                    <InputMoment
-                                        moment={this.state.startdate}
-                                        onChange={this.handleChangeStart}
-                                        minStep={5}
-                                        onSave={this.handleSave}
-                                    />
+                                    <div className="d-flex justify-content-between">
+                                        <div className="p-0">
+                                            {this.props.event !== null
+                                                ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                : null}
+
+                                        </div>
+                                        <div className="p-0">
+                                            <h6><Badge id="ChangeStartDate" onClick={this.handleStartPopover} color="secondary" style={{cursor:"pointer"}}>Keisti</Badge></h6>
+                                            <Popover placement="bottom" isOpen={this.state.startPopover} target="ChangeStartDate" toggle={this.handleStartPopover}>
+
+                                                <InputMoment
+                                                    moment={this.state.startdate}
+                                                    onChange={this.handleChangeStart}
+                                                    minStep={5}
+                                                />
+                                            </Popover>
+                                        </div>
+                                    </div>
+
                                 </Label>
                             </FormGroup>
                             <FormGroup row>
                                 <Label sm={2}>Pabaiga</Label>
-                                <Label sm={10}>
-                                    {this.props.event !== null ?
-                                        moment(this.props.event.end).format("dddd, MMMM Do YYYY, HH:mm:ss")
-                                        : null}
+                                <Label xs={9} sm={9} md={10} lg={6}>
+                                    <div className="d-flex justify-content-between">
+                                        <div className="p-0">
+                                            {this.props.event !== null
+                                                ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                : null}
+
+                                        </div>
+                                        <div className="p-0">
+                                            <h6><Badge id="ChangeEndDate" onClick={this.handleEndPopover} color="secondary" style={{cursor:"pointer"}}>Keisti</Badge></h6>
+                                            <Popover placement="bottom" isOpen={this.state.endPopover} target="ChangeEndDate" toggle={this.handleEndPopover}>
+
+                                                <InputMoment
+                                                    moment={this.state.enddate}
+                                                    onChange={this.handleChangeEnd}
+                                                    minStep={5}
+                                                />
+                                            </Popover>
+                                        </div>
+                                    </div>
                                 </Label>
                             </FormGroup>
                         </FormGroup>
