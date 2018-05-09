@@ -204,8 +204,8 @@ class EventModal extends React.Component {
                 'lecture[name]': this.state.name,
                 'lecture[lector]': this.state.lector.id,
                 'lecture[description]': this.state.description,
-                'lecture[start]': moment(this.props.event.start).format('YYYY-MM-DD HH:mm:ss'), // 0000-00-00 00:00:00
-                'lecture[end]': moment(this.props.event.end).format('YYYY-MM-DD HH:mm:ss')
+                'lecture[start]': this.state.startdate.format('YYYY-MM-DD HH:mm:ss'), // 0000-00-00 00:00:00
+                'lecture[end]': this.state.enddate.format('YYYY-MM-DD HH:mm:ss')
             }).then((response) => {
             if (response.data.success) {
                 this.props.confirm();
