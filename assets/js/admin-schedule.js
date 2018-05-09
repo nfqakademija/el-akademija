@@ -54,7 +54,7 @@ class CustomMonthEvent extends React.Component {
                             <Row>
                                 <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
                                     <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Dėstytojas
+                                        Lektorius
                                     </p>
                                     <p className="small">
                                         {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
@@ -124,7 +124,7 @@ class CustomWeekEvent extends React.Component {
                             <Row>
                                 <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
                                     <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Dėstytojas
+                                        Lektorius
                                     </p>
                                     <p className="small">
                                         {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
@@ -147,6 +147,12 @@ class CustomWeekEvent extends React.Component {
                                     <p className="small" dangerouslySetInnerHTML={{ __html: this.props.event.description }} />
                                 </Col>
                             </Row>
+                            <Button color="success" block size="sm">
+                                Užduoti namų darbą
+                            </Button>
+                            <Button color="danger" block size="sm">
+                                Redaguoti paskaitą
+                            </Button>
                         </Container>
                     </PopoverBody>
                 </Popover>
@@ -216,6 +222,7 @@ class EventModal extends React.Component {
         this.setState({
             startPopover:!this.state.startPopover
         });
+        console.log(this.state.startPopover);
     }
 
     handleChangeEnd = enddate => {
@@ -297,24 +304,25 @@ class EventModal extends React.Component {
                                 <FormGroup row>
                                     <Label for="StartDateInput" sm={2}>Pradžia</Label>
                                     <Col sm={10}>
-                                        <InputGroup name="StartDate" id="StartDate" onClick={this.handleStartPopover} style={{cursor:"pointer"}}>
-                                            <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
+                                        <InputGroup name="StartDate" id="StartDate" style={{cursor:"pointer"}} onClick={this.handleStartPopover}>
+                                                <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
                                                 ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
                                                 : null}
                                                    invalid={this.state.errors.start != null}
-                                                   style={{cursor:"pointer"}}/>
+                                                   style={{cursor:"pointer"}}
+                                                   />
                                             <InputGroupAddon addonType="append">
                                                 <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
                                             </InputGroupAddon>
                                             <FormFeedback valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
-                                            <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
-                                                <InputMoment
-                                                    moment={this.state.startdate}
-                                                    onChange={this.handleChangeStart}
-                                                    minStep={5}
-                                                />
-                                            </Popover>
                                         </InputGroup>
+                                        <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
+                                            <InputMoment
+                                                moment={this.state.startdate}
+                                                onChange={this.handleChangeStart}
+                                                minStep={5}
+                                            />
+                                        </Popover>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -330,14 +338,14 @@ class EventModal extends React.Component {
                                                 <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
                                             </InputGroupAddon>
                                             <FormFeedback valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
-                                            <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
-                                                <InputMoment
-                                                    moment={this.state.enddate}
-                                                    onChange={this.handleChangeEnd}
-                                                    minStep={5}
-                                                />
-                                            </Popover>
                                         </InputGroup>
+                                        <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
+                                            <InputMoment
+                                                moment={this.state.enddate}
+                                                onChange={this.handleChangeEnd}
+                                                minStep={5}
+                                            />
+                                        </Popover>
                                     </Col>
                                 </FormGroup>
                             </FormGroup>
