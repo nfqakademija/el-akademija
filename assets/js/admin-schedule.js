@@ -48,8 +48,44 @@ class CustomMonthEvent extends React.Component {
                     <PopoverHeader style={{
                         backgroundColor: this.props.event.category.color,
                         color:'white'
-                    }}>{this.props.event.category.name}</PopoverHeader>
-                    <PopoverBody>{this.props.event.description}</PopoverBody>
+                    }}>{this.props.event.title}</PopoverHeader>
+                    <PopoverBody>
+                        <Container>
+                            <Row>
+                                <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
+                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
+                                        Dėstytojas
+                                    </p>
+                                    <p className="small">
+                                        {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
+                                    </p>
+                                </Col>
+                                <Col sm={6}>
+                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
+                                        Kategorija
+                                    </p>
+                                    <p className="small">
+                                        {this.props.event.category.name}
+                                    </p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={12} className="mr-0">
+                                    <p className="font-weight-bold mb-0 text-center" style={{fontSize:"1.2em"}}>
+                                        Aprašymas
+                                    </p>
+                                    <p className="small" dangerouslySetInnerHTML={{ __html: this.props.event.description }} />
+                                </Col>
+                            </Row>
+
+                            <Button color="success" block size="sm">
+                                Užduoti namų darbą
+                            </Button>
+                            <Button color="danger" block size="sm">
+                                Redaguoti paskaitą
+                            </Button>
+                        </Container>
+                    </PopoverBody>
                 </Popover>
             </div>
         );
@@ -78,14 +114,44 @@ class CustomWeekEvent extends React.Component {
         return (
             <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height:"100%"}}>
                 {this.props.event.title}
-                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
+                <Popover placement="auto" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
                         backgroundColor: this.props.event.category.color,
                         color:'white'
-                    }}>{this.props.event.category.name}</PopoverHeader>
-                    <PopoverBody>{this.props.event.description}</PopoverBody>
+                    }}>{this.props.event.title}</PopoverHeader>
+                    <PopoverBody>
+                        <Container>
+                            <Row>
+                                <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
+                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
+                                        Dėstytojas
+                                    </p>
+                                    <p className="small">
+                                        {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
+                                    </p>
+                                </Col>
+                                <Col sm={6}>
+                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
+                                        Kategorija
+                                    </p>
+                                    <p className="small">
+                                        {this.props.event.category.name}
+                                    </p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={12} className="mr-0">
+                                    <p className="font-weight-bold mb-0 text-center" style={{fontSize:"1.2em"}}>
+                                        Aprašymas
+                                    </p>
+                                    <p className="small" dangerouslySetInnerHTML={{ __html: this.props.event.description }} />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </PopoverBody>
                 </Popover>
             </div>
+
         );
     }
 }
@@ -211,12 +277,12 @@ class EventModal extends React.Component {
             if (response.data.success) {
                 this.props.confirm();
             }
-            }).catch((error) => {
-                if(error.response.data.errors) {
-                    this.setState({
-                        errors: error.response.data.errors
-                    })
-                }
+        }).catch((error) => {
+            if(error.response.data.errors) {
+                this.setState({
+                    errors: error.response.data.errors
+                })
+            }
         });
     }
 
@@ -224,125 +290,125 @@ class EventModal extends React.Component {
         return (
             <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
                 <Form onSubmit={this.handleSubmit}>
-                <ModalHeader toggle={this.props.toggle}>Paskaitos pridėjimas</ModalHeader>
-                <ModalBody>
-                    <Container>
-                        <FormGroup>
+                    <ModalHeader toggle={this.props.toggle}>Paskaitos pridėjimas</ModalHeader>
+                    <ModalBody>
+                        <Container>
+                            <FormGroup>
+                                <FormGroup row>
+                                    <Label for="StartDateInput" sm={2}>Pradžia</Label>
+                                    <Col sm={10}>
+                                        <InputGroup name="StartDate" id="StartDate" onClick={this.handleStartPopover} style={{cursor:"pointer"}}>
+                                            <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
+                                                ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                : null}
+                                                   invalid={this.state.errors.start != null}
+                                                   style={{cursor:"pointer"}}/>
+                                            <InputGroupAddon addonType="append">
+                                                <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
+                                            </InputGroupAddon>
+                                            <FormFeedback valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
+                                            <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
+                                                <InputMoment
+                                                    moment={this.state.startdate}
+                                                    onChange={this.handleChangeStart}
+                                                    minStep={5}
+                                                />
+                                            </Popover>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="EndDateInput" sm={2}>Pabaiga</Label>
+                                    <Col sm={10}>
+                                        <InputGroup name="EndDate" id="EndDate" onClick={this.handleEndPopover} style={{cursor:"pointer"}}>
+                                            <Input name="EndDateInput" id="EndDateInput" disabled value={this.props.event !== null
+                                                ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                : null}
+                                                   invalid={this.state.errors.end != null}
+                                                   style={{cursor:"pointer"}}/>
+                                            <InputGroupAddon addonType="append">
+                                                <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
+                                            </InputGroupAddon>
+                                            <FormFeedback valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
+                                            <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
+                                                <InputMoment
+                                                    moment={this.state.enddate}
+                                                    onChange={this.handleChangeEnd}
+                                                    minStep={5}
+                                                />
+                                            </Popover>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                            </FormGroup>
                             <FormGroup row>
-                                <Label for="StartDateInput" sm={2}>Pradžia</Label>
+                                <Label for="courseList" sm={2}>Kursas</Label>
                                 <Col sm={10}>
-                                    <InputGroup name="StartDate" id="StartDate" onClick={this.handleStartPopover} style={{cursor:"pointer"}}>
-                                        <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
-                                            ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
-                                            : null}
-                                               invalid={this.state.errors.start != null}
-                                               style={{cursor:"pointer"}}/>
-                                        <InputGroupAddon addonType="append">
-                                            <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
-                                        </InputGroupAddon>
-                                        <FormFeedback valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
-                                        <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
-                                            <InputMoment
-                                                moment={this.state.startdate}
-                                                onChange={this.handleChangeStart}
-                                                minStep={5}
-                                            />
-                                        </Popover>
-                                    </InputGroup>
+                                    <Input type="select" name="courseList" id="courseList" value={this.state.course.name} onChange={this.handleChangeCourse}>
+                                        {this.props.courses.map((course) =>
+                                            <option
+                                                style={{
+                                                    color: course.id === this.currentCourse.id ? 'red' : null}}
+                                                key={course.id}
+                                                data-id={course.id}>{course.name}</option>
+                                        )}
+                                    </Input>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="EndDateInput" sm={2}>Pabaiga</Label>
+                                <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
                                 <Col sm={10}>
-                                    <InputGroup name="EndDate" id="EndDate" onClick={this.handleEndPopover} style={{cursor:"pointer"}}>
-                                        <Input name="EndDateInput" id="EndDateInput" disabled value={this.props.event !== null
-                                            ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
-                                            : null}
-                                               invalid={this.state.errors.end != null}
-                                               style={{cursor:"pointer"}}/>
-                                        <InputGroupAddon addonType="append">
-                                            <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
-                                        </InputGroupAddon>
-                                        <FormFeedback valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
-                                        <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
-                                            <InputMoment
-                                                moment={this.state.enddate}
-                                                onChange={this.handleChangeEnd}
-                                                minStep={5}
-                                            />
-                                        </Popover>
-                                    </InputGroup>
+                                    <Input invalid={this.state.errors.name != null} type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
+                                    <FormFeedback valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
                                 </Col>
                             </FormGroup>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="courseList" sm={2}>Kursas</Label>
-                            <Col sm={10}>
-                                <Input type="select" name="courseList" id="courseList" value={this.state.course.name} onChange={this.handleChangeCourse}>
-                                    {this.props.courses.map((course) =>
-                                        <option
-                                            style={{
-                                                color: course.id === this.currentCourse.id ? 'red' : null}}
-                                            key={course.id}
-                                            data-id={course.id}>{course.name}</option>
-                                    )}
-                                </Input>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
-                            <Col sm={10}>
-                                <Input invalid={this.state.errors.name != null} type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
-                                <FormFeedback valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
-                            <Col sm={10}>
-                                <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
-                                    {this.props.categories.map((category) =>
-                                        <option style={{
-                                            color: category.color,
-                                            textDecoration:'bold'}}
-                                                key={category.id}
-                                                data-id={category.id}>{category.name}</option>
-                                    )}
-                                </Input>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="lectureLector" sm={2}>Lektorius</Label>
-                            <Col sm={10}>
-                                <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.fullname} onChange={this.handleChangeLector}>
-                                    {this.props.lectors.map((lector) =>
-                                        <option
-                                            key={lector.id}
-                                            data-id={lector.id}>{lector.firstname} {lector.lastname}</option>
-                                    )}
-                                </Input>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
-                            <Col sm={10}>
-                                <Input
-                                    style={{minHeight: '200px'}}
-                                    type="textarea"
-                                    name="lectureDescription"
-                                    id="lectureDescription"
-                                    value={this.state.description}
-                                    onChange={this.handleChangeDescription}
-                                    invalid={this.state.errors.description != null}/>
+                            <FormGroup row>
+                                <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
+                                <Col sm={10}>
+                                    <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
+                                        {this.props.categories.map((category) =>
+                                            <option style={{
+                                                color: category.color,
+                                                textDecoration:'bold'}}
+                                                    key={category.id}
+                                                    data-id={category.id}>{category.name}</option>
+                                        )}
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="lectureLector" sm={2}>Lektorius</Label>
+                                <Col sm={10}>
+                                    <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.fullname} onChange={this.handleChangeLector}>
+                                        {this.props.lectors.map((lector) =>
+                                            <option
+                                                key={lector.id}
+                                                data-id={lector.id}>{lector.firstname} {lector.lastname}</option>
+                                        )}
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="lectureDescription" sm={2}>Paskaitos aprašymas</Label>
+                                <Col sm={10}>
+                                    <Input
+                                        style={{minHeight: '200px'}}
+                                        type="textarea"
+                                        name="lectureDescription"
+                                        id="lectureDescription"
+                                        value={this.state.description}
+                                        onChange={this.handleChangeDescription}
+                                        invalid={this.state.errors.description != null}/>
 
-                                <FormFeedback valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
-                            </Col>
-                        </FormGroup>
-                    </Container>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="success" type='submit'>Pridėti paskaitą</Button>
-                    <Button color="danger" onClick={this.props.toggle}>Atšaukti</Button>
-                </ModalFooter>
+                                    <FormFeedback valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
+                                </Col>
+                            </FormGroup>
+                        </Container>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="success" type='submit'>Pridėti paskaitą</Button>
+                        <Button color="danger" onClick={this.props.toggle}>Atšaukti</Button>
+                    </ModalFooter>
                 </Form>
             </Modal>
         );
@@ -363,7 +429,7 @@ class AdminSchedule extends React.Component {
             lectors: null,
         },
 
-        this.toggle = this.toggle.bind(this);
+            this.toggle = this.toggle.bind(this);
         this.update = this.update.bind(this);
         this.confirm = this.confirm.bind(this);
     }
