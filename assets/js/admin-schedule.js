@@ -208,11 +208,9 @@ class EventModal extends React.Component {
                 'lecture[end]': moment(this.props.event.end).format('YYYY-MM-DD HH:mm:ss')
             }).then((response) => {
             if (response.data.success) {
-                console.log(response);
                 this.props.confirm();
             }
             }).catch((error) => {
-                console.log(error.response.data);
                 if(error.response.data.errors) {
                     this.setState({
                         errors: error.response.data.errors
@@ -421,14 +419,12 @@ class AdminSchedule extends React.Component {
         if(lectures && categories && lectors) {
 
             lectures.forEach(l => {
-                let start = new Date(l.start);
-                let end = new Date(l.end);
 
                 events.push({
                     id: l.id,
                     title: l.name,
-                    start: start,
-                    end: end,
+                    start: new Date(l.start),
+                    end: new Date(l.end),
                     category: l.category,
                     lector: l.lector,
                     description: l.description
