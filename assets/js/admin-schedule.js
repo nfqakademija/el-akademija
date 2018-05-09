@@ -8,11 +8,12 @@ import 'moment/locale/lt';
 import ReactDOM from "react-dom";
 import ApiClient from "./api-client";
 const {api} = require('./api');
-import { Popover, PopoverHeader, PopoverBody,
-    Button, Modal, ModalHeader, ModalBody, ModalFooter,
+import {
+    Popover, PopoverHeader, PopoverBody,
+    Modal, ModalHeader, ModalBody, ModalFooter,
     Container, Row, Col,
-    Form, FormGroup, FormFeedback, Label, Input, FormText,
-    Badge
+    Form, FormGroup, FormFeedback, Label, Input, InputGroup, InputGroupAddon, InputGroupText, FormText,
+    Badge, Button
 } from 'reactstrap';
 import InputMoment from 'input-moment';
 
@@ -75,7 +76,7 @@ class CustomWeekEvent extends React.Component {
 
     render(){
         return (
-            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height:"100%"}}>
                 {this.props.event.title}
                 <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
                     <PopoverHeader style={{
@@ -228,54 +229,50 @@ class EventModal extends React.Component {
                     <Container>
                         <FormGroup>
                             <FormGroup row>
-                                <Label sm={2}>Pradžia</Label>
-                                <Label xs={9} sm={9} md={10} lg={6}>
-
-                                    <div className="d-flex justify-content-between">
-                                        <div className="p-0">
-                                            {this.props.event !== null
-                                                ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
-                                                : null}
-
-                                        </div>
-                                        <div className="p-0">
-                                            <h6><Badge id="ChangeStartDate" onClick={this.handleStartPopover} color="secondary" style={{cursor:"pointer"}}>Keisti</Badge></h6>
-                                            <Popover placement="bottom" isOpen={this.state.startPopover} target="ChangeStartDate" toggle={this.handleStartPopover}>
-
-                                                <InputMoment
-                                                    moment={this.state.startdate}
-                                                    onChange={this.handleChangeStart}
-                                                    minStep={5}
-                                                />
-                                            </Popover>
-                                        </div>
-                                    </div>
-
-                                </Label>
+                                <Label for="StartDateInput" sm={2}>Pradžia</Label>
+                                <Col sm={10}>
+                                    <InputGroup name="StartDate" id="StartDate" onClick={this.handleStartPopover} style={{cursor:"pointer"}}>
+                                        <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
+                                            ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
+                                            : null}
+                                               invalid={this.state.errors.start != null}
+                                               style={{cursor:"pointer"}}/>
+                                        <InputGroupAddon addonType="append">
+                                            <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
+                                        </InputGroupAddon>
+                                        <FormFeedback valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
+                                        <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
+                                            <InputMoment
+                                                moment={this.state.startdate}
+                                                onChange={this.handleChangeStart}
+                                                minStep={5}
+                                            />
+                                        </Popover>
+                                    </InputGroup>
+                                </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label sm={2}>Pabaiga</Label>
-                                <Label xs={9} sm={9} md={10} lg={6}>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="p-0">
-                                            {this.props.event !== null
-                                                ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
-                                                : null}
-
-                                        </div>
-                                        <div className="p-0">
-                                            <h6><Badge id="ChangeEndDate" onClick={this.handleEndPopover} color="secondary" style={{cursor:"pointer"}}>Keisti</Badge></h6>
-                                            <Popover placement="bottom" isOpen={this.state.endPopover} target="ChangeEndDate" toggle={this.handleEndPopover}>
-
-                                                <InputMoment
-                                                    moment={this.state.enddate}
-                                                    onChange={this.handleChangeEnd}
-                                                    minStep={5}
-                                                />
-                                            </Popover>
-                                        </div>
-                                    </div>
-                                </Label>
+                                <Label for="EndDateInput" sm={2}>Pabaiga</Label>
+                                <Col sm={10}>
+                                    <InputGroup name="EndDate" id="EndDate" onClick={this.handleEndPopover} style={{cursor:"pointer"}}>
+                                        <Input name="EndDateInput" id="EndDateInput" disabled value={this.props.event !== null
+                                            ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
+                                            : null}
+                                               invalid={this.state.errors.end != null}
+                                               style={{cursor:"pointer"}}/>
+                                        <InputGroupAddon addonType="append">
+                                            <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
+                                        </InputGroupAddon>
+                                        <FormFeedback valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
+                                        <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
+                                            <InputMoment
+                                                moment={this.state.enddate}
+                                                onChange={this.handleChangeEnd}
+                                                minStep={5}
+                                            />
+                                        </Popover>
+                                    </InputGroup>
+                                </Col>
                             </FormGroup>
                         </FormGroup>
                         <FormGroup row>
