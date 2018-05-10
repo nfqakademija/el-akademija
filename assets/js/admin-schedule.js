@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/lt';
 import ReactDOM from "react-dom";
 import ApiClient from "./api-client";
+
 const {api} = require('./api');
 import {
     Popover, PopoverHeader, PopoverBody,
@@ -19,13 +20,80 @@ import InputMoment from 'input-moment';
 
 BigCalendar.momentLocalizer(moment);
 
-class CustomMonthEvent extends React.Component {
-    constructor(props){
+class EventPopover extends React.Component {
+    constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
         this.state = {
-            popoverOpen: false
+            popoverOpen: false,
+        };
+    }
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        });
+    }
+
+    render() {
+        return (
+            <Popover placement={this.props.placement} isOpen={this.props.isOpen} target={`Event${this.props.event.id}`}
+                     toggle={this.props.toggle}>
+                <PopoverHeader style={{
+                    backgroundColor: this.props.event.category.color,
+                    color: 'white'
+                }}>{this.props.event.title}</PopoverHeader>
+                <PopoverBody>
+                    <Container>
+                        <Row>
+                            <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
+                                <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
+                                    Lektorius
+                                </p>
+                                <p className="small">
+                                    {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
+                                </p>
+                            </Col>
+                            <Col sm={6}>
+                                <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
+                                    Kategorija
+                                </p>
+                                <p className="small">
+                                    {this.props.event.category.name}
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={12} className="mr-0">
+                                <p className="font-weight-bold mb-0 text-center" style={{fontSize: "1.2em"}}>
+                                    Aprašymas
+                                </p>
+                                <p className="small" dangerouslySetInnerHTML={{__html: this.props.event.description}}/>
+                            </Col>
+                        </Row>
+
+                        <Button color="success" block size="sm">
+                            Užduoti namų darbą
+                        </Button>
+                        <Button color="danger" block size="sm">
+                            Redaguoti paskaitą
+                        </Button>
+                    </Container>
+                </PopoverBody>
+            </Popover>
+        );
+    }
+
+}
+
+class CustomMonthEvent extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            popoverOpen: false,
         };
 
 
@@ -37,63 +105,27 @@ class CustomMonthEvent extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
-            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
-                <div className="d-flex justify-content-between" >
+            <div id={`Event${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+                <div className="d-flex justify-content-between">
                     <div className="p-0">{this.props.event.title}</div>
-                    <div className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
+                    <div
+                        className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
                 </div>
-                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
-                    <PopoverHeader style={{
-                        backgroundColor: this.props.event.category.color,
-                        color:'white'
-                    }}>{this.props.event.title}</PopoverHeader>
-                    <PopoverBody>
-                        <Container>
-                            <Row>
-                                <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
-                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Lektorius
-                                    </p>
-                                    <p className="small">
-                                        {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
-                                    </p>
-                                </Col>
-                                <Col sm={6}>
-                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Kategorija
-                                    </p>
-                                    <p className="small">
-                                        {this.props.event.category.name}
-                                    </p>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm={12} className="mr-0">
-                                    <p className="font-weight-bold mb-0 text-center" style={{fontSize:"1.2em"}}>
-                                        Aprašymas
-                                    </p>
-                                    <p className="small" dangerouslySetInnerHTML={{ __html: this.props.event.description }} />
-                                </Col>
-                            </Row>
-
-                            <Button color="success" block size="sm">
-                                Užduoti namų darbą
-                            </Button>
-                            <Button color="danger" block size="sm">
-                                Redaguoti paskaitą
-                            </Button>
-                        </Container>
-                    </PopoverBody>
-                </Popover>
+                <EventPopover
+                    placement="bottom"
+                    isOpen={this.state.popoverOpen}
+                    event={this.props.event}
+                    toggle={this.toggle}
+                />
             </div>
         );
     }
 }
 
 class CustomWeekEvent extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
@@ -110,52 +142,16 @@ class CustomWeekEvent extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
-            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height:"100%"}}>
+            <div id={`Event${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height: "100%"}}>
                 {this.props.event.title}
-                <Popover placement="auto" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
-                    <PopoverHeader style={{
-                        backgroundColor: this.props.event.category.color,
-                        color:'white'
-                    }}>{this.props.event.title}</PopoverHeader>
-                    <PopoverBody>
-                        <Container>
-                            <Row>
-                                <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
-                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Lektorius
-                                    </p>
-                                    <p className="small">
-                                        {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
-                                    </p>
-                                </Col>
-                                <Col sm={6}>
-                                    <p className="font-weight-bold mb-0" style={{fontSize:"1.1em"}}>
-                                        Kategorija
-                                    </p>
-                                    <p className="small">
-                                        {this.props.event.category.name}
-                                    </p>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm={12} className="mr-0">
-                                    <p className="font-weight-bold mb-0 text-center" style={{fontSize:"1.2em"}}>
-                                        Aprašymas
-                                    </p>
-                                    <p className="small" dangerouslySetInnerHTML={{ __html: this.props.event.description }} />
-                                </Col>
-                            </Row>
-                            <Button color="success" block size="sm">
-                                Užduoti namų darbą
-                            </Button>
-                            <Button color="danger" block size="sm">
-                                Redaguoti paskaitą
-                            </Button>
-                        </Container>
-                    </PopoverBody>
-                </Popover>
+                <EventPopover
+                    placement="auto"
+                    isOpen={this.state.popoverOpen}
+                    event={this.props.event}
+                    toggle={this.toggle}
+                />
             </div>
 
         );
@@ -220,7 +216,7 @@ class EventModal extends React.Component {
 
     handleStartPopover() {
         this.setState({
-            startPopover:!this.state.startPopover
+            startPopover: !this.state.startPopover
         });
         console.log(this.state.startPopover);
     }
@@ -233,7 +229,7 @@ class EventModal extends React.Component {
 
     handleEndPopover() {
         this.setState({
-            endPopover:!this.state.endPopover
+            endPopover: !this.state.endPopover
         });
     }
 
@@ -242,7 +238,8 @@ class EventModal extends React.Component {
             course: {
                 name: event.target.value,
                 id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
-            }});
+            }
+        });
     }
 
     handleChangeName(event) {
@@ -254,7 +251,8 @@ class EventModal extends React.Component {
             category: {
                 name: event.target.value,
                 id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
-            }});
+            }
+        });
     }
 
     handleChangeLector(event) {
@@ -262,7 +260,8 @@ class EventModal extends React.Component {
             lector: {
                 fullname: event.target.value,
                 id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
-            }});
+            }
+        });
     }
 
     handleChangeDescription(event) {
@@ -285,7 +284,7 @@ class EventModal extends React.Component {
                 this.props.confirm();
             }
         }).catch((error) => {
-            if(error.response.data.errors) {
+            if (error.response.data.errors) {
                 this.setState({
                     errors: error.response.data.errors
                 })
@@ -293,7 +292,7 @@ class EventModal extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
             <Modal isOpen={this.props.modal} fade={true} toggle={this.props.toggle} size='lg'>
                 <Form onSubmit={this.handleSubmit}>
@@ -301,22 +300,27 @@ class EventModal extends React.Component {
                     <ModalBody>
                         <Container>
                             <FormGroup>
+                                {this.props.type}
                                 <FormGroup row>
                                     <Label for="StartDateInput" sm={2}>Pradžia</Label>
                                     <Col sm={10}>
-                                        <InputGroup name="StartDate" id="StartDate" style={{cursor:"pointer"}} onClick={this.handleStartPopover}>
-                                                <Input name="StartDateInput" id="StartDateInput" disabled value={this.props.event !== null
-                                                ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
-                                                : null}
+                                        <InputGroup name="StartDate" id="StartDate" style={{cursor: "pointer"}}
+                                                    onClick={this.handleStartPopover}>
+                                            <Input name="StartDateInput" id="StartDateInput" disabled
+                                                   value={this.props.event !== null
+                                                       ? this.state.startdate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                       : null}
                                                    invalid={this.state.errors.start != null}
-                                                   style={{cursor:"pointer"}}
-                                                   />
+                                                   style={{cursor: "pointer"}}
+                                            />
                                             <InputGroupAddon addonType="append">
                                                 <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
                                             </InputGroupAddon>
-                                            <FormFeedback valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
+                                            <FormFeedback
+                                                valid={this.state.errors.start == null}>{this.state.errors.start != null ? this.state.errors.start[0] : null}</FormFeedback>
                                         </InputGroup>
-                                        <Popover placement="bottom" isOpen={this.state.startPopover} target="StartDateInput" toggle={this.handleStartPopover}>
+                                        <Popover placement="bottom" isOpen={this.state.startPopover}
+                                                 target="StartDateInput" toggle={this.handleStartPopover}>
                                             <InputMoment
                                                 moment={this.state.startdate}
                                                 onChange={this.handleChangeStart}
@@ -328,18 +332,22 @@ class EventModal extends React.Component {
                                 <FormGroup row>
                                     <Label for="EndDateInput" sm={2}>Pabaiga</Label>
                                     <Col sm={10}>
-                                        <InputGroup name="EndDate" id="EndDate" onClick={this.handleEndPopover} style={{cursor:"pointer"}}>
-                                            <Input name="EndDateInput" id="EndDateInput" disabled value={this.props.event !== null
-                                                ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
-                                                : null}
+                                        <InputGroup name="EndDate" id="EndDate" onClick={this.handleEndPopover}
+                                                    style={{cursor: "pointer"}}>
+                                            <Input name="EndDateInput" id="EndDateInput" disabled
+                                                   value={this.props.event !== null
+                                                       ? this.state.enddate.format("dddd, MMMM Do YYYY, HH:mm")
+                                                       : null}
                                                    invalid={this.state.errors.end != null}
-                                                   style={{cursor:"pointer"}}/>
+                                                   style={{cursor: "pointer"}}/>
                                             <InputGroupAddon addonType="append">
                                                 <InputGroupText className="bg-warning text-dark">Keisti</InputGroupText>
                                             </InputGroupAddon>
-                                            <FormFeedback valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
+                                            <FormFeedback
+                                                valid={this.state.errors.end == null}>{this.state.errors.end != null ? this.state.errors.end[0] : null}</FormFeedback>
                                         </InputGroup>
-                                        <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput" toggle={this.handleEndPopover}>
+                                        <Popover placement="bottom" isOpen={this.state.endPopover} target="EndDateInput"
+                                                 toggle={this.handleEndPopover}>
                                             <InputMoment
                                                 moment={this.state.enddate}
                                                 onChange={this.handleChangeEnd}
@@ -352,11 +360,13 @@ class EventModal extends React.Component {
                             <FormGroup row>
                                 <Label for="courseList" sm={2}>Kursas</Label>
                                 <Col sm={10}>
-                                    <Input type="select" name="courseList" id="courseList" value={this.state.course.name} onChange={this.handleChangeCourse}>
+                                    <Input type="select" name="courseList" id="courseList"
+                                           value={this.state.course.name} onChange={this.handleChangeCourse}>
                                         {this.props.courses.map((course) =>
                                             <option
                                                 style={{
-                                                    color: course.id === this.currentCourse.id ? 'red' : null}}
+                                                    color: course.id === this.currentCourse.id ? 'red' : null
+                                                }}
                                                 key={course.id}
                                                 data-id={course.id}>{course.name}</option>
                                         )}
@@ -366,18 +376,23 @@ class EventModal extends React.Component {
                             <FormGroup row>
                                 <Label for="lectureName" sm={2}>Paskaitos pavadinimas</Label>
                                 <Col sm={10}>
-                                    <Input invalid={this.state.errors.name != null} type="text" name="lectureName" id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name} onChange={this.handleChangeName}/>
-                                    <FormFeedback valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
+                                    <Input invalid={this.state.errors.name != null} type="text" name="lectureName"
+                                           id="lectureName" placeholder="Paskaitos pavadinimas" value={this.state.name}
+                                           onChange={this.handleChangeName}/>
+                                    <FormFeedback
+                                        valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="lectureCategory" sm={2}>Paskaitos tipas</Label>
                                 <Col sm={10}>
-                                    <Input type="select" name="lectureCategory" id="lectureCategory" value={this.state.category.name} onChange={this.handleChangeCategory}>
+                                    <Input type="select" name="lectureCategory" id="lectureCategory"
+                                           value={this.state.category.name} onChange={this.handleChangeCategory}>
                                         {this.props.categories.map((category) =>
                                             <option style={{
                                                 color: category.color,
-                                                textDecoration:'bold'}}
+                                                textDecoration: 'bold'
+                                            }}
                                                     key={category.id}
                                                     data-id={category.id}>{category.name}</option>
                                         )}
@@ -387,7 +402,8 @@ class EventModal extends React.Component {
                             <FormGroup row>
                                 <Label for="lectureLector" sm={2}>Lektorius</Label>
                                 <Col sm={10}>
-                                    <Input type="select" name="lectureLector" id="lectureLector" value={this.state.lector.fullname} onChange={this.handleChangeLector}>
+                                    <Input type="select" name="lectureLector" id="lectureLector"
+                                           value={this.state.lector.fullname} onChange={this.handleChangeLector}>
                                         {this.props.lectors.map((lector) =>
                                             <option
                                                 key={lector.id}
@@ -408,7 +424,8 @@ class EventModal extends React.Component {
                                         onChange={this.handleChangeDescription}
                                         invalid={this.state.errors.description != null}/>
 
-                                    <FormFeedback valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
+                                    <FormFeedback
+                                        valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
                                 </Col>
                             </FormGroup>
                         </Container>
@@ -432,8 +449,8 @@ class AdminSchedule extends React.Component {
             modal: false,
             event: null,
             lectures: null,
-            categories:null,
-            courses:null,
+            categories: null,
+            courses: null,
             lectors: null,
         },
 
@@ -487,7 +504,7 @@ class AdminSchedule extends React.Component {
         const events = [];
         const {modal, event, lectures, categories, courses, lectors} = {...this.state};
 
-        if(lectures && categories && lectors) {
+        if (lectures && categories && lectors) {
 
             lectures.forEach(l => {
 
@@ -502,7 +519,7 @@ class AdminSchedule extends React.Component {
                 })
             });
 
-            return(
+            return (
                 <div>
                     <BigCalendar
                         selectable
@@ -551,6 +568,7 @@ class AdminSchedule extends React.Component {
                     />
                     {modal !== false ?
                         <EventModal modal={modal}
+                                    type="new"
                                     toggle={this.toggle}
                                     event={event}
                                     categories={categories}
@@ -562,7 +580,7 @@ class AdminSchedule extends React.Component {
             )
 
         } else {
-            return(
+            return (
                 <div>
 
                 </div>
