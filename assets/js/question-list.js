@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {InputGroup, InputGroupAddon, Input, Button, Row, Col} from 'reactstrap';
 
 import ApiClient from './api-client';
 import Question from './question';
@@ -12,10 +13,33 @@ class QuestionList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            questions:null
+            questions:null,
+            search: '',
         };
+
+        this.onSearchChange = this.onSearchChange.bind(this);
+        this.onSearchClick = this.onSearchClick.bind(this);
     }
 
+    onSearchChange(event) {
+        this.setState({
+            search: event.target.value
+        });
+    }
+
+    onSearchClick() {
+        if(this.state.search === '') return;
+        ApiClient.get(api.question.search, {
+            params: {
+                param: this.state.search
+            }
+        }).
+            then(questions => {
+                this.setState({
+                    questions: questions.data
+                })
+        });
+    }
     componentDidMount() {
         ApiClient.get(api.question.show)
             .then(questions => {
@@ -23,8 +47,6 @@ class QuestionList extends React.Component {
                     questions: questions.data
                 })
             });
-
-
     }
 
     render() {
@@ -36,12 +58,25 @@ class QuestionList extends React.Component {
 
             const { questions } = {...this.state};
             return (
-                <div className="stream-posts">
-                    {questions.map(question =>
-                        <Question
-                            key={question.id}
-                            question={question}/>
-                    )}
+                <div>
+                    <Row>
+                        <Col sm={6}>
+
+                        </Col>
+                        <Col sm={6}>
+                            <InputGroup className="mb-3">
+                                <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą" />
+                                <InputGroupAddon addonType="append"><Button className="text-white" style={{backgroundColor:"#ff6b00"}} onClick={this.onSearchClick}>Ieškoti</Button></InputGroupAddon>
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                    <div className="stream-posts">
+                        {questions.map(question =>
+                            <Question
+                                key={question.id}
+                                question={question}/>
+                        )}
+                    </div>
                 </div>
             );
         }
