@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Homework;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +15,7 @@ class HomeworkType extends AbstractType
 		$builder
 			->add('lecture')
 			->add('name')
-			->add('deadline', DateType::class, ['widget' => 'single_text'])
+			->add('deadline', DateTimeType::class, ['widget' => 'single_text'])
 		;
 	}
 
