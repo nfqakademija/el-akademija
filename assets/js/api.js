@@ -6,7 +6,7 @@ const api = {
         show: '/api/question/show',
         comments: (id) => `/api/question/${id}/comments`,
         post_comment: '/api/comment/new',
-        search: `api/question/search`
+        search: `/api/question/search`
     },
     lecture: {
         show: '/api/lecture/show',

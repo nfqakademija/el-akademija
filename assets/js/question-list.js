@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from 'react-router-dom';
-import {InputGroup, InputGroupAddon, Input, Button, Row, Col} from 'reactstrap';
+import {Link} from 'react-router-dom';
+import {
+    Pagination, PaginationItem, PaginationLink,
+    InputGroup, InputGroupAddon, Input, Button, Row, Col
+} from 'reactstrap';
 
 import ApiClient from './api-client';
 import Question from './question';
@@ -15,7 +18,9 @@ class QuestionList extends React.Component {
         super(props);
         this.state = {
             questions:null,
-            search: '',
+            search: this.props.text,
+            page: this.props.page,
+            totalPages: null
         };
 
         this.onSearchChange = this.onSearchChange.bind(this);
@@ -28,26 +33,33 @@ class QuestionList extends React.Component {
         });
     }
 
+
     onSearchClick() {
         if(this.state.search === '') return;
-        ApiClient.get(api.question.search, {
-            params: {
-                param: this.state.search
+        this.handleSearch();
+    }
+
+    handleSearch() {
+        ApiClient.get(this.state.search !== '' ? api.question.search : api.question.show,
+            this.state.search !== '' ? {
+                params: {
+                    page: this.state.page,
+                    param: this.state.search
+                }} : {
+                params: {
+                    page: this.state.page
+                }
             }
-        }).
-            then(questions => {
-                this.setState({
-                    questions: questions.data
-                })
+        ).
+        then(questions => {
+            this.setState({
+                questions: questions.data,
+                totalPages: questions.totalPages
+            })
         });
     }
     componentDidMount() {
-        ApiClient.get(api.question.show)
-            .then(questions => {
-                this.setState({
-                    questions: questions.data
-                })
-            });
+        this.handleSearch();
     }
 
     render() {
@@ -58,11 +70,33 @@ class QuestionList extends React.Component {
         } else {
 
             const { questions } = {...this.state};
+            const pagesList = () => {
+                const buttons = [];
+                for(let i = 1; i <= this.state.totalPages; i++) {
+                    buttons.push(
+                        <PaginationItem key={i}>
+                            <PaginationLink href={"/questions/"+ i +  (this.state.search !== "" ? "/" : "") + this.state.search}>
+                                {i}
+                            </PaginationLink>
+                        </PaginationItem>
+                    )
+                }
+                return buttons;
+            };
             return (
                 <div>
+
                     <Row>
                         <Col sm={6}>
-
+                            <Pagination>
+                                <PaginationItem>
+                                    <PaginationLink previous href="#" />
+                                </PaginationItem>
+                                {pagesList()}
+                                <PaginationItem>
+                                    <PaginationLink next href="#" />
+                                </PaginationItem>
+                            </Pagination>
                         </Col>
                         <Col sm={6}>
                             <InputGroup className="mb-3">
@@ -84,7 +118,7 @@ class QuestionList extends React.Component {
     }
 }
 const questionListElement = document.getElementById('question-list');
-ReactDOM.render(<QuestionList/>,
+ReactDOM.render(<QuestionList page={questionListElement.getAttribute('page')} text={questionListElement.getAttribute('text')}/>,
     questionListElement
 );
 

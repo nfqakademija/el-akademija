@@ -23,7 +23,25 @@ class IndexController extends AbstractController
      */
     public function questions(): Response
     {
-        return $this->render('questions.html.twig');
+        return $this->render('questions.html.twig', ['page' => 1]);
+    }
+
+    /**
+     * @Route("/questions/{page}", name="questions_page")
+     * @return Response
+     */
+    public function questions_page($page): Response
+    {
+        return $this->render('questions.html.twig', ['page' => $page]);
+    }
+
+    /**
+     * @Route("/questions/{page}/{text}", name="questions_page_search")
+     * @return Response
+     */
+    public function questions_page_search($page, $text): Response
+    {
+        return $this->render('questions.html.twig', ['page' => $page, 'text' => $text]);
     }
     /**
      * @Route("/question/{id}", name="question")
