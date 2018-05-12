@@ -10,8 +10,9 @@ class QueryArgs
 	 * @var int|null $limit
 	 * @var int|null $offset
 	 * @var int $page
+	 * @var int $totalPages
 	 */
-	private $orderBy, $order, $limit, $offset, $page, $filter;
+	private $orderBy, $order, $limit, $offset, $page, $filter, $totalPages;
 
 	/**
 	 * QueryArgs constructor.
@@ -154,7 +155,23 @@ class QueryArgs
 		if ($this->limit) {
 			$meta['max_results'] = $this->limit;
 			$meta['page'] = $this->page;
+			$meta['totalPages'] = $this->totalPages;
 		}
 		return $meta;
+	}
+
+	public function getTotalPages()
+	{
+		return $this->totalPages;
+	}
+
+	/**
+	 * @param mixed $totalPages
+	 * @return QueryArgs
+	 */
+	public function setTotalPages($totalPages): self
+	{
+		$this->totalPages = $totalPages;
+		return $this;
 	}
 }
