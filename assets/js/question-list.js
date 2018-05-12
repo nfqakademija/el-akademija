@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Router from 'react-router-dom';
 import {InputGroup, InputGroupAddon, Input, Button, Row, Col} from 'reactstrap';
 
 import ApiClient from './api-client';
