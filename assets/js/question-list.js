@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router';
 import {
     Pagination, PaginationItem, PaginationLink,
     InputGroup, InputGroupAddon, Input, Button, Row, Col
@@ -36,6 +36,9 @@ class QuestionList extends React.Component {
 
     onSearchClick() {
         if(this.state.search === '') return;
+        this.setState({
+            page: 1
+        });
         this.handleSearch();
     }
 
@@ -89,12 +92,12 @@ class QuestionList extends React.Component {
                     <Row>
                         <Col sm={6}>
                             <Pagination>
-                                <PaginationItem>
-                                    <PaginationLink previous href="#" />
+                                <PaginationItem disabled={ Number(this.state.page)-1 === 0}>
+                                    <PaginationLink previous href={"/questions/"+ (Number(this.state.page)-1) +  (this.state.search !== "" ? "/" : "") + this.state.search} />
                                 </PaginationItem>
                                 {pagesList()}
-                                <PaginationItem>
-                                    <PaginationLink next href="#" />
+                                <PaginationItem disabled={ Number(this.state.page) === Number(this.state.totalPages)}>
+                                    <PaginationLink next href={"/questions/"+ (Number(this.state.page)+1) +  (this.state.search !== "" ? "/" : "") + this.state.search} />
                                 </PaginationItem>
                             </Pagination>
                         </Col>
