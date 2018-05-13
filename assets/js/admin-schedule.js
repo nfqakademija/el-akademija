@@ -114,7 +114,7 @@ class CustomMonthEvent extends React.Component {
                         className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
                 </div>
                 <EventPopover
-                    placement="bottom"
+                    placement="left"
                     isOpen={this.state.popoverOpen}
                     event={this.props.event}
                     toggle={this.toggle}
@@ -147,7 +147,7 @@ class CustomWeekEvent extends React.Component {
             <div id={`Event${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height: "100%"}}>
                 {this.props.event.title}
                 <EventPopover
-                    placement="auto"
+                    placement="left"
                     isOpen={this.state.popoverOpen}
                     event={this.props.event}
                     toggle={this.toggle}
