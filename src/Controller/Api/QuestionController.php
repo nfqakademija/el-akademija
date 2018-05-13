@@ -78,7 +78,7 @@ class QuestionController extends BaseApiController
 		$violations = $validator->validate($param, [
 			new NotBlank(),
 			new Length([
-				'min' => 4,
+				'min' => 3,
 				'max' => 10
 			])
 		]);
@@ -88,6 +88,8 @@ class QuestionController extends BaseApiController
 			]);
 
 		$args = $this->handleOPS($request, Question::class);
+		$rows = $this->getRepository()->searchCount($param);
+		$args->setTotalPages(ceil($rows / $args->getLimit()));
 		return $this->jsonService->successData(
 			$this
 				->getRepository()

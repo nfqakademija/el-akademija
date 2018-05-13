@@ -50,4 +50,19 @@ class QuestionRepository extends ServiceEntityRepository
 			->getQuery()
 			->execute();
 	}
+
+	/**
+	 * @param string $param
+	 * @return int
+	 * @throws \Doctrine\ORM\NonUniqueResultException
+	*/
+	public function searchCount($param)
+	{
+		return $this->createQueryBuilder('q')
+			->select('count(q.id)')
+			->where('MATCH_AGAINST (q.title, q.text, :param) > 0')
+			->setParameter('param', $param)
+			->getQuery()
+			->getSingleScalarResult();
+	}
 }

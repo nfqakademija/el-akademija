@@ -119,7 +119,6 @@ abstract class BaseApiController extends AbstractController
 	 * @Route("/show", name="show_all", methods={"GET"})
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	public function showAll(Request $request): JsonResponse
 	{
@@ -134,7 +133,6 @@ abstract class BaseApiController extends AbstractController
 	 * @param Request $request
 	 * @param string|null $class
 	 * @return QueryArgs
-	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	protected function handleOPS(Request $request, string $class = null): QueryArgs
 	{
@@ -168,6 +166,6 @@ abstract class BaseApiController extends AbstractController
 			->setLimit($limit)
 			->setOffset($offset)
 			->setPage($page)
-			->setTotalPages(floor($rowsCount / $limit));
+			->setTotalPages(ceil($rowsCount / $limit));
 	}
 }
