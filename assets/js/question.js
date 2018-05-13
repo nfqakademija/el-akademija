@@ -47,7 +47,7 @@ class Question extends React.Component {
                         <div className="sp-content">
                             <div className="sp-header">
                                 <div className="sp-title">
-                                    <a href={"/questions/"+question.id}> {question.title} </a>
+                                    <a href={"/question/"+question.id}> {question.title} </a>
                                 </div>
                                 <div className="sp-date">{timeAgo.format(Date.parse(question.created), 'twitter')}</div>
                             </div>
@@ -55,7 +55,7 @@ class Question extends React.Component {
                         </div>
 
                         <div className="button-blue mt-2 justify-content-end">
-                            <a href={"/questions/"+question.id} className="btn button-shaped" role="button">Skaityti daugiau</a>
+                            <a href={"/question/"+question.id} className="btn button-shaped" role="button">Skaityti daugiau</a>
                         </div>
                     </div>
                 </div>

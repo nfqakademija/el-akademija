@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {withRouter} from 'react-router';
+import {Link} from 'react-router-dom';
+
 import {
     Pagination, PaginationItem, PaginationLink,
     InputGroup, InputGroupAddon, Input, Button, Row, Col
@@ -25,6 +26,8 @@ class QuestionList extends React.Component {
 
         this.onSearchChange = this.onSearchChange.bind(this);
         this.onSearchClick = this.onSearchClick.bind(this);
+        this.onPagePrev = this.onPagePrev.bind(this);
+        this.onPageNext = this.onPageNext.bind(this);
     }
 
     onSearchChange(event) {
@@ -36,33 +39,45 @@ class QuestionList extends React.Component {
 
     onSearchClick() {
         if(this.state.search === '') return;
-        this.setState({
-            page: 1
-        });
-        this.handleSearch();
+        this.handleSearch(1);
     }
 
-    handleSearch() {
+    onPagePrev() {
+        this.handleSearch(Number(this.state.page)-1)
+    }
+
+    onPageNext() {
+        this.handleSearch(Number(this.state.page)+1)
+    }
+
+
+
+    handleSearch(page = null) {
         ApiClient.get(this.state.search !== '' ? api.question.search : api.question.show,
             this.state.search !== '' ? {
                 params: {
-                    page: this.state.page,
+                    page: page === null ? this.state.page : page,
                     param: this.state.search
                 }} : {
                 params: {
-                    page: this.state.page
+                    page: page === null ? this.state.page : page
                 }
             }
         ).
         then(questions => {
             this.setState({
                 questions: questions.data,
-                totalPages: questions.totalPages
+                totalPages: questions.totalPages,
+                page: page === null ? this.state.page : page
             })
         });
     }
     componentDidMount() {
         this.handleSearch();
+    }
+
+    componentDidUpdate() {
+        history.pushState(null, null, "/questions/" + this.state.page+  (this.state.search !== "" ? "/" : "") + this.state.search);
     }
 
     render() {
@@ -77,8 +92,8 @@ class QuestionList extends React.Component {
                 const buttons = [];
                 for(let i = 1; i <= this.state.totalPages; i++) {
                     buttons.push(
-                        <PaginationItem key={i}>
-                            <PaginationLink href={"/questions/"+ i +  (this.state.search !== "" ? "/" : "") + this.state.search}>
+                        <PaginationItem key={i} onClick={() => this.handleSearch(i)} active={Number(this.state.page) === i}>
+                            <PaginationLink>
                                 {i}
                             </PaginationLink>
                         </PaginationItem>
@@ -92,12 +107,12 @@ class QuestionList extends React.Component {
                     <Row>
                         <Col sm={6}>
                             <Pagination>
-                                <PaginationItem disabled={ Number(this.state.page)-1 === 0}>
-                                    <PaginationLink previous href={"/questions/"+ (Number(this.state.page)-1) +  (this.state.search !== "" ? "/" : "") + this.state.search} />
+                                <PaginationItem disabled={ Number(this.state.page)-1 === 0} onClick={this.onPagePrev}>
+                                    <PaginationLink previous/>
                                 </PaginationItem>
                                 {pagesList()}
-                                <PaginationItem disabled={ Number(this.state.page) === Number(this.state.totalPages)}>
-                                    <PaginationLink next href={"/questions/"+ (Number(this.state.page)+1) +  (this.state.search !== "" ? "/" : "") + this.state.search} />
+                                <PaginationItem disabled={ Number(this.state.page) === Number(this.state.totalPages)} onClick={this.onPageNext}>
+                                    <PaginationLink next  />
                                 </PaginationItem>
                             </Pagination>
                         </Col>
