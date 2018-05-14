@@ -218,7 +218,6 @@ class EventModal extends React.Component {
         this.setState({
             startPopover: !this.state.startPopover
         });
-        console.log(this.state.startPopover);
     }
 
     handleChangeEnd = enddate => {
