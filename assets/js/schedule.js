@@ -5,17 +5,20 @@ import 'moment/locale/lt';
 import ReactDOM from "react-dom";
 import ApiClient from "./api-client";
 const {api} = require('./api');
-import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import {
+    Popover, PopoverHeader, PopoverBody,
+    Container, Row, Col,
+} from 'reactstrap';
 
 BigCalendar.momentLocalizer(moment);
 
-class CustomMonthEvent extends React.Component {
-    constructor(props){
+class EventPopover extends React.Component {
+    constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
         this.state = {
-            popoverOpen: false
+            popoverOpen: false,
         };
     }
 
@@ -25,27 +28,89 @@ class CustomMonthEvent extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
-            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
-                <div className="d-flex justify-content-between" >
+            <Popover placement={this.props.placement} isOpen={this.props.isOpen} target={`Event${this.props.event.id}`}
+                     toggle={this.props.toggle}>
+                <PopoverHeader style={{
+                    backgroundColor: this.props.event.category.color,
+                    color: 'white'
+                }}>{this.props.event.title}</PopoverHeader>
+                <PopoverBody>
+                    <Container>
+                        <Row>
+                            <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
+                                <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
+                                    Lektorius
+                                </p>
+                                <p className="small">
+                                    {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
+                                </p>
+                            </Col>
+                            <Col sm={6}>
+                                <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
+                                    Kategorija
+                                </p>
+                                <p className="small">
+                                    {this.props.event.category.name}
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={12} className="mr-0">
+                                <p className="font-weight-bold mb-0 text-center" style={{fontSize: "1.2em"}}>
+                                    Aprašymas
+                                </p>
+                                <p className="small" dangerouslySetInnerHTML={{__html: this.props.event.description}}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </PopoverBody>
+            </Popover>
+        );
+    }
+
+}
+
+class CustomMonthEvent extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            popoverOpen: false,
+        };
+
+
+    }
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        });
+    }
+
+    render() {
+        return (
+            <div id={`Event${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+                <div className="d-flex justify-content-between">
                     <div className="p-0">{this.props.event.title}</div>
-                    <div className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
+                    <div
+                        className="p-0">{moment(this.props.event.start).format("HH:mm")} - {moment(this.props.event.end).format("HH:mm")}</div>
                 </div>
-                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
-                    <PopoverHeader style={{
-                        backgroundColor: this.props.event.category.color,
-                        color:'white'
-                    }}>{this.props.event.category.name}</PopoverHeader>
-                    <PopoverBody>{this.props.event.description}</PopoverBody>
-                </Popover>
+                <EventPopover
+                    placement="left"
+                    isOpen={this.state.popoverOpen}
+                    event={this.props.event}
+                    toggle={this.toggle}
+                />
             </div>
         );
     }
 }
 
 class CustomWeekEvent extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
@@ -62,18 +127,18 @@ class CustomWeekEvent extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
-            <div id={`Popover${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer'}}>
+            <div id={`Event${this.props.event.id}`} onClick={this.toggle} style={{cursor: 'pointer', height: "100%"}}>
                 {this.props.event.title}
-                <Popover placement="bottom" isOpen={this.state.popoverOpen} target={`Popover${this.props.event.id}`} toggle={this.toggle}>
-                    <PopoverHeader style={{
-                        backgroundColor: this.props.event.category.color,
-                        color:'white'
-                    }}>{this.props.event.category.name}</PopoverHeader>
-                    <PopoverBody>{this.props.event.description}</PopoverBody>
-                </Popover>
+                <EventPopover
+                    placement="left"
+                    isOpen={this.state.popoverOpen}
+                    event={this.props.event}
+                    toggle={this.toggle}
+                />
             </div>
+
         );
     }
 }

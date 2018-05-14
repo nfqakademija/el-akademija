@@ -43,10 +43,12 @@ class QuestionList extends React.Component {
     }
 
     onPagePrev() {
+        if(Number(this.state.page)-1 === 0) return;
         this.handleSearch(Number(this.state.page)-1)
     }
 
     onPageNext() {
+        if(Number(this.state.page) === Number(this.state.totalPages)) return;
         this.handleSearch(Number(this.state.page)+1)
     }
 
@@ -118,8 +120,19 @@ class QuestionList extends React.Component {
                         </Col>
                         <Col sm={6}>
                             <InputGroup className="mb-3">
-                                <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą" />
-                                <InputGroupAddon addonType="append"><Button className="text-white" style={{backgroundColor:"#ff6b00"}} onClick={this.onSearchClick}>Ieškoti</Button></InputGroupAddon>
+                                <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą"
+                                       onKeyDown={event => {
+                                           if(event.key === 'Enter') {
+                                               event.preventDefault();
+                                               event.stopPropagation();
+                                               this.onSearchClick();
+                                           }
+                                       }}/>
+                                <InputGroupAddon addonType="append">
+                                    <Button className="text-white" style={{backgroundColor:"#ff6b00"}} onClick={this.onSearchClick}>
+                                        Ieškoti
+                                    </Button>
+                                </InputGroupAddon>
                             </InputGroup>
                         </Col>
                     </Row>
