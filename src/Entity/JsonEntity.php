@@ -31,6 +31,6 @@ abstract class JsonEntity implements \JsonSerializable
 	 */
 	protected function formatDateTime(\DateTimeInterface $dateTime)
 	{
-		return $dateTime->format('Y-m-d H:i:s');
+		return $dateTime->format('c');
 	}
 }
