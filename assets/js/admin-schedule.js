@@ -47,7 +47,7 @@ class EventPopover extends React.Component {
                 <PopoverBody>
                     <Container>
                         <Row>
-                            <Col sm={6} className="mr-0" style={{whiteSpace: "nowrap"}}>
+                            <Col sm={6} className="mr-0 text-left" style={{whiteSpace: "nowrap"}}>
                                 <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
                                     Lektorius
                                 </p>
@@ -55,7 +55,7 @@ class EventPopover extends React.Component {
                                     {this.props.event.lector.firstname + ' ' + this.props.event.lector.lastname}
                                 </p>
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={6} className="text-right">
                                 <p className="font-weight-bold mb-0" style={{fontSize: "1.1em"}}>
                                     Kategorija
                                 </p>
@@ -189,8 +189,8 @@ class EventModal extends React.Component {
                 id: this.props.lectors[0].id
             },
             errors: [],
-            startdate: moment(this.props.event.start),
-            enddate: moment(this.props.event.end),
+            startdate: this.props.event.start,
+            enddate: this.props.event.end,
 
             startPopover: false,
             endPopover: false,
@@ -299,7 +299,6 @@ class EventModal extends React.Component {
                     <ModalBody>
                         <Container>
                             <FormGroup>
-                                {this.props.type}
                                 <FormGroup row>
                                     <Label for="StartDateInput" sm={2}>Pradžia</Label>
                                     <Col sm={10}>
@@ -451,8 +450,8 @@ class AdminSchedule extends React.Component {
             categories: null,
             courses: null,
             lectors: null,
+            currentView: 'month',
         },
-
             this.toggle = this.toggle.bind(this);
         this.update = this.update.bind(this);
         this.confirm = this.confirm.bind(this);
@@ -465,9 +464,12 @@ class AdminSchedule extends React.Component {
     toggle = (e) => {
         this.setState({
             modal: !this.state.modal,
-            event: this.state.modal === false ? {
-                start: e.start,
-                end: e.end,
+            event: this.state.modal === false ? this.state.currentView === 'month' ? {
+                start: moment(e.start).set('hour', 17),
+                end: moment(e.end).set('hour', 19),
+            } : {
+                start: moment(e.start),
+                end: moment(e.end),
             } : null
         });
     };
@@ -499,7 +501,6 @@ class AdminSchedule extends React.Component {
 
     render() {
 
-
         const events = [];
         const {modal, event, lectures, categories, courses, lectors} = {...this.state};
 
@@ -527,6 +528,7 @@ class AdminSchedule extends React.Component {
                         step={60}
                         defaultDate={new Date()}
                         views={["month", "week", "day", "agenda"]}
+                        view={this.state.currentView}
                         onSelecting={() => false}
                         onView={(view) => {
                             this.setState({currentView: view});
@@ -567,7 +569,6 @@ class AdminSchedule extends React.Component {
                     />
                     {modal !== false ?
                         <EventModal modal={modal}
-                                    type="new"
                                     toggle={this.toggle}
                                     event={event}
                                     categories={categories}
