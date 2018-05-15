@@ -20,6 +20,79 @@ import InputMoment from 'input-moment';
 
 BigCalendar.momentLocalizer(moment);
 
+class CustomToolbar extends React.Component {
+
+    render() {
+
+        let { messages, label } = this.props;
+
+        return (
+            <div className="rbc-toolbar">
+        <span className="rbc-btn-group">
+          <button
+              type="button"
+              onClick={this.navigate.bind(null, 'TODAY')}
+          >
+            {messages.today}
+          </button>
+          <button
+              type="button"
+              onClick={this.navigate.bind(null, 'PREV')}
+          >
+            {messages.previous}
+          </button>
+          <button
+              type="button"
+              onClick={this.navigate.bind(null, 'NEXT')}
+          >
+            {messages.next}
+          </button>
+        </span>
+
+                <span className="rbc-toolbar-label">{label}</span>
+
+                <span className="rbc-btn-group">
+
+                    <Input type="select" name="select" id="exampleSelect">
+            <option>Kaunas | Pavasario semestras 2018</option>
+            <option>Vilnius | Pavasario semestras 2018</option>
+            <option>Šiauliai | Pavasario semestras 2018</option>
+          </Input>
+
+                    {this.viewNamesGroup(messages)}
+                    </span>
+            </div>
+        )
+    }
+
+
+    navigate = action => {
+        this.props.onNavigate(action)
+    }
+
+    view = view => {
+        this.props.onViewChange(view)
+    }
+
+    viewNamesGroup(messages) {
+        let viewNames = this.props.views
+        const view = this.props.view
+
+        if (viewNames.length > 1) {
+            return viewNames.map(name => (
+                <button
+                    type="button"
+                    key={name}
+                    className={view === name && 'rbc-active'}
+                    onClick={this.view.bind(null, name)}
+                >
+                    {messages[name]}
+                </button>
+            ))
+        }
+    }
+};
+
 class EventPopover extends React.Component {
     constructor(props) {
         super(props);
@@ -558,6 +631,7 @@ class AdminSchedule extends React.Component {
                             }
                         }
                         components={{
+                            toolbar: CustomToolbar,
                             month: {
                                 event: CustomMonthEvent
                             },
