@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -18,18 +20,20 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 	/**
 	 * @var JsonService $jsonService
 	 * @var AuthorizationCheckerInterface $authorizationChecker
+	 * @var UserPasswordEncoderInterface $encoder
 	 */
-	private $jsonService, $authorizationChecker;
+	private $jsonService, $authorizationChecker, $encoder;
 
 	/**
 	 * UserAuthenticator constructor.
 	 * @param JsonService $jsonService
 	 * @param AuthorizationCheckerInterface $authorizationChecker
 	 */
-	public function __construct(JsonService $jsonService, AuthorizationCheckerInterface $authorizationChecker)
+	public function __construct(JsonService $jsonService, AuthorizationCheckerInterface $authorizationChecker, UserPasswordEncoderInterface $encoder)
 	{
 		$this->jsonService = $jsonService;
 		$this->authorizationChecker = $authorizationChecker;
+		$this->encoder = $encoder;
 	}
 
 	public function supports(Request $request)
@@ -54,12 +58,13 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
 	public function checkCredentials($credentials, UserInterface $user)
 	{
+		if (!$this->encoder->isPasswordValid($user, $credentials['password']))
+			throw new AuthenticationCredentialsNotFoundException('Invalid credentials');
 		return true;
 	}
 
 	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
 	{
-		var_dump($exception->getMessage());
 		return $this->jsonService->error($exception->getMessage(), [], Response::HTTP_FORBIDDEN);
 	}
 

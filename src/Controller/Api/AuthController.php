@@ -6,8 +6,8 @@ use App\Service\JsonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -31,35 +31,42 @@ class AuthController extends AbstractController
 
 	/**
 	 * @Route("/login", methods={"POST"})
-	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function login(Request $request): JsonResponse
+	public function login(): JsonResponse
 	{
-//		$user = new User();
-//		$form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
-//		$form->handleRequest($request);
-//
-//		if (!$form->isSubmitted())
-//			return $this->jsonService->parametersMissing($form);
-//		if (!$form->isValid())
-//			return $this->jsonService->formErrors($form);
-
 		$user = $this->getUser();
-		var_dump($user);
 		if ($user instanceof UserInterface)
-			return $this->jsonService->success('Successfully logged in2');
+			return $this->jsonService->success('Successfully logged in');
 		return $this->jsonService->error();
 	}
 
 	/**
-	 * @Route("/logout", methods={"GET"})
-	 * @param Session $session
+	 * @Route("/info", methods={"GET"})
+	 * @param AuthorizationCheckerInterface $checker
 	 * @return JsonResponse
 	 */
-	public function logout(Session $session): JsonResponse
+	public function info(AuthorizationCheckerInterface $checker): JsonResponse
 	{
-		$session->invalidate();
+		if ($checker->isGranted('IS_AUTHENTICATED_FULLY'))
+			$data = [
+				'loggedIn' => true,
+				'roles' => $this->getUser()->getRoles()
+			];
+		else
+			$data = ['loggedIn' => false];
+		return $this->jsonService->successData($data);
+	}
+
+	/**
+	 * @Route("/logout", methods={"GET"})
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function logout(Request $request): JsonResponse
+	{
+		$request->getSession()->start();
+		session_destroy();
 		return $this->jsonService->success();
 	}
 }

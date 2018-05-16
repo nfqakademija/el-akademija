@@ -51,4 +51,9 @@ class UserRepository extends ServiceEntityRepository implements UserProviderInte
 		return $this->getEntityName() === $class
 			|| is_subclass_of($class, $this->getEntityName());
 	}
+
+	public function getRoles(UserInterface $user)
+	{
+
+	}
 }

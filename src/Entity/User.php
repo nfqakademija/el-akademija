@@ -41,6 +41,11 @@ class User extends JsonEntity implements UserInterface
 	 */
 	private $password;
 
+	/**
+	 * @ORM\Column(type="array")
+	 */
+	private $roles;
+
 	public function getId()
 	{
 		return $this->id;
@@ -102,7 +107,12 @@ class User extends JsonEntity implements UserInterface
 
 	public function getRoles()
 	{
-		return ['ROLE_STUDENT', 'ROLE_LECTOR', 'ROLE_ADMIN'];
+		return array_unique(array_merge(['ROLE_USER'], $this->roles));
+	}
+
+	public function setRoles(array $roles)
+	{
+		$this->roles = $roles;
 	}
 
 	public function eraseCredentials()

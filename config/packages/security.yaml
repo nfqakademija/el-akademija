@@ -22,7 +22,7 @@ security:
             logout: true
             anonymous: true
             provider: main
-            #access_denied_handler: App\Security\AccessDeniedHandler
+            access_denied_handler: App\Security\AccessDeniedHandler
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
