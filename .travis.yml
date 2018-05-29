@@ -25,6 +25,6 @@ before_script:
 script:
   # - vendor/bin/phpcs -p --standard=PSR2 --extensions=php ./src
   - bin/phpunit
-  - cd acceptance-tests
-  - composer install
-  - vendor/bin/codecept run --debug
+  # - cd acceptance-tests
+  # - composer install
+  # - vendor/bin/codecept run --debug
