@@ -21,7 +21,7 @@ suites:
                     config:
                         WebDriver:
                             url: http://172.17.0.1:8000 # IP of docker0 interface on Linux OS
-                            host: 127.0.0.1 # From physical to port binding of container
+                            host: 127.0.0.11 # From physical to port binding of container
             live: # Local Chrome, but real website (deployed for example purposes)
                  modules:
                     config:
