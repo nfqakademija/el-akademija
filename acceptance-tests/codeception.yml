@@ -23,14 +23,12 @@ suites:
                         WebDriver:
                             url: http://172.17.0.1:8000 # IP of docker0 interface on Linux OS
                             host: 127.0.0.1 # From physical to port binding of container
-                            port: 4444
             live: # Local Chrome, but real website (deployed for example purposes)
                  modules:
                     config:
                         WebDriver:
                             url: http://elakademija.projektai.nfqakademija.lt/
                             host: selenium.symfony
-                            port: 4444
 
 extensions:
     enabled: [Codeception\Extension\RunFailed]
