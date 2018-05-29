@@ -16,7 +16,6 @@ suites:
                         WebDriver:
                             url: http://nginx.symfony:8000
                             host: selenium.symfony
-                            port: 4444
             travis: # From physical via docker back to physical
                  modules:
                     config:
