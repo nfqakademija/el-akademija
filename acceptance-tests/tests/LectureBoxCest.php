@@ -14,10 +14,25 @@ class LectureBoxCest
     // tests
     public function tryToTest(AcceptanceTester $I)
     {
-    	$I->amOnPage('/admin/schedule');
-		$I->wait(10);
-    	$I->waitForElement('#admin-schedule > div');
-    	$I->click('#admin-schedule > div > div > div.rbc-toolbar > span:nth-child(1) > button:nth-child(3)');
-    	$I->wait(5);
+    	$I->amOnPage('/schedule');
+    	$I->waitForElement('#schedule > div');
+
+    	$menesiai = [
+    		'01' => 'Sausis',
+    		'02' => 'Vasaris',
+    		'03' => 'Kovas',
+    		'04' => 'Balandis',
+    		'05' => 'Gegužė',
+    		'06' => 'Birželis',
+    		'07' => 'Liepa',
+    		'08' => 'Rugpjūtis',
+    		'09' => 'Rugsėjis',
+    		'10' => 'Spalis',
+    		'11' => 'Lapkritis',
+    		'12' => 'Gruodis'
+		];
+    	$menuo = $menesiai[date('m')];
+
+    	$I->see($menuo . ' ' . date('Y'), '#schedule > div > div > div.rbc-toolbar > span.rbc-toolbar-label');
     }
 }
