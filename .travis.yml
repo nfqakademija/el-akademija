@@ -24,6 +24,7 @@ before_script:
   - yarn run encore production
 script:
   # - vendor/bin/phpcs -p --standard=PSR2 --extensions=php ./src
-  - cd acceptance-tests
-  - vendor/bin/codecept run --debug
   - bin/phpunit
+  - cd acceptance-tests
+  - composer install
+  - vendor/bin/codecept run --debug
