@@ -18,3 +18,7 @@ acceptance-tests/tests/_support/_generated
 !acceptance-tests/tests/_output/.gitkeep
 acceptance-tests/tests/_output
 ###< acceptance-tests (codeception dependencies) ###
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###

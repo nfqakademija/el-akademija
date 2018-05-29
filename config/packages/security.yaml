@@ -40,7 +40,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/course, roles: ROLE_ADMIN, methods: [POST] }
+        # - { path: ^/api/course, roles: ROLE_ADMIN, methods: [POST] }
         - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
 
 fos_user:
