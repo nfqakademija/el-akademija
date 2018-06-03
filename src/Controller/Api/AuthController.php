@@ -51,6 +51,7 @@ class AuthController extends AbstractController
 		if ($checker->isGranted('IS_AUTHENTICATED_FULLY'))
 			$data = [
 				'loggedIn' => true,
+				'user' => $this->getUser(),
 				'roles' => $this->getUser()->getRoles()
 			];
 		else
