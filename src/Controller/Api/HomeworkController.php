@@ -35,7 +35,7 @@ class HomeworkController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/{id}/homework_links", name="homework_links")
+	 * @Route("/{id}/homework_links", name="homework_links", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse

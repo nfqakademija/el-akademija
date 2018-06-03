@@ -52,7 +52,7 @@ class CourseController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/{id}/lectures", name="lectures")
+	 * @Route("/{id}/lectures", name="lectures", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
@@ -75,7 +75,7 @@ class CourseController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/{id}/homework", name="homework")
+	 * @Route("/{id}/homework", name="homework", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse

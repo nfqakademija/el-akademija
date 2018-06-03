@@ -38,7 +38,7 @@ class QuestionController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/{id}/comments", name="comments")
+	 * @Route("/{id}/comments", name="comments", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse

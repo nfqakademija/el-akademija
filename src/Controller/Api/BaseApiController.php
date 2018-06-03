@@ -149,19 +149,23 @@ abstract class BaseApiController extends AbstractController
 
 		$orderBy = strtolower($request->query->get('orderBy', ''));
 		$order = strtolower($request->query->get('order', ''));
+
 		if (in_array($orderBy, $whiteList))
 			$args->setOrderBy($orderBy);
 		if (in_array($order, ['asc', 'desc']))
 			$args->setOrder(strtoupper($order));
+
 		$page = (int) $request->query->get('page');
 		if ($page <= 0)
 			$page = 1;
 		$offset = ($page - 1) * $limit;
+
 		$rowsCount = $this->getRepository()
 			->createQueryBuilder('u')
 			->select('count(u.id)')
 			->getQuery()
 			->getSingleScalarResult();
+
 		return $args
 			->setLimit($limit)
 			->setOffset($offset)

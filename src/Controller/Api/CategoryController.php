@@ -35,7 +35,7 @@ class CategoryController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/{id}/questions", name="questions")
+	 * @Route("/{id}/questions", name="questions", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
