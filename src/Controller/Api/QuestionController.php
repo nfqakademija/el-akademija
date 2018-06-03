@@ -45,7 +45,7 @@ class QuestionController extends BaseApiController
 	public function showAll(Request $request): JsonResponse
 	{
 		$args = $this->handleOPS($request);
-//		$args->setOrder('desc');
+		$args->setOrder('desc');
 		return $this->jsonService->successData(
 			$this->getRepository()->findBy([], ...$args->getArray()),
 			$args->getMetaInfo()
