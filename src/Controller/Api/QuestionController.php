@@ -38,6 +38,21 @@ class QuestionController extends BaseApiController
 	}
 
 	/**
+	 * @Route("/show", name="show_all", methods={"GET"})
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function showAll(Request $request): JsonResponse
+	{
+		$args = $this->handleOPS($request);
+//		$args->setOrder('desc');
+		return $this->jsonService->successData(
+			$this->getRepository()->findBy([], ...$args->getArray()),
+			$args->getMetaInfo()
+		);
+	}
+
+	/**
 	 * @Route("/{id}/comments", name="comments", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
