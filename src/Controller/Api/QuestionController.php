@@ -95,7 +95,7 @@ class QuestionController extends BaseApiController
 			new NotBlank(),
 			new Length([
 				'min' => 3,
-				'max' => 10
+				'max' => 50
 			])
 		]);
 		if (count($violations) !== 0)
