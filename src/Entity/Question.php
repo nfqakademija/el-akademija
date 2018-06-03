@@ -131,7 +131,7 @@ class Question extends JsonEntity
 
 	public static function whiteListedFields(): array
 	{
-		return ['id'];
+		return ['id', 'created'];
 	}
 
 	public static function getLimit(): int
