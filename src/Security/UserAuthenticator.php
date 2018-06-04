@@ -3,7 +3,7 @@
 namespace App\Security;
 
 use App\Service\JsonService;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -73,9 +73,9 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 		return null;
 	}
 
-	public function start(Request $request, AuthenticationException $authException = null): JsonResponse
+	public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
 	{
-		return $this->jsonService->error('Access denied. Please log in.', [], Response::HTTP_FORBIDDEN);
+		return new RedirectResponse('/login');
 	}
 
 	public function supportsRememberMe()

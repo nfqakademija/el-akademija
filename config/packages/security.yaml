@@ -9,6 +9,12 @@ security:
             id: App\Repository\UserRepository
             # entity: { class: App\Entity\User, property: email }
 
+    role_hierarchy:
+        ROLE_STUDENT: ROLE_USER
+        ROLE_LECTOR: [ROLE_USER, ROLE_STUDENT]
+        ROLE_ADMIN: [ROLE_USER, ROLE_STUDENT, ROLE_LECTOR]
+        # ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     encoders:
         # FOS\UserBundle\Model\UserInterface: bcrypt
         App\Entity\User: bcrypt
@@ -19,7 +25,9 @@ security:
             security: false
         main:
             pattern: ^/
-            logout: true
+            logout:
+                path:   /logout
+                target: /login
             anonymous: true
             provider: main
             access_denied_handler: App\Security\AccessDeniedHandler
@@ -38,10 +46,21 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        # - { path: ^/api/course, roles: ROLE_ADMIN, methods: [POST] }
-        - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
+        - { path: ^/questions, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/schedule, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/admin/schedule, roles: ROLE_LECTOR, methods: [GET] }
+        - { path: ^/api/category, roles: ROLE_ADMIN, methods: [GET, POST, PATCH] }
+        - { path: ^/api/comment, roles: ROLE_USER, methods: [GET, POST, PATCH] }
+        - { path: ^/api/course/show, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/course, roles: ROLE_ADMIN, methods: [GET, POST, PATCH] }
+        - { path: ^/api/homework, roles: ROLE_LECTOR, methods: [GET, POST, PATCH] }
+        - { path: ^/api/homework_grade, roles: ROLE_LECTOR, methods: [GET, POST, PATCH] }
+        - { path: ^/api/homework_link, roles: ROLE_STUDENT, methods: [GET, POST, PATCH] }
+        - { path: ^/api/lecture/show, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/lecture, roles: ROLE_LECTOR, methods: [GET, POST, PATCH] }
+        - { path: ^/api/question, roles: ROLE_USER, methods: [GET, POST, PATCH] }
+        - { path: ^/, roles: ROLE_USER, methods: [GET, POST, PATCH] }
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'

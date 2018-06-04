@@ -76,4 +76,12 @@ class IndexController extends AbstractController
     public function login(): Response {
         return $this->render('login.html.twig');
     }
+
+	/**
+	 * @Route("/logout", name="logout")
+	 */
+	public function logout()
+	{
+
+    }
 }
