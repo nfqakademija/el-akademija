@@ -19,6 +19,13 @@
                     <span>{{ app.user.firstName }} {{ app.user.lastName }}</span>
 
                     <div class="dropdown-menu dropdown-sticky-nav dropdown-menu-right" aria-labelledby="navbarProfileDropdown">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <span class="dropdown-item" style="color: #797979;">Administratorius</span>
+                        {% elseif is_granted('ROLE_LECTOR') %}
+                            <span class="dropdown-item" style="color: #797979;">Lektorius</span>
+                        {% else %}
+                            <span class="dropdown-item" style="color: #797979;">Studentas</span>
+                        {% endif %}
                         <a class="dropdown-item" href="{{ path('logout') }}">Atsijungti</a>
                     </div>
                 </li>
