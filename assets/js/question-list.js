@@ -107,7 +107,7 @@ class QuestionList extends React.Component {
                 <div>
 
                     <Row>
-                        <Col sm={6}>
+                        <Col sm={1}>
                             <Pagination>
                                 <PaginationItem disabled={ Number(this.state.page)-1 === 0} onClick={this.onPagePrev}>
                                     <PaginationLink previous/>
@@ -118,7 +118,14 @@ class QuestionList extends React.Component {
                                 </PaginationItem>
                             </Pagination>
                         </Col>
-                        <Col sm={6}>
+
+                        <Col sm={2}>
+                            <Button className="text-white" style={{backgroundColor:"#ff6b00"}} >
+                                Užduoti klausimą
+                            </Button>
+                        </Col>
+
+                        <Col sm={{size:6, offset: 3}}>
                             <InputGroup className="mb-3">
                                 <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą"
                                        onKeyDown={event => {
