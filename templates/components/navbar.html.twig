@@ -9,6 +9,7 @@
                 <span></span>
             </button>
 
+            {% if app.user %}
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown" href="#" id="navbarProfileDropdown" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -18,10 +19,11 @@
                     <span>{{ app.user.firstName }} {{ app.user.lastName }}</span>
 
                     <div class="dropdown-menu dropdown-sticky-nav dropdown-menu-right" aria-labelledby="navbarProfileDropdown">
-                        <a class="dropdown-item" href="#">Atsijungti</a>
+                        <a class="dropdown-item" href="{{ path('logout') }}">Atsijungti</a>
                     </div>
                 </li>
             </ul>
+            {% endif %}
         </nav>
     </div>
 
