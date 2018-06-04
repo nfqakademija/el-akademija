@@ -54,29 +54,6 @@ class QuestionController extends BaseApiController
 	}
 
 	/**
-	 * @Route("/new", name="new", methods={"POST"})
-	 * @param Request $request
-	 * @return JsonResponse
-	 */
-	public function new(Request $request): JsonResponse
-	{
-		$obj = new Question();
-		$form = $this->createForm(QuestionType::class, $obj, ['csrf_protection' => false]);
-		$form->handleRequest($request);
-		$obj->setUser($this->getUser());
-
-		if (!$form->isSubmitted())
-			return $this->jsonService->parametersMissing($form);
-		if (!$form->isValid())
-			return $this->jsonService->formErrors($form);
-		$em = $this->getDoctrine()->getManager();
-
-		$em->persist($obj);
-		$em->flush();
-		return $this->jsonService->success();
-	}
-
-	/**
 	 * @Route("/{id}/comments", name="comments", requirements={"id"="\d+"})
 	 * @param Request $request
 	 * @param int $id
