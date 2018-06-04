@@ -20,7 +20,7 @@ class CommentInput extends React.Component {
         ApiClient.post(api.question.post_comment,
             {
                 'comment[question]': this.props.questionId,
-                'comment[user]': 1,
+                'comment[user]': this.props.userId,
                 'comment[text]': this.state.value
             });
 

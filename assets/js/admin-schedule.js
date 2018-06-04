@@ -72,13 +72,6 @@ class EventPopover extends React.Component {
                                 <p className="small" dangerouslySetInnerHTML={{__html: this.props.event.description}}/>
                             </Col>
                         </Row>
-
-                        <Button color="success" block size="sm">
-                            Užduoti namų darbą
-                        </Button>
-                        <Button color="danger" block size="sm">
-                            Redaguoti paskaitą
-                        </Button>
                     </Container>
                 </PopoverBody>
             </Popover>

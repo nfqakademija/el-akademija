@@ -81,7 +81,7 @@ class QuestionViewMore extends React.Component {
 
                     </div>
 
-                    <CommentInput questionId={question.id}/>
+                    <CommentInput questionId={question.id} userId={this.props.userId}/>
                 </div>
             )
 
@@ -89,7 +89,8 @@ class QuestionViewMore extends React.Component {
     }
 }
 const questionViewMoreElement = document.getElementById('question-view-more');
-ReactDOM.render(<QuestionViewMore questionId={questionViewMoreElement.getAttribute('question-id')}/>,
+ReactDOM.render(<QuestionViewMore questionId={questionViewMoreElement.getAttribute('question-id')}
+                                  userId={questionViewMoreElement.getAttribute('user-id')}/>,
     questionViewMoreElement
 );
 

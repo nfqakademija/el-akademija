@@ -143,6 +143,20 @@ class QuestionList extends React.Component {
                                 question={question}/>
                         )}
                     </div>
+
+                    <Row>
+                        <Col sm={12}>
+                            <Pagination>
+                                <PaginationItem disabled={ Number(this.state.page)-1 === 0} onClick={this.onPagePrev}>
+                                    <PaginationLink previous/>
+                                </PaginationItem>
+                                {pagesList()}
+                                <PaginationItem disabled={ Number(this.state.page) === Number(this.state.totalPages)} onClick={this.onPageNext}>
+                                    <PaginationLink next  />
+                                </PaginationItem>
+                            </Pagination>
+                        </Col>
+                    </Row>
                 </div>
             );
         }
