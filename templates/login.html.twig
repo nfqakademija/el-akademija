@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet_for_page %}
+    <link rel="stylesheet" href="{{ asset('build/css/login.css') }}"/>
+{% endblock %}
+
+{% block  body %}
+    <div id="login"></div>
+{% endblock %}
+
+{% block javascript_for_page %}
+    <script src="{{ asset('build/js/login.js') }}"></script>
+{% endblock %}

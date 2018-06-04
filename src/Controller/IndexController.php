@@ -68,4 +68,12 @@ class IndexController extends AbstractController
     public function admin_schedule(): Response {
         return $this->render('admin/admin_schedule.html.twig');
     }
+
+    /**
+     * @Route ("/login", name="login")
+     * @return Response
+     */
+    public function login(): Response {
+        return $this->render('login.html.twig');
+    }
 }

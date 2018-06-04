@@ -7,6 +7,7 @@ Encore
 
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
+    .addEntry('/js/login', ["babel-polyfill", './assets/js/login.js'])
     .addEntry('/js/admin-schedule', ["babel-polyfill", './assets/js/admin-schedule.js'])
     .addEntry('/js/schedule', ["babel-polyfill", './assets/js/schedule.js'])
     .addEntry('/js/courses-list-table', ["babel-polyfill", './assets/js/courses-list-table.js'])
@@ -20,6 +21,7 @@ Encore
     .addEntry('/js/api', ["babel-polyfill", './assets/js/api.js'])
     // will create public/build/app.js and public/build/app.css
     .addStyleEntry('/css/style', `./assets/sass/style.scss`)
+    .addStyleEntry('/css/login', `./assets/sass/login.scss`)
 
     // allow sass/scss files to be processed
     .enableSassLoader()

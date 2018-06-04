@@ -20,9 +20,12 @@ const api = {
     },
     user: {
         show: '/api/user/show'
-    }
+    },
+    auth: {
+        login: '/api/auth/login'
+    },
 };
 
 module.exports = {
     api
-}
+};
