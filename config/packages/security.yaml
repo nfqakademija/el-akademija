@@ -50,7 +50,7 @@ security:
         - { path: ^/questions, roles: ROLE_USER, methods: [GET] }
         - { path: ^/schedule, roles: ROLE_USER, methods: [GET] }
         - { path: ^/admin/schedule, roles: ROLE_LECTOR, methods: [GET] }
-        - { path: ^/api/category, roles: ROLE_ADMIN, methods: [GET, POST, PATCH] }
+        - { path: ^/api/category, roles: ROLE_LECTOR, methods: [GET, POST, PATCH] }
         - { path: ^/api/comment, roles: ROLE_USER, methods: [GET, POST, PATCH] }
         - { path: ^/api/course/show, roles: ROLE_USER, methods: [GET] }
         - { path: ^/api/course, roles: ROLE_ADMIN, methods: [GET, POST, PATCH] }
