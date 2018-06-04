@@ -59,7 +59,7 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 	public function checkCredentials($credentials, UserInterface $user)
 	{
 		if (!$this->encoder->isPasswordValid($user, $credentials['password']))
-			throw new AuthenticationCredentialsNotFoundException('Invalid credentials');
+			throw new AuthenticationCredentialsNotFoundException('Neteisingi duomenys');
 		return true;
 	}
 

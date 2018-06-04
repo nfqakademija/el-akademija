@@ -37,7 +37,7 @@ class AuthController extends AbstractController
 	{
 		$user = $this->getUser();
 		if ($user instanceof UserInterface)
-			return $this->jsonService->success('Successfully logged in');
+			return $this->jsonService->success('Sėkmingai prisijungta');
 		return $this->jsonService->error();
 	}
 

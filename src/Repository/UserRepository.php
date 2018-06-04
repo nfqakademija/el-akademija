@@ -27,7 +27,7 @@ class UserRepository extends ServiceEntityRepository implements UserProviderInte
 	{
 		$user = $this->findOneBy(['email' => $email]);
 		if (!$user)
-			throw new AuthenticationCredentialsNotFoundException('Invalid credentials');
+			throw new AuthenticationCredentialsNotFoundException('Neteisingi duomenys');
 		return $user;
 	}
 
