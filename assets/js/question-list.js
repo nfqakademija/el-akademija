@@ -34,6 +34,7 @@ class QuestionList extends React.Component {
             text: '',
             errors: [],
             categories: null,
+            userId: this.props.userId
         };
 
         this.onSearchChange = this.onSearchChange.bind(this);
@@ -115,8 +116,26 @@ class QuestionList extends React.Component {
         });
     };
 
-    handleModalSubmit = () => {
-
+    handleModalSubmit(event) {
+        event.preventDefault();
+        ApiClient.post(api.question.new,
+            {
+                'question[title]': this.state.name,
+                'question[category]': this.state.category.id,
+                'question[text]': this.state.text,
+                'question[user]': this.state.userId,
+            }).then((response) => {
+            if (response.data.success) {
+                console.log("success");
+                //this.props.confirm();
+            }
+        }).catch((error) => {
+            if (error.response.data.errors) {
+                this.setState({
+                    errors: error.response.data.errors
+                })
+            }
+        });
     }
 
     handleChangeName(event) {
@@ -173,13 +192,13 @@ class QuestionList extends React.Component {
                             </Pagination>
                         </Col>
 
-                        {/*<Col sm={2} md={2}>
+                        <Col sm={2} md={2}>
                             <Button onClick={this.modalToggle} className="text-white" style={{backgroundColor:"#ff6b00"}} >
                                 Užduoti klausimą
                             </Button>
-                        </Col>*/}
+                        </Col>
 
-                        <Col sm={{size:6, offset: 1}} md={{size:7}}>
+                        <Col sm={{size:6, offset: 1}} md={{size:6, offset:1}}>
                             <InputGroup className="mb-3">
                                 <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą"
                                        onKeyDown={event => {
@@ -228,11 +247,11 @@ class QuestionList extends React.Component {
                                     <FormGroup row>
                                         <Label for="questionName" sm={2}>Tema</Label>
                                         <Col sm={10}>
-                                            <Input invalid={this.state.errors.name != null} type="text" name="questionName"
+                                            <Input invalid={this.state.errors.title != null} type="text" name="questionName"
                                                    id="questionName" placeholder="Temos pavadinimas" value={this.state.name}
                                                    onChange={this.handleChangeName}/>
                                             <FormFeedback
-                                                valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
+                                                valid={this.state.errors.title == null}>{this.state.errors.title != null ? this.state.errors.title[0] : null}</FormFeedback>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
@@ -261,10 +280,10 @@ class QuestionList extends React.Component {
                                                 id="questionDescription"
                                                 value={this.state.text}
                                                 onChange={this.handleChangeText}
-                                                invalid={this.state.errors.description != null}/>
+                                                invalid={this.state.errors.text != null}/>
 
                                             <FormFeedback
-                                                valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
+                                                valid={this.state.errors.text == null}>{this.state.errors.text != null ? this.state.errors.text[0] : null}</FormFeedback>
                                         </Col>
                                     </FormGroup>
                                 </Container>
@@ -281,7 +300,7 @@ class QuestionList extends React.Component {
     }
 }
 const questionListElement = document.getElementById('question-list');
-ReactDOM.render(<QuestionList page={questionListElement.getAttribute('page')} text={questionListElement.getAttribute('text')}/>,
+ReactDOM.render(<QuestionList page={questionListElement.getAttribute('page')} text={questionListElement.getAttribute('text')} userId={questionListElement.getAttribute('user-id')}/>,
     questionListElement
 );
 
