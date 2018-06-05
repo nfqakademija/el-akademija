@@ -126,8 +126,7 @@ class QuestionList extends React.Component {
                 'question[user]': this.state.userId,
             }).then((response) => {
             if (response.data.success) {
-                console.log("success");
-                //this.props.confirm();
+                window.location.replace("/question/" + response.data.data.question);
             }
         }).catch((error) => {
             if (error.response.data.errors) {
@@ -178,9 +177,8 @@ class QuestionList extends React.Component {
             };
             return (
                 <div>
-
                     <Row>
-                        <Col sm={3} md={2}>
+                        <Col sm={12} md={12} lg={2}>
                             <Pagination>
                                 <PaginationItem disabled={ Number(this.state.page)-1 === 0} onClick={this.onPagePrev}>
                                     <PaginationLink previous/>
@@ -192,13 +190,7 @@ class QuestionList extends React.Component {
                             </Pagination>
                         </Col>
 
-                        <Col sm={2} md={2}>
-                            <Button onClick={this.modalToggle} className="text-white" style={{backgroundColor:"#ff6b00"}} >
-                                Užduoti klausimą
-                            </Button>
-                        </Col>
-
-                        <Col sm={{size:6, offset: 1}} md={{size:6, offset:1}}>
+                        <Col sm={{size:12}} md={{size:12}} lg={8}>
                             <InputGroup className="mb-3">
                                 <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą"
                                        onKeyDown={event => {
@@ -214,6 +206,12 @@ class QuestionList extends React.Component {
                                     </Button>
                                 </InputGroupAddon>
                             </InputGroup>
+                        </Col>
+
+                        <Col sm={12} md={{size:12}} lg={2}>
+                            <Button onClick={this.modalToggle} className="text-white" style={{backgroundColor:"#ff6b00"}} >
+                                Užduoti klausimą
+                            </Button>
                         </Col>
                     </Row>
                     <div className="stream-posts">
