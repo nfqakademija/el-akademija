@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 
 import {
+    Modal, ModalHeader, ModalBody, ModalFooter,
     Pagination, PaginationItem, PaginationLink,
-    InputGroup, InputGroupAddon, Input, Button, Row, Col
+    InputGroup, InputGroupAddon, Input, Button, Container, Row, Col,
+    Form, FormGroup, FormFeedback, Label
 } from 'reactstrap';
 
 import ApiClient from './api-client';
 import Question from './question';
+import moment from "moment/moment";
 
 const {api} = require('./api');
 
@@ -18,16 +21,32 @@ class QuestionList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            modal: false,
             questions:null,
             search: this.props.text,
             page: this.props.page,
-            totalPages: null
+            totalPages: null,
+            name: '',
+            category: {
+                name: '',
+                id: ''
+            },
+            text: '',
+            errors: [],
+            categories: null,
         };
 
         this.onSearchChange = this.onSearchChange.bind(this);
         this.onSearchClick = this.onSearchClick.bind(this);
         this.onPagePrev = this.onPagePrev.bind(this);
         this.onPageNext = this.onPageNext.bind(this);
+
+        this.modalToggle = this.modalToggle.bind(this);
+        this.handleModalSubmit = this.handleModalSubmit.bind(this);
+
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.handleChangeCategory = this.handleChangeCategory.bind(this);
+        this.handleChangeText = this.handleChangeText.bind(this);
     }
 
     onSearchChange(event) {
@@ -55,24 +74,32 @@ class QuestionList extends React.Component {
 
 
     handleSearch(page = null) {
-        ApiClient.get(this.state.search !== '' ? api.question.search : api.question.show,
-            this.state.search !== '' ? {
-                params: {
-                    page: page === null ? this.state.page : page,
-                    param: this.state.search
-                }} : {
-                params: {
-                    page: page === null ? this.state.page : page
+        ApiClient.all([
+            ApiClient.get(this.state.search !== '' ? api.question.search : api.question.show,
+                this.state.search !== '' ? {
+                    params: {
+                        page: page === null ? this.state.page : page,
+                        param: this.state.search
+                    }} : {
+                    params: {
+                        page: page === null ? this.state.page : page
+                    }
                 }
-            }
-        ).
-        then(questions => {
+            ),
+            ApiClient.get(api.category.show),
+        ]).
+        then(ApiClient.spread((questions, categories) => {
             this.setState({
                 questions: questions.data,
                 totalPages: questions.totalPages,
-                page: page === null ? this.state.page : page
-            })
-        });
+                page: page === null ? this.state.page : page,
+                categories: categories.data,
+                category: {
+                    name: categories.data[0].name,
+                    id: categories.data[0].id
+                }
+            });
+        }));
     }
     componentDidMount() {
         this.handleSearch();
@@ -80,6 +107,33 @@ class QuestionList extends React.Component {
 
     componentDidUpdate() {
         history.pushState(null, null, "/questions/" + this.state.page+  (this.state.search !== "" ? "/" : "") + this.state.search);
+    }
+
+    modalToggle = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
+    };
+
+    handleModalSubmit = () => {
+
+    }
+
+    handleChangeName(event) {
+        this.setState({name: event.target.value});
+    }
+
+    handleChangeCategory(event) {
+        this.setState({
+            category: {
+                name: event.target.value,
+                id: Number(event.target[event.target.selectedIndex].getAttribute('data-id'))
+            }
+        });
+    }
+
+    handleChangeText(event) {
+        this.setState({text: event.target.value});
     }
 
     render() {
@@ -107,7 +161,7 @@ class QuestionList extends React.Component {
                 <div>
 
                     <Row>
-                        <Col sm={1}>
+                        <Col sm={3} md={2}>
                             <Pagination>
                                 <PaginationItem disabled={ Number(this.state.page)-1 === 0} onClick={this.onPagePrev}>
                                     <PaginationLink previous/>
@@ -119,13 +173,13 @@ class QuestionList extends React.Component {
                             </Pagination>
                         </Col>
 
-                        <Col sm={2}>
-                            <Button className="text-white" style={{backgroundColor:"#ff6b00"}} >
+                        {/*<Col sm={2} md={2}>
+                            <Button onClick={this.modalToggle} className="text-white" style={{backgroundColor:"#ff6b00"}} >
                                 Užduoti klausimą
                             </Button>
-                        </Col>
+                        </Col>*/}
 
-                        <Col sm={{size:6, offset: 3}}>
+                        <Col sm={{size:6, offset: 1}} md={{size:7}}>
                             <InputGroup className="mb-3">
                                 <Input onChange={this.onSearchChange} value={this.state.search} placeholder="Įveskite tekstą arba pavadinimą"
                                        onKeyDown={event => {
@@ -164,6 +218,63 @@ class QuestionList extends React.Component {
                             </Pagination>
                         </Col>
                     </Row>
+
+
+                    <Modal isOpen={this.state.modal} fade={true} toggle={this.modalToggle} size='lg'>
+                        <Form onSubmit={this.handleModalSubmit}>
+                            <ModalHeader toggle={this.modalToggle}>Klausimo uždavimas</ModalHeader>
+                            <ModalBody>
+                                <Container>
+                                    <FormGroup row>
+                                        <Label for="questionName" sm={2}>Tema</Label>
+                                        <Col sm={10}>
+                                            <Input invalid={this.state.errors.name != null} type="text" name="questionName"
+                                                   id="questionName" placeholder="Temos pavadinimas" value={this.state.name}
+                                                   onChange={this.handleChangeName}/>
+                                            <FormFeedback
+                                                valid={this.state.errors.name == null}>{this.state.errors.name != null ? this.state.errors.name[0] : null}</FormFeedback>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Label for="questionCategory" sm={2}>Kategorija</Label>
+                                        <Col sm={10}>
+                                            <Input type="select" name="questionCategory" id="questionCategory"
+                                                   value={this.state.category.name} onChange={this.handleChangeCategory}>
+                                                {this.state.categories.map((category) =>
+                                                    <option style={{
+                                                        color: category.color,
+                                                        textDecoration: 'bold'
+                                                    }}
+                                                            key={category.id}
+                                                            data-id={category.id}>{category.name}</option>
+                                                )}
+                                            </Input>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Label for="questionDescription" sm={2}>Aprašymas</Label>
+                                        <Col sm={10}>
+                                            <Input
+                                                style={{minHeight: '200px'}}
+                                                type="textarea"
+                                                name="questionDescription"
+                                                id="questionDescription"
+                                                value={this.state.text}
+                                                onChange={this.handleChangeText}
+                                                invalid={this.state.errors.description != null}/>
+
+                                            <FormFeedback
+                                                valid={this.state.errors.description == null}>{this.state.errors.description != null ? this.state.errors.description[0] : null}</FormFeedback>
+                                        </Col>
+                                    </FormGroup>
+                                </Container>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="success" type='submit'>Užduoti klausimą</Button>
+                                <Button color="danger" onClick={this.modalToggle}>Atšaukti</Button>
+                            </ModalFooter>
+                        </Form>
+                    </Modal>
                 </div>
             );
         }
