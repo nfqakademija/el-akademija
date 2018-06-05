@@ -33,6 +33,7 @@ class Question extends React.Component {
                             </a>
                             <h6 className="sp-author-name"><a href="#">{user.firstname} {user.lastname}</a></h6>
                             <div className="likes">
+                                Kategorija: <span style={{color: question.category.color, fontWeight: 'bold'}}>{question.category.name}</span>
                                 <div className="hearts">
                                     <span className="heart"></span>
                                     <span className="heart-number">TODO</span>
